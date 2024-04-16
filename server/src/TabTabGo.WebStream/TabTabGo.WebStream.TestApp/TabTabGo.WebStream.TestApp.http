@@ -1,0 +1,6 @@
+@TabTabGo.WebStream.TestApp_HostAddress = http://localhost:5128
+
+GET {{TabTabGo.WebStream.TestApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
