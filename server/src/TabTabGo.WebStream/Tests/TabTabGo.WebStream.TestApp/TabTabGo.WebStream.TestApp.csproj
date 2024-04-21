@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TabTabGo.WebStream.DependencyInjection\TabTabGo.WebStream.DependencyInjection.csproj" />
-    <ProjectReference Include="..\TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj" />
+    <ProjectReference Include="..\..\TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj" />
   </ItemGroup>
 
+ 
 </Project>
