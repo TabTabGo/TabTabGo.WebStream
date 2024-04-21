@@ -8,7 +8,7 @@ namespace TabTabGo.WebStream.Builders
     {
         Action<EventHandlerBuilder> _EventHandlerBuilder;
         Func<IPushEvent> pushBuilder;
-        public WebStreamBuilder UseEventHandler(Action<EventHandlerBuilder> action)
+        public WebStreamBuilder SetupEventHandlers(Action<EventHandlerBuilder> action)
         {
             _EventHandlerBuilder = action;
             return this;

@@ -5,7 +5,7 @@ using TabTabGo.WebStream.Services;
 
 namespace TabTabGo.WebStream.Extensions
 {
-    public static class Extensions
+    public static class ExtensionsClass
     {
         private static WebStreamBuilder Get(IServiceProvider serviceProvider,Action<IServiceProvider,WebStreamBuilder> action)
         {
