@@ -33,11 +33,33 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
             Object = action;
             return this;
         }
-        public EventHandlerBuilder UseComplexHandler(Action<ComplexEventHandlerBuilder> action)
+        public EventHandlerBuilder UseFirstPassHandler(Action<FirstPassEventHandlerBuilder> action)
         {
             Object = () =>
             {
-                ComplexEventHandlerBuilder builder = new ComplexEventHandlerBuilder();
+                FirstPassEventHandlerBuilder builder = new FirstPassEventHandlerBuilder();
+                action(builder);
+                return builder.Build();
+            };
+            return this;
+        }
+
+        public EventHandlerBuilder UseAllPassedHandlers(Action<AllPassEventHandlersBuilder> action)
+        {
+            Object = () =>
+            {
+                AllPassEventHandlersBuilder builder = new AllPassEventHandlersBuilder();
+                action(builder);
+                return builder.Build();
+            };
+            return this;
+        }
+
+        public EventHandlerBuilder UseEventHandlers(Action<EventHandlerListBuilders> action)
+        {
+            Object = () =>
+            {
+                EventHandlerListBuilders builder = new EventHandlerListBuilders();
                 action(builder);
                 return builder.Build();
             };
