@@ -6,10 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream", "TabTabGo.WebStream\TabTabGo.WebStream.csproj", "{D76A76C7-49B7-4D22-B257-AF87B7D60C14}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.SignalR", "TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj", "{B451E71B-3311-4211-B39D-443132E5C6DB}"
-EndProject 
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4AF33E86-9916-4F1E-9776-A6A0D3381DD0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.TestApp", "Tests/TabTabGo.WebStream.TestApp\TabTabGo.WebStream.TestApp.csproj", "{EBF69406-49DF-44A1-90B0-D07CB96A811A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.TestApp", "Tests\TabTabGo.WebStream.TestApp\TabTabGo.WebStream.TestApp.csproj", "{EBF69406-49DF-44A1-90B0-D07CB96A811A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NotificationStorage", "NotificationStorage", "{CCEC652F-D27A-4766-BB76-1978921451AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.NotificationStorage", "NotificationStorage\TabTabGo.WebStream.NotificationStorage\TabTabGo.WebStream.NotificationStorage.csproj", "{B687C315-2B55-42E2-878E-789C43C23CB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,12 +33,17 @@ Global
 		{EBF69406-49DF-44A1-90B0-D07CB96A811A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBF69406-49DF-44A1-90B0-D07CB96A811A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBF69406-49DF-44A1-90B0-D07CB96A811A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B687C315-2B55-42E2-878E-789C43C23CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B687C315-2B55-42E2-878E-789C43C23CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B687C315-2B55-42E2-878E-789C43C23CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B687C315-2B55-42E2-878E-789C43C23CB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EBF69406-49DF-44A1-90B0-D07CB96A811A} = {4AF33E86-9916-4F1E-9776-A6A0D3381DD0}
+		{B687C315-2B55-42E2-878E-789C43C23CB7} = {CCEC652F-D27A-4766-BB76-1978921451AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DA62474-E7F3-4385-B08D-88FE745580C9}
