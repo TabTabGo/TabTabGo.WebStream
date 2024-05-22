@@ -8,7 +8,7 @@ namespace TabTabGo.WebStream.Builders
 {
     public static class SignalRWebStreamBuilder
     {
-        public static PushEventBuilder UseSignalR(this PushEventBuilder webStreamBuilder)
+        public static PushEventBuilder AddSignalR(this PushEventBuilder webStreamBuilder)
         {
             webStreamBuilder.AddPushEvent((serviceProvider) => new PushSignalREvent(serviceProvider.GetRequiredService<IHubContext<TabtabGoHub>>()));
             return webStreamBuilder;

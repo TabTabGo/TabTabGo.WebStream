@@ -31,7 +31,7 @@ builder.Services.AddWebStream(builder =>
         });
     });
     builder.SetupIPushEvent(s =>
-          s.UseSignalR() 
+          s.AddSignalR() 
     );
 });
 
