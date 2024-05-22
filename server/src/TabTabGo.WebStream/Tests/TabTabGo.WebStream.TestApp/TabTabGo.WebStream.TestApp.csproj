@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\NotificationStorage\TabTabGo.WebStream.NotificationStorage.EFCore\TabTabGo.WebStream.NotificationStorage.EFCore.csproj" />
     <ProjectReference Include="..\..\TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj" />
   </ItemGroup>
 

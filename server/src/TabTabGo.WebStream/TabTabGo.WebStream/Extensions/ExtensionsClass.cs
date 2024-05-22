@@ -21,6 +21,10 @@ namespace TabTabGo.WebStream.Extensions
                 {
                     services.AddScoped(item);
                 }
+                foreach (var item in Get(action).GetRegistedServices())
+                {
+                    services.AddScoped(item.GetTypeToRegest(), s=>item.Get());
+                }
                 services.AddScoped<IPushEvent>(s => Get(action).BuildIPushEvent(s));
                 services.AddScoped<IReceiveEvent>(s => Get(action).BuildEventHandler(s));
             }
@@ -30,6 +34,10 @@ namespace TabTabGo.WebStream.Extensions
                 {
                     services.AddTransient(item);
                 }
+                foreach (var item in Get(action).GetRegistedServices())
+                {
+                    services.AddTransient(item.GetTypeToRegest(), s => item.Get());
+                }
                 services.AddTransient<IPushEvent>(s => Get(action).BuildIPushEvent(s));
                 services.AddTransient<IReceiveEvent>(s => Get(action).BuildEventHandler(s));
             }
@@ -37,7 +45,11 @@ namespace TabTabGo.WebStream.Extensions
             {
                 foreach (var item in Get(action).GetRegistedEventHandlers())
                 {
-                    services.AddTransient(item);
+                    services.AddSingleton(item);
+                }
+                foreach (var item in Get(action).GetRegistedServices())
+                {
+                    services.AddSingleton(item.GetTypeToRegest(), s => item.Get());
                 }
                 services.AddSingleton<IPushEvent>(s => Get(action).BuildIPushEvent(s));
                 services.AddSingleton<IReceiveEvent>(s => Get(action).BuildEventHandler(s));

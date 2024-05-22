@@ -6,20 +6,45 @@ using TabTabGo.WebStream.Services.Contract;
 using TabTabGo.WebStream.Services.EventHandlers;
 namespace TabTabGo.WebStream.Builders
 {
+    internal abstract class WebStreamBuilderService
+    {
+        internal abstract object Get();
+        internal abstract Type GetTypeToRegest();
+    }
+    internal class WebStreamBuilderService<T, Imp> : WebStreamBuilderService where Imp:T
+    {
+        internal Func<Imp> Function;
+        internal override object Get()
+        {
+            return Function();
+        }
+        internal override Type GetTypeToRegest() { return typeof(T); }
+    }
     public class WebStreamBuilder
     {
+
         Action<EventHandlerBuilder> _eventHandlerBuilder;
         Action<PushEventBuilders.PushEventBuilder> _pushEventBuilder;
 
         private readonly List<Type> _eventHandlerTypes = new List<Type>();
+        private readonly List<WebStreamBuilderService> services = new List<WebStreamBuilderService>();
 
-        public List<Type> GetRegistedEventHandlers()
+        internal List<Type> GetRegistedEventHandlers()
         {
             return _eventHandlerTypes;
+        }
+        internal List<WebStreamBuilderService> GetRegistedServices()
+        {
+            return services;
         }
         public WebStreamBuilder RegisteEventHandler<T>() where T : IReceiveEvent
         {
             _eventHandlerTypes.Add(typeof(T));
+            return this;
+        }
+        public WebStreamBuilder RegisteService<T, Implement>(Func<Implement> func) where Implement : T
+        {
+            services.Add(new WebStreamBuilderService<T, Implement> { Function = func });
             return this;
         }
         public WebStreamBuilder SetupEventHandlers(Action<EventHandlerBuilder> action)
@@ -36,8 +61,8 @@ namespace TabTabGo.WebStream.Builders
         {
             var eventHandlerBuilder = new EventHandlerBuilder();
             _eventHandlerBuilder(eventHandlerBuilder);
-            var eventHandler = eventHandlerBuilder.Build(provider); 
-            return eventHandler?? new NullReceiveEvent();
+            var eventHandler = eventHandlerBuilder.Build(provider);
+            return eventHandler ?? new NullReceiveEvent();
         }
         public IPushEvent BuildIPushEvent(IServiceProvider serviceProvider)
         {
