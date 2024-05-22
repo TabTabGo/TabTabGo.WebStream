@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using TabTabGo.WebStream.Model;
-using TabTabGo.WebStream.Services;
+using TabTabGo.WebStream.Services.EventHandlers;
 
 namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
 {
     public class EventHandlerListBuilders
     {
 
-        List<EventHandlerBuilder> handlers = new List<EventHandlerBuilder>();
+        private readonly List<EventHandlerBuilder> handlers = new List<EventHandlerBuilder>();
         public EventHandlerListBuilders AddEventHandler(Action<EventHandlerBuilder> action)
         {
             var builder = new EventHandlerBuilder();
-            action(builder); 
+            action(builder);
             handlers.Add(builder);
             return this;
         }
-        public EventHandlerList Build()
+        public EventHandlerList Build(IServiceProvider serviceProvider)
         {
-            return new EventHandlerList(handlers);
+            return new EventHandlerList(handlers, serviceProvider);
         }
     }
 }

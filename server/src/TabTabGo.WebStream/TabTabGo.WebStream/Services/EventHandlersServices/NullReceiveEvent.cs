@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using TabTabGo.WebStream.Builders;
 using TabTabGo.WebStream.Model;
-using TabTabGo.WebStream.Services;
+using TabTabGo.WebStream.Services.Contract;
 
-namespace Services
+namespace TabTabGo.WebStream.Services.EventHandlers
 {
     /// <summary>
     /// this will used to ignore Events sent by Stream client
@@ -11,7 +11,7 @@ namespace Services
     public class NullReceiveEvent : IReceiveEvent
     {
         public Task OnEventReceived(string connectionId, WebStreamMessage message)
-        { 
+        {
             return Task.CompletedTask;
         }
     }

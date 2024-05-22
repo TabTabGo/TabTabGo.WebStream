@@ -4,13 +4,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.WebStream.Model;
+using TabTabGo.WebStream.Services.Contract;
 using TabTabGo.WebStream.SignalR.Hub;
 
 namespace TabTabGo.WebStream.Services
 {
     public class PushSignalREvent : IPushEvent
     {
-        IHubContext<TabtabGoHub> _hubContext;
+        private readonly IHubContext<TabtabGoHub> _hubContext;
         public PushSignalREvent(IHubContext<TabtabGoHub> hubContext)
         {
             _hubContext=hubContext;

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TabTabGo.WebStream.Services
+namespace TabTabGo.WebStream.Services.Contract
 {
     public interface IPushEvent
     {

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TabTabGo.WebStream.Services
+namespace TabTabGo.WebStream.Services.Contract
 {
     public interface IUserConnections
     {
@@ -48,7 +48,7 @@ namespace TabTabGo.WebStream.Services
         /// </summary>
         /// <param name="connectionIds"></param>
         /// <returns>List Users Ids </returns>
-        Task<List<string>> GetUsersIdsByConnectionIdsAsync(IEnumerable<string> connectionIds,CancellationToken cancellationToken=default);
+        Task<List<string>> GetUsersIdsByConnectionIdsAsync(IEnumerable<string> connectionIds, CancellationToken cancellationToken = default);
 
     }
 }

@@ -1,47 +1,49 @@
-﻿using Services;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using TabTabGo.WebStream.Builders.EventHandlerBuilders;
-using TabTabGo.WebStream.Services;
+using TabTabGo.WebStream.Builders.PushEventBuilders;
+using TabTabGo.WebStream.Services.Contract;
+using TabTabGo.WebStream.Services.EventHandlers;
 namespace TabTabGo.WebStream.Builders
 {
     public class WebStreamBuilder
     {
-        Action<EventHandlerBuilder> _EventHandlerBuilder;
-        Func<IPushEvent> pushBuilder;
+        Action<EventHandlerBuilder> _eventHandlerBuilder;
+        Action<PushEventBuilders.PushEventBuilder> _pushEventBuilder;
+
+        private readonly List<Type> _eventHandlerTypes = new List<Type>();
+
+        public List<Type> GetRegistedEventHandlers()
+        {
+            return _eventHandlerTypes;
+        }
+        public WebStreamBuilder RegisteEventHandler<T>() where T : IReceiveEvent
+        {
+            _eventHandlerTypes.Add(typeof(T));
+            return this;
+        }
         public WebStreamBuilder SetupEventHandlers(Action<EventHandlerBuilder> action)
         {
-            _EventHandlerBuilder = action;
+            _eventHandlerBuilder = action;
             return this;
         }
-        public WebStreamBuilder SetEventSender(Func<IPushEvent> func)
+        public WebStreamBuilder SetupIPushEvent(Action<PushEventBuilder> action)
         {
-            pushBuilder = func;
+            _pushEventBuilder = action;
             return this;
         }
-        public (IPushEvent, IReceiveEvent) Build()
-        { 
-            return (this.BuildEventSender(), this.BuildEventHandler());
-        }
-
-        public  IReceiveEvent BuildEventHandler()
+        public IReceiveEvent BuildEventHandler(IServiceProvider provider)
         {
             var eventHandlerBuilder = new EventHandlerBuilder();
-            _EventHandlerBuilder(eventHandlerBuilder);
-            var eventHandler = eventHandlerBuilder.Build();
-            if (eventHandler == null)
-            {
-                eventHandler = new NullReceiveEvent();
-            }
-            return  eventHandler;
+            _eventHandlerBuilder(eventHandlerBuilder);
+            var eventHandler = eventHandlerBuilder.Build(provider); 
+            return eventHandler?? new NullReceiveEvent();
         }
-
-        public IPushEvent BuildEventSender()
+        public IPushEvent BuildIPushEvent(IServiceProvider serviceProvider)
         {
-            return pushBuilder();
+            var pushBuilder = new PushEventBuilder();
+            _pushEventBuilder(pushBuilder);
+            return pushBuilder.Build(serviceProvider);
         }
-
-
-
-
     }
 }
