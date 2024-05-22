@@ -5,21 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using TabTabGo.WebStream.Builders.EventHandlerBuilders;
 using TabTabGo.WebStream.Model;
+using TabTabGo.WebStream.Services.Contract;
 
-namespace TabTabGo.WebStream.Services
+namespace TabTabGo.WebStream.Services.EventHandlers
 {
-    public class EventHandlerList: IReceiveEvent
+    public class EventHandlerList : IReceiveEvent
     {
         List<EventHandlerBuilder> _handlers;
-        public EventHandlerList(List<EventHandlerBuilder> handlers)
+        IServiceProvider _provider;
+        public EventHandlerList(List<EventHandlerBuilder> handlers, IServiceProvider serviceProvider)
         {
             _handlers = handlers ?? new List<EventHandlerBuilder>();
+            _provider = serviceProvider;
         }
         public Task OnEventReceived(string connectionId, WebStreamMessage message)
-        { 
+        {
             foreach (var handler in _handlers)
             {
-                handler.Build().OnEventReceived(connectionId, message);
+                handler.Build(_provider).OnEventReceived(connectionId, message);
             }
             return Task.CompletedTask;
         }

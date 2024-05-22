@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.NotificationStorage.Entites;
 using TabTabGo.WebStream.NotificationStorage.Repository;
-using TabTabGo.WebStream.Services;
+using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.NotificationStorage.Services
 {
@@ -14,7 +14,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
     {
         private readonly IUserConnections _userConnections;
         private readonly IUserRepository _userRepository;
-        INotificationRepository _notificationRepository;
+        private readonly INotificationRepository _notificationRepository;
         public PushToStorageService(IUserConnections userConnections, IUserRepository userRepository, INotificationRepository notificationRepository)
         {
             _userConnections = userConnections;

@@ -1,6 +1,6 @@
-using Services;
 using TabTabGo.WebStream.Builders;
 using TabTabGo.WebStream.Extensions;
+using TabTabGo.WebStream.Services.EventHandlers;
 using TabTabGo.WebStream.SignalR.Hub;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSignalR();
 builder.Services.AddScoped<NullReceiveEvent>();
-builder.Services.AddWebStream((serviceProvider, builder) =>
+builder.Services.AddWebStream(builder =>
 {
+    builder.RegisteEventHandler<NullReceiveEvent>();
     builder.SetupEventHandlers(eventHandler =>
     {
         eventHandler.UseAllPassedHandlers(complex => // use all handlers pass the conditions
@@ -23,18 +24,20 @@ builder.Services.AddWebStream((serviceProvider, builder) =>
             .AddEventHandler(s => s.EventName.StartsWith("event2"), s => s.UseEventHandlers((s) =>//use all events handlers
             {
                 s.AddEventHandler(x => x.IgnoreAllEvents())
-                .AddEventHandler(x => x.SetEventHandler(serviceProvider.GetRequiredService<NullReceiveEvent>())) // add handler implemented by library client 
+                .AddEventHandler((x) => x.UseEventHandler<NullReceiveEvent>()) // add handler implemented by library client 
                 .AddEventHandler(x => x.IgnoreAllEvents());
             }));
 
         });
     });
-    builder.UseSignalR(serviceProvider);
+    builder.SetupIPushEvent(s =>
+          s.UseSignalR() 
+    );
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseHttpsRedirection(); 
+app.UseHttpsRedirection();
 app.MapHub<TabtabGoHub>("TabtabgoHub");
 app.Run();

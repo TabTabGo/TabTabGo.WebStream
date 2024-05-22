@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using System.Xml;
 using TabTabGo.WebStream.Model;
-using TabTabGo.WebStream.Services;
+using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.SignalR.Hub
 {
