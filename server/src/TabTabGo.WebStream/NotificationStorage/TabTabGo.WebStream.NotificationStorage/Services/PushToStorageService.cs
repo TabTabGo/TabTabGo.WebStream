@@ -27,6 +27,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
 
                 var notification = new Notification()
                 {
+                    Id = message.NotificationId,
                     EventName = message.EventName,
                     Message = message.Data,
                 };
@@ -53,6 +54,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             {
                 var notification = new Notification()
                 {
+                    Id = message.NotificationId,
                     EventName = message.EventName,
                     Message = message.Data,
                 };
@@ -69,15 +71,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             }
 
         }
-        public Task PushAsync(IEnumerable<string> connectionIds, string eventName, object data, CancellationToken cancellationToken = default)
-        {
-            return this.PushAsync(connectionIds, new WebStreamMessage { EventName = eventName, Data = data }, cancellationToken);
-        }
-        public Task PushAsync(string connectionId, string eventName, object data, CancellationToken cancellationToken = default)
-        {
-            return this.PushAsync(connectionId, new WebStreamMessage { EventName = eventName, Data = data }, cancellationToken);
-        }
-
+ 
 
 
         public async Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
@@ -88,6 +82,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
 
                 var notification = new Notification()
                 {
+                    Id = message.NotificationId,
                     EventName = message.EventName,
                     Message = message.Data,
                 };
@@ -114,6 +109,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             {
                 var notification = new Notification()
                 {
+                    Id = message.NotificationId,
                     EventName = message.EventName,
                     Message = message.Data,
                 };
@@ -127,16 +123,6 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
                 transaction.Commit();
             }
-        }
-
-        public Task PushToUserAsync(IEnumerable<string> userIds, string eventName, object data, CancellationToken cancellationToken = default)
-        {
-            return this.PushAsync(userIds, new WebStreamMessage { EventName = eventName, Data = data }, cancellationToken);
-        }
-
-        public Task PushToUserAsync(string userId, string eventName, object data, CancellationToken cancellationToken = default)
-        {
-            return this.PushAsync(userId, new WebStreamMessage { EventName = eventName, Data = data }, cancellationToken);
-        }
+        } 
     }
 }

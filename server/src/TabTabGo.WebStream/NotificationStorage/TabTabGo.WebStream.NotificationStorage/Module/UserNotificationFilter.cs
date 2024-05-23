@@ -9,7 +9,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Module
 {
     public class UserNotificationFilter
     {
-        public string q { get; set; }
+        public string Q { get; set; }
         public string Status { get; set; }
         public string EventsNames { get; set; }  
         public DateTime? NotifiedDateTimeRangeStart { get; set; }

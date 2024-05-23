@@ -34,9 +34,13 @@ namespace TabTabGo.WebStream.NotificationStorage.Builders
         {
             webStreamBuilder.RegisteService<INotificationUnitOfWorkFactory, INotificationUnitOfWorkFactory>(() =>
             {
-                StorageBuilder bulder = new();
+                StorageBuilder bulder = new StorageBuilder();
                 action(bulder);
                 return bulder.GetUnitOfWork();
+            });
+            webStreamBuilder.RegisteService<INotificationServices, DefaultNotificationServices>(() =>
+            {
+                return new DefaultNotificationServices();
             });
             return webStreamBuilder;
         }

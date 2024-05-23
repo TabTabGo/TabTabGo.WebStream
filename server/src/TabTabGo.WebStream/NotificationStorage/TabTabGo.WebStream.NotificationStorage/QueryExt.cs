@@ -14,8 +14,7 @@ namespace TabTabGo.WebStream.NotificationStorage
             }
 
             var lambda = (dynamic)CreateExpression(typeof(TSource), key); 
-            return desc
-                ?  Queryable.OrderByDescending(query, lambda) :  Queryable.OrderBy(query, lambda);
+            return desc ?  Queryable.OrderByDescending(query, lambda) :  Queryable.OrderBy(query, lambda); 
         }
         private static LambdaExpression CreateExpression(Type type, string propertyName)
         {

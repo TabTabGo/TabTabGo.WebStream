@@ -12,11 +12,11 @@ namespace TabTabGo.WebStream.NotificationStorage.Module
         {
 
         }
-        public PagingException(string? message) : base(message)
+        public PagingException(string message) : base(message)
         {
 
         }
-        public PagingException(string? message, Exception? innerException) : base(message, innerException)
+        public PagingException(string message, Exception innerException) : base(message, innerException)
         {
 
         }

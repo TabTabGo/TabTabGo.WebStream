@@ -11,17 +11,17 @@ using TabTabGo.WebStream.NotificationStorage.Repository;
 
 namespace TabTabGo.WebStream.NotificationStorage.Services
 {
-    internal class DefaultNotificationServices() : INotificationServices
+    internal class DefaultNotificationServices : INotificationServices
     {
-        List<Expression<Func<NotificationUser, bool>>> getNotificationUserCriteria(UserNotificationFilter filters)
+        List<Expression<Func<NotificationUser, bool>>> GetNotificationUserCriteria(UserNotificationFilter filters)
         {
             var criteria = new List<Expression<Func<NotificationUser, bool>>>();
             if (filters != null)
             {
-                if (string.IsNullOrEmpty(filters.q))
+                if (string.IsNullOrEmpty(filters.Q))
                 {
-                    filters.q = filters.q.ToLower();
-                    criteria.Add(s => s.Notification.EventName.ToLower().Contains(filters.q));
+                    filters.Q = filters.Q.ToLower();
+                    criteria.Add(s => s.Notification.EventName.ToLower().Contains(filters.Q));
                 }
 
                 if (string.IsNullOrEmpty(filters.EventsNames))
@@ -31,7 +31,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 }
                 if (string.IsNullOrEmpty(filters.Status))
                 {
-                    var list = filters.Status.ToLower().Split('|').Where(s => Enum.TryParse<NotificationUserStatus>(s, true, out var _)).Select(s => Enum.Parse<NotificationUserStatus>(s, true)).ToList();
+                    var list = filters.Status.ToLower().Split('|').Where(s => Enum.TryParse<NotificationUserStatus>(s, true, out var _)).Select(s =>(NotificationUserStatus) Enum.Parse(typeof(NotificationUserStatus),s, true)).ToList();
                     criteria.Add(s => list.Contains(s.Status));
                 }
 
@@ -59,14 +59,14 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
 
         public PageingResult<NotificationUser> GetUserNotifications(string userId, UserNotificationFilter filters, PagingParameters pagingParameters, INotificationUserRepository notificationUserRepository)
         {
-            var criteria = getNotificationUserCriteria(filters);
+            var criteria = GetNotificationUserCriteria(filters);
             criteria.Add(s => s.UserId.Equals(userId));
             return notificationUserRepository.FindByCriteria(criteria, pagingParameters.Order, pagingParameters.IsDesc, pagingParameters.PageSize, pagingParameters.PageNumber);
         }
 
         public Task<PageingResult<NotificationUser>> GetUserNotificationsAsync(string userId, UserNotificationFilter filters, PagingParameters pagingParameters, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default)
         {
-            var criteria = getNotificationUserCriteria(filters);
+            var criteria = GetNotificationUserCriteria(filters);
             criteria.Add(s => s.UserId.Equals(userId));
             return notificationUserRepository.FindByCriteriaAsync(criteria, pagingParameters.Order, pagingParameters.IsDesc, pagingParameters.PageSize, pagingParameters.PageNumber, cancellationToken);
 
