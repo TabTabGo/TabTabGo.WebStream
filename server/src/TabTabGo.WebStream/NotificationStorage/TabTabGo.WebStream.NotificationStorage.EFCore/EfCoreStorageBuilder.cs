@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TabTabGo.WebStream.NotificationStorage.EFCore.Repositories;
+using TabTabGo.WebStream.NotificationStorage.Repository;
 
 namespace TabTabGo.WebStream.NotificationStorage.EFCore
 {
@@ -11,7 +12,7 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore
             {
                 DbContextOptionsBuilder contextOptions = new();
                 action(contextOptions);
-                return new EfNotificationUnitOfWork(contextOptions.Options);
+                return new EFUnitOfWorkFactory(contextOptions.Options);
             });
             return builder;
         }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using TabTabGo.WebStream.NotificationStorage.Entites;
+using TabTabGo.WebStream.NotificationStorage.Module;
 using TabTabGo.WebStream.NotificationStorage.Repository;
 
 namespace TabTabGo.WebStream.NotificationStorage.EFCore.Repositories
@@ -40,5 +42,31 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore.Repositories
         {
             return context.NotificationUsers.Where(s => s.UserId.Equals(userId)).Select(s => s.Notification).ToListAsync(cancellationToken);
         }
+
+
+        public Task<List<Notification>> FindByCriteria(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, CancellationToken cancellationToken = default)
+        {
+            IQueryable<Notification> query = context.Notifications.AppleyCriteria(criteria);
+            return query.OrderBy(orderBy, isDesc).ToListAsync(cancellationToken);
+        }
+
+        public Task<PageingResult<Notification>> FindByCriteria(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
+        {
+            IQueryable<Notification> query = context.Notifications.AppleyCriteria(criteria);
+            return new PageingResultBuilder<Notification>(query, pageNumber, pageSize, orderBy, isDesc).BuildAsync(cancellationToken);
+        }
+
+        public List<Notification> FindByCriteriaAsync(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc)
+        {
+            IQueryable<Notification> query = context.Notifications.AppleyCriteria(criteria);
+            return query.OrderBy(orderBy, isDesc).ToList();
+        }
+
+        public PageingResult<Notification> FindByCriteriaAsync(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
+        {
+            IQueryable<Notification> query = context.Notifications.AppleyCriteria(criteria);
+            return new PageingResultBuilder<Notification>(query, pageNumber, pageSize, orderBy, isDesc).Build();
+        }
+
     }
 }

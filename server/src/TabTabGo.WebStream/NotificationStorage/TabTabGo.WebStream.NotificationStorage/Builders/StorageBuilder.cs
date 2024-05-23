@@ -6,13 +6,13 @@ namespace TabTabGo.WebStream.NotificationStorage
     public class StorageBuilder
     {
 
-        Func<INotificationUnitOfWork> _UnitOfWorkFunction;
-        public StorageBuilder SetUnitOfWork(Func<INotificationUnitOfWork> UnitOfWorkFunction)
+        Func<INotificationUnitOfWorkFactory> _UnitOfWorkFunction;
+        public StorageBuilder SetUnitOfWork(Func<INotificationUnitOfWorkFactory> UnitOfWorkFunction)
         {
             _UnitOfWorkFunction = UnitOfWorkFunction;
             return this;
         }
-        public INotificationUnitOfWork GetUnitOfWork()
+        public INotificationUnitOfWorkFactory GetUnitOfWork()
         {
             return _UnitOfWorkFunction();
         }

@@ -14,6 +14,15 @@ namespace TabTabGo.WebStream.Builders.PushEventBuilders
             _pushBuilder.Add(func);
             return this;
         }
+
+        public PushEventBuilder DecorateWith(Func<IServiceProvider, IPushEvent, IPushEvent> func)
+        {
+            var oldPushBuilder = _pushBuilder.ToList();
+            _pushBuilder.Clear();
+            _pushBuilder.Add(s => func(s, new CompositPushEvent(oldPushBuilder.Select(x => x(s)))));
+            return this;
+        }
+
         public IPushEvent Build(IServiceProvider serviceProvider)
         {
             return new CompositPushEvent(_pushBuilder.Select(x => x(serviceProvider)));

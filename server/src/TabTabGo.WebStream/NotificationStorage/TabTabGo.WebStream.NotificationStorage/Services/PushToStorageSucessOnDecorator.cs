@@ -10,12 +10,14 @@ using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.NotificationStorage.Services
 {
-    public class PushToStorageService : IPushEvent
+    public class PushToStorageSucessOnDecorator : IPushEvent
     {
+        private readonly IPushEvent _pushEvent;
         private readonly IUserConnections _userConnections;
         private readonly INotificationUnitOfWorkFactory _notificationUnitofWorkFactory;
-        public PushToStorageService(IUserConnections userConnections, INotificationUnitOfWorkFactory notificationUnitofWorkFactory)
+        public PushToStorageSucessOnDecorator(IPushEvent pushEvent, IUserConnections userConnections, INotificationUnitOfWorkFactory notificationUnitofWorkFactory)
         {
+            _pushEvent = pushEvent;
             _userConnections = userConnections;
             _notificationUnitofWorkFactory = notificationUnitofWorkFactory;
         }
@@ -43,6 +45,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                     };
                     await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
                 }
+                await _pushEvent.PushAsync(connectionIds, message, cancellationToken);
                 transaction.Commit();
             }
         }
@@ -65,6 +68,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                     UserId = userId
                 };
                 await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
+                await _pushEvent.PushAsync(connectionId, message, cancellationToken);
                 transaction.Commit();
             }
 
