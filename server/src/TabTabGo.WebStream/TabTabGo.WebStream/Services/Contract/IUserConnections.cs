@@ -50,5 +50,11 @@ namespace TabTabGo.WebStream.Services.Contract
         /// <returns>List Users Ids </returns>
         Task<List<string>> GetUsersIdsByConnectionIdsAsync(IEnumerable<string> connectionIds, CancellationToken cancellationToken = default);
 
+
+
+
+        List<string> GetUsersConnections(IEnumerable<string> userIds);
+        Task<List<string>> GetUsersConnectionsAsync(IEnumerable<string> userIds, CancellationToken cancellationToken = default);
+
     }
 }

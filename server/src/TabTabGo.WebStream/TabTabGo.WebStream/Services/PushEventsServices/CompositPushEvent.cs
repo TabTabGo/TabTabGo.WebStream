@@ -44,5 +44,38 @@ namespace TabTabGo.WebStream.Services.PushEventsServices
                 await s.PushAsync(connectionId, eventName, data, cancellationToken);
             }
         }
+
+
+        public async Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            foreach (var s in _pushEvents)
+            {
+                await s.PushToUserAsync(userIds, message, cancellationToken);
+            }
+        }
+
+        public async Task PushToUserAsync(string UserId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            foreach (var s in _pushEvents)
+            {
+                await s.PushToUserAsync(UserId, message, cancellationToken);
+            }
+        }
+
+        public async Task PushToUserAsync(IEnumerable<string> userIds, string eventName, object data, CancellationToken cancellationToken = default)
+        {
+            foreach (var s in _pushEvents)
+            {
+                await s.PushToUserAsync(userIds, eventName, data, cancellationToken);
+            }
+        }
+
+        public async Task PushToUserAsync(string UserId, string eventName, object data, CancellationToken cancellationToken = default)
+        {
+            foreach (var s in _pushEvents)
+            {
+                await s.PushToUserAsync(UserId, eventName, data, cancellationToken);
+            }
+        }
     }
 }

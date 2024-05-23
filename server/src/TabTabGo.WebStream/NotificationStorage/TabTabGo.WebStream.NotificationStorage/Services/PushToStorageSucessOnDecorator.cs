@@ -81,5 +81,72 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
         {
             return this.PushAsync(connectionId, new WebStreamMessage { EventName = eventName, Data = data }, cancellationToken);
         }
+
+
+
+
+        public async Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            using (var _notificationUnitofWork = _notificationUnitofWorkFactory.Get())
+            using (var transaction = _notificationUnitofWork.StartTransaction())
+            {
+
+                var notification = new Notification()
+                {
+                    EventName = message.EventName,
+                    Message = message.Data,
+                };
+                var notificationId = await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                foreach (var userId in userIds.Distinct().ToList())
+                {
+
+                    var user = new NotificationUser()
+                    {
+                        NotifiedDateTime = DateTime.UtcNow,
+                        NotificationId = notificationId,
+                        UserId = userId
+                    };
+                    await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
+                }
+                await _pushEvent.PushToUserAsync(userIds, message, cancellationToken);
+                transaction.Commit();
+            }
+        }
+
+        public async Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            using (var _notificationUnitofWork = _notificationUnitofWorkFactory.Get())
+            using (var transaction = _notificationUnitofWork.StartTransaction())
+            {
+                var notification = new Notification()
+                {
+                    EventName = message.EventName,
+                    Message = message.Data,
+                };
+                var notificationId = await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                var user = new NotificationUser()
+                {
+                    NotifiedDateTime = DateTime.UtcNow,
+                    NotificationId = notificationId,
+                    UserId = userId
+                };
+                await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
+                await _pushEvent.PushToUserAsync(userId, message, cancellationToken);
+                transaction.Commit();
+            }
+        }
+
+        public Task PushToUserAsync(IEnumerable<string> userIds, string eventName, object data, CancellationToken cancellationToken = default)
+        {
+            return this.PushAsync(userIds, new WebStreamMessage { EventName = eventName, Data = data }, cancellationToken);
+        }
+
+        public Task PushToUserAsync(string userId, string eventName, object data, CancellationToken cancellationToken = default)
+        {
+            return this.PushAsync(userId, new WebStreamMessage { EventName = eventName, Data = data }, cancellationToken);
+        }
+
+
+
     }
 }
