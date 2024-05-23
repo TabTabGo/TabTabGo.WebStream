@@ -1,7 +1,11 @@
 using TabTabGo.WebStream.Builders;
 using TabTabGo.WebStream.Extensions;
+using TabTabGo.WebStream.NotificationStorage.Builders;
+using TabTabGo.WebStream.NotificationStorage.EFCore;
 using TabTabGo.WebStream.Services.EventHandlers;
 using TabTabGo.WebStream.SignalR.Hub;
+using Microsoft.EntityFrameworkCore.InMemory;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -30,9 +34,12 @@ builder.Services.AddWebStream(builder =>
 
         });
     });
-    builder.SetupIPushEvent(s =>
-          s.AddSignalR() 
-    );
+
+    builder.SetUpStorage((s) => s.UseEfCore((efcore) =>
+    {
+        efcore.UseInMemoryDatabase("test");
+    }));
+    builder.SetupIPushEvent(s => s.AddSignalR().AddPushToStorage());
 });
 
 var app = builder.Build();

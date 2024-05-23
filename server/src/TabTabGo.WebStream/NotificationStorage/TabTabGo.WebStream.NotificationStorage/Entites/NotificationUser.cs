@@ -6,6 +6,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Entites
 
     public class NotificationUser
     {
+        public Guid Id { get; set; }
         public string UserId { get; set; }
         public NotificationUserStatus Status { get; set; } = NotificationUserStatus.Unread;
         public DateTime NotidyDateTime { get; set; } = DateTime.UtcNow;
