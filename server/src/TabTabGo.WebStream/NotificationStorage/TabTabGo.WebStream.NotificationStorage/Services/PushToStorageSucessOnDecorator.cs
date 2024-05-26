@@ -27,13 +27,17 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             using (var transaction = _notificationUnitofWork.StartTransaction())
             {
 
-                var notification = new Notification()
+                var notification = await _notificationUnitofWork.Notifications.FindAsync(message.NotificationId, cancellationToken);
+                if (notification == null)
                 {
-                    Id = message.NotificationId,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                };
-                var notificationId = await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                    notification = new Notification()
+                    {
+                        Id = message.NotificationId,
+                        EventName = message.EventName,
+                        Message = message.Data,
+                    };
+                    await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                }
                 var userIds = await _userConnections.GetUsersIdsByConnectionIdsAsync(connectionIds, cancellationToken);
                 foreach (var userId in userIds.Distinct().ToList())
                 {
@@ -41,7 +45,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                     var user = new NotificationUser()
                     {
                         NotifiedDateTime = DateTime.UtcNow,
-                        NotificationId = notificationId,
+                        NotificationId = notification.Id,
                         UserId = userId
                     };
                     await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
@@ -55,18 +59,22 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             using (var _notificationUnitofWork = _notificationUnitofWorkFactory.Get())
             using (var transaction = _notificationUnitofWork.StartTransaction())
             {
-                var notification = new Notification()
+
+                var notification = await _notificationUnitofWork.Notifications.FindAsync(message.NotificationId, cancellationToken);
+                if (notification == null)
                 {
-                    Id = message.NotificationId,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                };
-                var notificationId = await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                    notification = new Notification()
+                    {
+                        Id = message.NotificationId,
+                        EventName = message.EventName,
+                        Message = message.Data,
+                    }; await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                }
                 var userId = await _userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken);
                 var user = new NotificationUser()
                 {
                     NotifiedDateTime = DateTime.UtcNow,
-                    NotificationId = notificationId,
+                    NotificationId = notification.Id,
                     UserId = userId
                 };
                 await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
@@ -81,20 +89,24 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             using (var transaction = _notificationUnitofWork.StartTransaction())
             {
 
-                var notification = new Notification()
+                var notification = await _notificationUnitofWork.Notifications.FindAsync(message.NotificationId, cancellationToken);
+                if (notification == null)
                 {
-                    Id = message.NotificationId,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                };
-                var notificationId = await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                    notification = new Notification()
+                    {
+                        Id = message.NotificationId,
+                        EventName = message.EventName,
+                        Message = message.Data,
+                    };
+                    await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                }
                 foreach (var userId in userIds.Distinct().ToList())
                 {
 
                     var user = new NotificationUser()
                     {
                         NotifiedDateTime = DateTime.UtcNow,
-                        NotificationId = notificationId,
+                        NotificationId = notification.Id,
                         UserId = userId
                     };
                     await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
@@ -109,17 +121,21 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             using (var _notificationUnitofWork = _notificationUnitofWorkFactory.Get())
             using (var transaction = _notificationUnitofWork.StartTransaction())
             {
-                var notification = new Notification()
+
+                var notification = await _notificationUnitofWork.Notifications.FindAsync(message.NotificationId, cancellationToken);
+                if (notification == null)
                 {
-                    Id = message.NotificationId,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                };
-                var notificationId = await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                    notification = new Notification()
+                    {
+                        Id = message.NotificationId,
+                        EventName = message.EventName,
+                        Message = message.Data,
+                    }; await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
+                }
                 var user = new NotificationUser()
                 {
                     NotifiedDateTime = DateTime.UtcNow,
-                    NotificationId = notificationId,
+                    NotificationId = notification.Id,
                     UserId = userId
                 };
                 await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
