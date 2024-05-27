@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using TabTabGo.Core.Data;
+using TabTabGo.Core.Services;
 using TabTabGo.WebStream.NotificationStorage.Repository;
 using TabTabGo.WebStream.NotificationStorage.Services;
 namespace TabTabGo.WebStream.NotificationStorage.API.APIs
@@ -11,19 +13,15 @@ namespace TabTabGo.WebStream.NotificationStorage.API.APIs
         public static IEndpointRouteBuilder MapTabtabGoNotificationsEndPoints(this IEndpointRouteBuilder endpointRouteBuilder, string prefix)
         {
             endpointRouteBuilder.MapPost(prefix + "/notificaitons/{Id}/read",
-                ([FromServices] INotificationUnitOfWorkFactory unitOfWorkFactory, [FromServices] INotificationServices service, Guid Id) =>
+                ([FromServices] INotificationUserRepository repo, [FromServices] ISecurityService securityService, [FromServices] IUnitOfWork unitOfWork, [FromServices] INotificationServices service, Guid Id) =>
             {
-                using (var unitofWork = unitOfWorkFactory.Get())
-                { 
-                    using (var transaction = unitofWork.StartTransaction())
-                    {
-                        var userNotification = unitofWork.UserRepository.FindByUserIdAndNotificationId("currentUser"/* how to get Current user ??? do we need to use tabtabgo.ISecureityService or add new Service */, Id);
-                        if (userNotification != null) { return Results.NotFound(); }
-                        service.ReadNotification(userNotification, unitofWork.UserRepository);
-                        transaction.Commit();
-                        return Results.Ok(userNotification);
-                    }
-                } 
+                unitOfWork.BeginTransaction();
+
+                var userNotification = repo.FindByUserIdAndNotificationId(securityService.GetUser().UserId.ToString(), Id);
+                if (userNotification != null) { return Results.NotFound(); }
+                service.ReadNotification(userNotification, repo);
+                unitOfWork.Commit();
+                return Results.Ok(userNotification);
             });
 
             /* endpointRouteBuilder.MapGet(prefix+"/notificaitons",
@@ -46,14 +44,12 @@ namespace TabTabGo.WebStream.NotificationStorage.API.APIs
             */
 
 
-            endpointRouteBuilder.MapGet(prefix + "/notificaitons/{Id}", ([FromServices] INotificationUnitOfWorkFactory unitOfWorkFactory, Guid Id) =>
+            endpointRouteBuilder.MapGet(prefix + "/notificaitons/{Id}", ([FromServices] INotificationUserRepository repo, [FromServices] ISecurityService securityService, [FromServices] INotificationServices service, Guid Id) =>
             {
-                using (var unitofWork = unitOfWorkFactory.Get())
-                {
-                    var userNotification = unitofWork.UserRepository.FindByUserIdAndNotificationId("currentUser"/* how to get Current user ??? do we need to use tabtabgo.ISecureityService or add new Service */, Id);
-                    if (userNotification != null) { return Results.NotFound(); }
-                    return Results.Ok(userNotification);
-                }
+
+                var userNotification = repo.FindByUserIdAndNotificationId(securityService.GetUser().UserId.ToString(), Id);
+                if (userNotification != null) { return Results.NotFound(); }
+                return Results.Ok(userNotification);
             }
           );
             return endpointRouteBuilder;

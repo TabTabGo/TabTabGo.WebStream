@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TabTabGo.Core.Data;
 using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.NotificationStorage.Entites;
 using TabTabGo.WebStream.NotificationStorage.Repository;
@@ -14,134 +15,126 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
     {
         private readonly IPushEvent _pushEvent;
         private readonly IUserConnections _userConnections;
-        private readonly INotificationUnitOfWorkFactory _notificationUnitofWorkFactory;
-        public PushToStorageSucessOnDecorator(IPushEvent pushEvent, IUserConnections userConnections, INotificationUnitOfWorkFactory notificationUnitofWorkFactory)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly INotificationRepository _notifications;
+        private readonly INotificationUserRepository _users;
+        public PushToStorageSucessOnDecorator(IPushEvent pushEvent, IUserConnections userConnections, IUnitOfWork unitOfWork, INotificationRepository notifications, INotificationUserRepository users)
         {
             _pushEvent = pushEvent;
             _userConnections = userConnections;
-            _notificationUnitofWorkFactory = notificationUnitofWorkFactory;
+            _unitOfWork = unitOfWork;
+            _users = users;
+            _notifications = notifications;
         }
         public async Task PushAsync(IEnumerable<string> connectionIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
-            using (var _notificationUnitofWork = _notificationUnitofWorkFactory.Get())
-            using (var transaction = _notificationUnitofWork.StartTransaction())
+
+            await _pushEvent.PushAsync(connectionIds, message, cancellationToken);
+            var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
+            if (notification == null)
             {
-
-                var notification = await _notificationUnitofWork.Notifications.FindAsync(message.NotificationId, cancellationToken);
-                if (notification == null)
+                notification = new Notification()
                 {
-                    notification = new Notification()
-                    {
-                        Id = message.NotificationId,
-                        EventName = message.EventName,
-                        Message = message.Data,
-                    };
-                    await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
-                }
-                var userIds = await _userConnections.GetUsersIdsByConnectionIdsAsync(connectionIds, cancellationToken);
-                foreach (var userId in userIds.Distinct().ToList())
-                {
-
-                    var user = new NotificationUser()
-                    {
-                        NotifiedDateTime = DateTime.UtcNow,
-                        NotificationId = notification.Id,
-                        UserId = userId
-                    };
-                    await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
-                }
-                await _pushEvent.PushAsync(connectionIds, message, cancellationToken);
-                transaction.Commit();
+                    Id = message.NotificationId,
+                    EventName = message.EventName,
+                    Message = message.Data,
+                }; await _notifications.InsertAsync(notification, cancellationToken);
             }
-        }
-        public async Task PushAsync(string connectionId, WebStreamMessage message, CancellationToken cancellationToken = default)
-        {
-            using (var _notificationUnitofWork = _notificationUnitofWorkFactory.Get())
-            using (var transaction = _notificationUnitofWork.StartTransaction())
+            var userIds = await _userConnections.GetUsersIdsByConnectionIdsAsync(connectionIds, cancellationToken);
+            foreach (var userId in userIds.Distinct().ToList())
             {
 
-                var notification = await _notificationUnitofWork.Notifications.FindAsync(message.NotificationId, cancellationToken);
-                if (notification == null)
-                {
-                    notification = new Notification()
-                    {
-                        Id = message.NotificationId,
-                        EventName = message.EventName,
-                        Message = message.Data,
-                    }; await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
-                }
-                var userId = await _userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken);
                 var user = new NotificationUser()
                 {
                     NotifiedDateTime = DateTime.UtcNow,
                     NotificationId = notification.Id,
                     UserId = userId
                 };
-                await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
-                await _pushEvent.PushAsync(connectionId, message, cancellationToken);
-                transaction.Commit();
+                await _users.InsertAsync(user, cancellationToken);
             }
+        }
+
+        public async Task PushAsync(string connectionId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            await _pushEvent.PushAsync(connectionId, message, cancellationToken);
+            var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
+            if (notification == null)
+            {
+                notification = new Notification()
+                {
+                    Id = message.NotificationId,
+                    EventName = message.EventName,
+                    Message = message.Data,
+                };
+                await _notifications.InsertAsync(notification, cancellationToken);
+            }
+
+            var userId = await _userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken);
+            var user = new NotificationUser()
+            {
+                NotifiedDateTime = DateTime.UtcNow,
+                NotificationId = notification.Id,
+                UserId = userId
+            };
+            await _users.InsertAsync(user, cancellationToken);
+
 
         }
+
+
+
         public async Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
-            using (var _notificationUnitofWork = _notificationUnitofWorkFactory.Get())
-            using (var transaction = _notificationUnitofWork.StartTransaction())
+            await _pushEvent.PushToUserAsync(userIds, message, cancellationToken);
+
+            var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
+            if (notification == null)
+            {
+                notification = new Notification()
+                {
+                    Id = message.NotificationId,
+                    EventName = message.EventName,
+                    Message = message.Data,
+                };
+                await _notifications.InsertAsync(notification, cancellationToken);
+            }
+
+            foreach (var userId in userIds.Distinct().ToList())
             {
 
-                var notification = await _notificationUnitofWork.Notifications.FindAsync(message.NotificationId, cancellationToken);
-                if (notification == null)
+                var user = new NotificationUser()
                 {
-                    notification = new Notification()
-                    {
-                        Id = message.NotificationId,
-                        EventName = message.EventName,
-                        Message = message.Data,
-                    };
-                    await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
-                }
-                foreach (var userId in userIds.Distinct().ToList())
-                {
-
-                    var user = new NotificationUser()
-                    {
-                        NotifiedDateTime = DateTime.UtcNow,
-                        NotificationId = notification.Id,
-                        UserId = userId
-                    };
-                    await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
-                }
-                await _pushEvent.PushToUserAsync(userIds, message, cancellationToken);
-                transaction.Commit();
+                    NotifiedDateTime = DateTime.UtcNow,
+                    NotificationId = notification.Id,
+                    UserId = userId
+                };
+                await _users.InsertAsync(user, cancellationToken);
             }
+
         }
 
         public async Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
-            using (var _notificationUnitofWork = _notificationUnitofWorkFactory.Get())
-            using (var transaction = _notificationUnitofWork.StartTransaction())
-            {
+            await _pushEvent.PushToUserAsync(userId, message, cancellationToken);
 
-                var notification = await _notificationUnitofWork.Notifications.FindAsync(message.NotificationId, cancellationToken);
-                if (notification == null)
+            var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
+            if (notification == null)
+            {
+                notification = new Notification()
                 {
-                    notification = new Notification()
-                    {
-                        Id = message.NotificationId,
-                        EventName = message.EventName,
-                        Message = message.Data,
-                    }; await _notificationUnitofWork.Notifications.CreateAsync(notification, cancellationToken);
-                }
-                var user = new NotificationUser()
-                {
-                    NotifiedDateTime = DateTime.UtcNow,
-                    NotificationId = notification.Id,
-                    UserId = userId
+                    Id = message.NotificationId,
+                    EventName = message.EventName,
+                    Message = message.Data,
                 };
-                await _notificationUnitofWork.UserRepository.CreateAsync(user, cancellationToken);
-                await _pushEvent.PushToUserAsync(userId, message, cancellationToken);
-                transaction.Commit();
+                await _notifications.InsertAsync(notification, cancellationToken);
             }
+            var user = new NotificationUser()
+            {
+                NotifiedDateTime = DateTime.UtcNow,
+                NotificationId = notification.Id,
+                UserId = userId
+            };
+            await _users.InsertAsync(user, cancellationToken);
         }
     }
 }

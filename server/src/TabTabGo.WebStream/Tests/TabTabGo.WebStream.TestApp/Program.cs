@@ -35,10 +35,7 @@ builder.Services.AddWebStream(builder =>
         });
     });
 
-    builder.SetUpStorage((s) => s.UseEfCore((efcore) =>
-    {
-        efcore.UseInMemoryDatabase("test");
-    }));
+    builder.UseEfCore();
     builder.SetupIPushEvent(s => s.AddSignalR().AddPushToStorage());
 });
 

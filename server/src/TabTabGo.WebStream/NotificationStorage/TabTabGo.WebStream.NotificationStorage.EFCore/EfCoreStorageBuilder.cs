@@ -1,19 +1,36 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TabTabGo.WebStream.Builders;
 using TabTabGo.WebStream.NotificationStorage.EFCore.Repositories;
 using TabTabGo.WebStream.NotificationStorage.Repository;
+using TabTabGo.WebStream.NotificationStorage.Services;
 
 namespace TabTabGo.WebStream.NotificationStorage.EFCore
 {
     public static class EfCoreStorageBuilder
     {
-        public static StorageBuilder UseEfCore(this StorageBuilder builder, Action<DbContextOptionsBuilder> action)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static WebStreamBuilder UseEfCore(this WebStreamBuilder builder)
         {
-            builder.SetUnitOfWork(() =>
+            builder.RegisteService<INotificationUserRepository, EfNotificationUserRepository>((s) =>
             {
-                DbContextOptionsBuilder contextOptions = new();
-                action(contextOptions);
-                return new EFUnitOfWorkFactory(contextOptions.Options);
+                return new EfNotificationUserRepository(s.GetRequiredService<DbContext>());
             });
+            builder.RegisteService<INotificationRepository, EfNotificationRepository>((s) =>
+            {
+                return new EfNotificationRepository(s.GetRequiredService<DbContext>());
+            });
+
+            builder.RegisteService<INotificationServices, DefaultNotificationServices>((s) =>
+            {
+                return new DefaultNotificationServices();
+            });
+
+
             return builder;
         }
     }
