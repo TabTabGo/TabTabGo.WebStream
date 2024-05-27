@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using TabTabGo.Core.Data;
 using TabTabGo.WebStream.Builders;
 using TabTabGo.WebStream.NotificationStorage.EFCore.Repositories;
 using TabTabGo.WebStream.NotificationStorage.Repository;
 using TabTabGo.WebStream.NotificationStorage.Services;
+using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.NotificationStorage.EFCore
 {
@@ -29,8 +31,10 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore
             {
                 return new DefaultNotificationServices();
             });
-
-
+            builder.RegisteService<ISaveWebStreamMessage, PushToStorageService>((serviceProvider) =>
+            {
+                return new PushToStorageService(serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>());
+            });
             return builder;
         }
     }

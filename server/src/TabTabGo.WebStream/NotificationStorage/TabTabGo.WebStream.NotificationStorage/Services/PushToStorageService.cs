@@ -11,7 +11,7 @@ using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.NotificationStorage.Services
 {
-    public class PushToStorageService : IPushEvent
+    public class PushToStorageService : IPushEvent, ISaveWebStreamMessage
     {
         private readonly IUserConnections _userConnections;
         private readonly IUnitOfWork _unitOfWork;
@@ -130,6 +130,16 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 UserId = userId
             };
             await _users.InsertAsync(user, cancellationToken); 
+        }
+
+        public Task Save(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+           return this.PushToUserAsync(userIds, message, cancellationToken);
+        }
+
+        public Task Save(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            return this.PushToUserAsync(userId, message, cancellationToken);
         }
     }
 }

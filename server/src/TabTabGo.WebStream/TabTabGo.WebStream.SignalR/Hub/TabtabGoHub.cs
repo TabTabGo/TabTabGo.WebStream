@@ -25,7 +25,7 @@ namespace TabTabGo.WebStream.SignalR.Hub
         }
         public Task ClientEvent(SignalReceiveEvent webStreamMessage)
         {
-            return _eventHandler.OnEventReceived(this.Context.ConnectionId, new WebStreamMessage(webStreamMessage.EventName, webStreamMessage.Data));
+            return _eventHandler.OnEventReceived(this.Context.UserIdentifier, new WebStreamMessage(webStreamMessage.EventName, webStreamMessage.Data));
         }
     }
 }

@@ -10,8 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 
-builder.Services.AddSignalR();
-builder.Services.AddScoped<NullReceiveEvent>();
+builder.Services.AddSignalR(); 
 builder.Services.AddWebStream(builder =>
 {
     builder.RegisteEventHandler<NullReceiveEvent>();
