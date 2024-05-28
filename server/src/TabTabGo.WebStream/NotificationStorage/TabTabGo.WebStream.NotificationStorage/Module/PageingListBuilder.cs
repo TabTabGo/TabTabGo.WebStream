@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,9 +54,9 @@ namespace TabTabGo.WebStream.NotificationStorage.Module
         }
 
 
-        public virtual TabTabGo.Core.Models.PageList<T> BuildWithPartialCount()
+        public virtual TabTabGo.Core.Models.PageList<T> BuildWithPartialCount(int pagesToCountAfterThisPage)
         {
-            var countTo = (PageNumber + 5) * PageSize;
+            var countTo = (PageNumber + pagesToCountAfterThisPage) * PageSize;
             var partialCount = Query.Take(countTo).Count(); 
             var queryToGetReuslt = Query;
             try
@@ -87,9 +88,9 @@ namespace TabTabGo.WebStream.NotificationStorage.Module
         }
 
 
-        public virtual Task<TabTabGo.Core.Models.PageList<T>> BuildWithPartialCountAsync(CancellationToken cancellationToken = default)
+        public virtual Task<TabTabGo.Core.Models.PageList<T>> BuildWithPartialCountAsync(int pagesToCountAfterThisPage,CancellationToken cancellationToken = default)
         {
-            return Task.Run<TabTabGo.Core.Models.PageList<T>>(() => this.BuildWithPartialCount(), cancellationToken);
+            return Task.Run<TabTabGo.Core.Models.PageList<T>>(() => this.BuildWithPartialCount(pagesToCountAfterThisPage), cancellationToken);
         }
         public virtual Task<TabTabGo.Core.Models.PageList<T>> BuildWithFullCountAsync(CancellationToken cancellationToken = default)
         {
