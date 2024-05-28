@@ -8,7 +8,7 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore.Mappers
     {
         public void Configure(EntityTypeBuilder<NotificationUser> builder)
         {
-            builder.ToTable("tabtabgo_user_notifications");
+            builder.ToTable("user_notifications");
             builder.HasKey(m => m.Id);
             builder.HasIndex(m => new { m.UserId, m.NotifiedDateTime, m.Status });
             builder.HasIndex(m => new { m.UserId, m.ReadDateTime });

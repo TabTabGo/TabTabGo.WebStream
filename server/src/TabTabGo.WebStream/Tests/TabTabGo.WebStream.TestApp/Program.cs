@@ -59,11 +59,12 @@ builder.Services.AddWebStream(builder =>
                 .AddEventHandler(x => x.IgnoreAllEvents());
             }));
 
-        });
+        })
+        .LogAllRecevedMessages();
     });
 
     builder.UseEfCore();
-    builder.SetupIPushEvent(s => s.AddSignalR().AddPushToStorage());
+    builder.SetupIPushEvent(s => s.AddSignalR().AddPushToStorage().LogAllOutMessages());
 });
 
 var app = builder.Build();

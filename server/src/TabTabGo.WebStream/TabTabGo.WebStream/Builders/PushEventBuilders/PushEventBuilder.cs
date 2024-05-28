@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TabTabGo.WebStream.Services.Contract;
@@ -12,6 +14,19 @@ namespace TabTabGo.WebStream.Builders.PushEventBuilders
         public PushEventBuilder AddPushEvent(Func<IServiceProvider, IPushEvent> func)
         {
             _pushBuilder.Add(func);
+            return this;
+        }
+        private bool logEnabled = false;
+        public PushEventBuilder LogAllOutMessages()
+        {
+            if (!logEnabled)
+            {
+                logEnabled = true;
+                var oldPushBuilder = _pushBuilder.ToList();
+                oldPushBuilder.Insert(0, s => new LogPushEvents(s.GetRequiredService<ILogger<IPushEvent>>()));
+                _pushBuilder.Clear();
+                _pushBuilder.Add(s => new CompositPushEvent(oldPushBuilder.Select(x => x(s))));
+            }
             return this;
         }
 

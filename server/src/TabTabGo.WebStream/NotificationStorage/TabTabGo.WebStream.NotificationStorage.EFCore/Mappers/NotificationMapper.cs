@@ -8,7 +8,7 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore.Mappers
     {
         public void Configure(EntityTypeBuilder<Notification> builder)
         { 
-            builder.ToTable("tabtabgo_notifications");
+            builder.ToTable("notifications");
             builder.HasKey(m => m.Id); 
         }
     }
