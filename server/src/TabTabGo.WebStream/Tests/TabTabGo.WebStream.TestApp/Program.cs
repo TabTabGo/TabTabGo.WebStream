@@ -6,9 +6,37 @@ using TabTabGo.WebStream.Services.EventHandlers;
 using TabTabGo.WebStream.SignalR.Hub;
 using Microsoft.EntityFrameworkCore.InMemory;
 using Microsoft.EntityFrameworkCore;
+using TabTabGo.WebStream.NotificationStorage.API.APIs;
+using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddEndpointsApiExplorer();
 
-
+builder.Services.AddSwaggerGen(c =>
+{ 
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+builder.Services.AddControllers();
 
 builder.Services.AddSignalR(); 
 builder.Services.AddWebStream(builder =>
@@ -39,8 +67,9 @@ builder.Services.AddWebStream(builder =>
 });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
+app.MapTabtabGoNotificationsEndPoints("tabtabgo"); 
 app.MapHub<TabtabGoHub>("TabtabgoHub");
 app.Run();

@@ -10,7 +10,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
     {
         void ReadNotification(NotificationUser notificationUser, INotificationUserRepository notificationUserRepository);
         Task ReadNotificationAsync(NotificationUser notificationUser, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default);
-        PageingResult<NotificationUser> GetUserNotifications(string userId, UserNotificationFilter filters, PagingParameters pagingParameters, INotificationUserRepository notificationUserRepository);
-        Task<PageingResult<NotificationUser>> GetUserNotificationsAsync(string UserId, UserNotificationFilter filters, PagingParameters pagingParameters, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default);
+        TabTabGo.Core.Models.PageList<NotificationUser> GetUserNotifications(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository);
+        Task<TabTabGo.Core.Models.PageList<NotificationUser>> GetUserNotificationsAsync(string UserId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default);
     }
 }

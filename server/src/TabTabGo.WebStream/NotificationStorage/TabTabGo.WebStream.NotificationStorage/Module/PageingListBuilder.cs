@@ -21,7 +21,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Module
 
         }
     }
-    public class PageingResultBuilder<T>
+    public class PageingListBuilder<T> where T : class
     {
         protected readonly bool NeedOrder;
         protected readonly IQueryable<T> Query;
@@ -29,14 +29,14 @@ namespace TabTabGo.WebStream.NotificationStorage.Module
         protected readonly int PageSize;
         protected readonly string Order;
         protected readonly bool IsDesc;
-        public PageingResultBuilder(IQueryable<T> query, int pageNumber, int pageSize, string order, bool isDesc) : this(query, pageNumber, pageSize)
+        public PageingListBuilder(IQueryable<T> query, int pageNumber, int pageSize, string order, bool isDesc) : this(query, pageNumber, pageSize)
         {
             this.NeedOrder = true;
             this.Order = order;
             this.IsDesc = isDesc;
 
         }
-        public PageingResultBuilder(IQueryable<T> query, int pageNumber, int pageSize)
+        public PageingListBuilder(IQueryable<T> query, int pageNumber, int pageSize)
         {
             if (pageNumber <= 0)
             {
@@ -53,7 +53,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Module
         }
 
 
-        public virtual PageingResult<T> Build()
+        public virtual TabTabGo.Core.Models.PageList<T> BuildWithPartialCount()
         {
             var countTo = (PageNumber + 5) * PageSize;
             var partialCount = Query.Take(countTo).Count(); 
@@ -67,21 +67,36 @@ namespace TabTabGo.WebStream.NotificationStorage.Module
             }
             catch { }
             var result = queryToGetReuslt.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToList();
-            return new PageingResult<T> { Items = result, PartialTotal = partialCount, pageNumber = this.PageNumber, pageSize = this.PageSize }; 
+            return new TabTabGo.Core.Models.PageList<T>(result, partialCount,this.PageSize,this.PageNumber);
+        }
+        public virtual TabTabGo.Core.Models.PageList<T> BuildWithFullCount()
+        { 
+            var count = Query.Count();
+            var queryToGetReuslt = Query;
+            try
+            {
+                if (NeedOrder)
+                {
+                    queryToGetReuslt = queryToGetReuslt.OrderBy(Order, IsDesc);
+                }
+            }
+            catch { }
+            var result = queryToGetReuslt.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToList();
+            return new TabTabGo.Core.Models.PageList<T>(result, count, this.PageSize, this.PageNumber);
 
         }
-        public virtual Task<PageingResult<T>> BuildAsync(CancellationToken cancellationToken = default)
+
+
+        public virtual Task<TabTabGo.Core.Models.PageList<T>> BuildWithPartialCountAsync(CancellationToken cancellationToken = default)
         {
-            return Task.Run<PageingResult<T>>(() => this.Build(), cancellationToken);
+            return Task.Run<TabTabGo.Core.Models.PageList<T>>(() => this.BuildWithPartialCount(), cancellationToken);
         }
-    }
+        public virtual Task<TabTabGo.Core.Models.PageList<T>> BuildWithFullCountAsync(CancellationToken cancellationToken = default)
+        {
+            return Task.Run<TabTabGo.Core.Models.PageList<T>>(() => this.BuildWithFullCount(), cancellationToken);
+        }
 
-    public class PageingResult<T>
-    {
-        public int PartialTotal { get; set; }
-        public int pageNumber { get; set; }
-        public int pageSize { get; set; }
-        public List<T> Items { get; set; }
     }
+ 
 
 }

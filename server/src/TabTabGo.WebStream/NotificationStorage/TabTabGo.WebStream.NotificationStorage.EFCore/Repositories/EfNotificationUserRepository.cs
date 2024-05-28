@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using TabTabGo.Core.Models;
 using TabTabGo.WebStream.NotificationStorage.Entites;
 using TabTabGo.WebStream.NotificationStorage.Module;
 using TabTabGo.WebStream.NotificationStorage.Repository;
@@ -20,16 +21,16 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore.Repositories
             return query.OrderBy(orderBy, descOrder).ToList();
         }
 
-        public Task<PageingResult<NotificationUser>> FindByCriteriaAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
+        public Task<PageList<NotificationUser>> FindByCriteriaAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
         {
             IQueryable<NotificationUser> query = context.Set<NotificationUser>().AppleyCriteria(criteria);
-            return new PageingResultBuilder<NotificationUser>(query, pageNumber, pageSize, orderBy, isDesc).BuildAsync(cancellationToken);
+            return new PageingListBuilder<NotificationUser>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCountAsync(cancellationToken);
         }
 
-        public PageingResult<NotificationUser> FindByCriteria(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
+        public PageList<NotificationUser> FindByCriteria(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
         {
             IQueryable<NotificationUser> query = context.Set<NotificationUser>().AppleyCriteria(criteria);
-            return new PageingResultBuilder<NotificationUser>(query, pageNumber, pageSize, orderBy, isDesc).Build();
+            return new PageingListBuilder<NotificationUser>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         } 
         public List<NotificationUser> FindByUserId(string userId)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using TabTabGo.Core.Models;
 using TabTabGo.WebStream.NotificationStorage.Entites;
 using TabTabGo.WebStream.NotificationStorage.Module;
 
@@ -16,7 +17,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Repository
         NotificationUser FindByUserIdAndNotificationId(string userId, Guid notificationId);  
         Task<List<NotificationUser>> FindByCriteriaAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy,bool isDesc, CancellationToken cancellationToken = default);
         List<NotificationUser> FindByCriteria(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc); 
-        Task<PageingResult<NotificationUser>> FindByCriteriaAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize,int pageNumber, CancellationToken cancellationToken = default);
-        PageingResult<NotificationUser> FindByCriteria(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber); 
+        Task<PageList<NotificationUser>> FindByCriteriaAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize,int pageNumber, CancellationToken cancellationToken = default);
+        PageList<NotificationUser> FindByCriteria(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber); 
     }
 }

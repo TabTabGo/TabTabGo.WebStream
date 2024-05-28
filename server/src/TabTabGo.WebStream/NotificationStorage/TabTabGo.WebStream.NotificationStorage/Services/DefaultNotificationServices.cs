@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using TabTabGo.Core.Models;
 using TabTabGo.WebStream.NotificationStorage.Entites;
 using TabTabGo.WebStream.NotificationStorage.Entites.Enums;
 using TabTabGo.WebStream.NotificationStorage.Module;
@@ -55,17 +56,17 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             } 
             return criteria;
         } 
-        public PageingResult<NotificationUser> GetUserNotifications(string userId, UserNotificationFilter filters, PagingParameters pagingParameters, INotificationUserRepository notificationUserRepository)
+        public PageList<NotificationUser> GetUserNotifications(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository)
         {
             var criteria = GetNotificationUserCriteria(filters);
             criteria.Add(s => s.UserId.Equals(userId));
-            return notificationUserRepository.FindByCriteria(criteria, pagingParameters.Order, pagingParameters.IsDesc, pagingParameters.PageSize, pagingParameters.PageNumber);
+            return notificationUserRepository.FindByCriteria(criteria, pagingParameters.OrderBy, pagingParameters.OrderDirection.ToLower().Equals("desc"), pagingParameters.PageSize, pagingParameters.Page);
         } 
-        public Task<PageingResult<NotificationUser>> GetUserNotificationsAsync(string userId, UserNotificationFilter filters, PagingParameters pagingParameters, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default)
+        public Task<PageList<NotificationUser>> GetUserNotificationsAsync(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default)
         {
             var criteria = GetNotificationUserCriteria(filters);
             criteria.Add(s => s.UserId.Equals(userId));
-            return notificationUserRepository.FindByCriteriaAsync(criteria, pagingParameters.Order, pagingParameters.IsDesc, pagingParameters.PageSize, pagingParameters.PageNumber, cancellationToken);
+            return notificationUserRepository.FindByCriteriaAsync(criteria, pagingParameters.OrderBy, pagingParameters.OrderDirection.ToLower().Equals("desc"), pagingParameters.PageSize, pagingParameters.Page);
         }
         public void ReadNotification(NotificationUser notificationUser, INotificationUserRepository notificationUserRepository)
         {

@@ -6,11 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.5" />
+  <ItemGroup> 
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\NotificationStorage\TabTabGo.WebStream.NotificationStorage.API\TabTabGo.WebStream.NotificationStorage.API.csproj" />
     <ProjectReference Include="..\..\NotificationStorage\TabTabGo.WebStream.NotificationStorage.EFCore\TabTabGo.WebStream.NotificationStorage.EFCore.csproj" />
     <ProjectReference Include="..\..\TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj" />
   </ItemGroup>

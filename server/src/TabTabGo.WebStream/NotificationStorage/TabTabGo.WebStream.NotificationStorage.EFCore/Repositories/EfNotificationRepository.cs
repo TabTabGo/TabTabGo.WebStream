@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using TabTabGo.Core.Models;
 using TabTabGo.WebStream.NotificationStorage.Entites;
 using TabTabGo.WebStream.NotificationStorage.Module;
 using TabTabGo.WebStream.NotificationStorage.Repository;
@@ -14,10 +15,10 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore.Repositories
             return query.OrderBy(orderBy, isDesc).ToListAsync(cancellationToken);
         }
 
-        public Task<PageingResult<Notification>> FindByCriteria(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
+        public Task<PageList<Notification>> FindByCriteria(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
         {
             IQueryable<Notification> query = context.Set<Notification>().AppleyCriteria(criteria);
-            return new PageingResultBuilder<Notification>(query, pageNumber, pageSize, orderBy, isDesc).BuildAsync(cancellationToken);
+            return new PageingListBuilder<Notification>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCountAsync(cancellationToken);
         }
 
         public List<Notification> FindByCriteriaAsync(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc)
@@ -26,10 +27,10 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore.Repositories
             return query.OrderBy(orderBy, isDesc).ToList();
         }
 
-        public PageingResult<Notification> FindByCriteriaAsync(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
+        public PageList<Notification> FindByCriteriaAsync(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
         {
             IQueryable<Notification> query = context.Set<Notification>().AppleyCriteria(criteria);
-            return new PageingResultBuilder<Notification>(query, pageNumber, pageSize, orderBy, isDesc).Build();
+            return new PageingListBuilder<Notification>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         }
 
         public List<Notification> FindByUserId(string userId)
