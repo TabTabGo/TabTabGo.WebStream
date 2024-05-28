@@ -82,8 +82,14 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
             return this;
         }
         bool logEnabled = false;
+
+
+        /// <summary>
+        /// log message of the this configured handler
+        /// </summary> 
         public EventHandlerBuilder LogAllRecevedMessages()
         {
+            if (Object == null) throw new Exception("please set up this handler before enable logging"); 
             if (!logEnabled)
             {
                 logEnabled = true;
