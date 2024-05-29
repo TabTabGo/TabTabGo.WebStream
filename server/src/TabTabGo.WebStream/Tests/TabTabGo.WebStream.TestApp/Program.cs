@@ -62,7 +62,7 @@ builder.Services.AddWebStream(builder =>
     });
 
     builder.UseEfCore();
-    builder.SetupIPushEvent(s => s.AddSignalR().PushToStorageOnSuccess().LogAllOutMessages());
+    builder.SetupIPushEvent(s => s.AddSignalR().LogAllOutMessages());
 });
 
 var app = builder.Build();

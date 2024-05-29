@@ -26,7 +26,7 @@ namespace TabTabGo.WebStream.NotificationStorage.API.APIs
             {
                 unitOfWork.BeginTransaction();
 
-                var userNotification = repo.FindByUserIdAndNotificationId(securityService.GetUser().UserId.ToString(), Id);
+                var userNotification = repo.GetByUserIdAndNotificationId(securityService.GetUser().UserId.ToString(), Id);
                 if (userNotification != null) { return Results.NotFound(); }
                 service.ReadNotification(userNotification, repo);
                 unitOfWork.Commit();
@@ -68,7 +68,7 @@ namespace TabTabGo.WebStream.NotificationStorage.API.APIs
             endpointRouteBuilder.MapGet(prefix + "/notificaitons/{Id}", ([FromServices] INotificationUserRepository repo, [FromServices] ISecurityService securityService, [FromServices] INotificationServices service, Guid Id) =>
             {
 
-                var userNotification = repo.FindByUserIdAndNotificationId(securityService.GetUser().UserId.ToString(), Id);
+                var userNotification = repo.GetByUserIdAndNotificationId(securityService.GetUser().UserId.ToString(), Id);
                 if (userNotification != null) { return Results.NotFound(); }
                 return Results.Ok(userNotification);
             }

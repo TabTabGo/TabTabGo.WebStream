@@ -60,13 +60,13 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
         {
             var criteria = GetNotificationUserCriteria(filters);
             criteria.Add(s => s.UserId.Equals(userId));
-            return notificationUserRepository.FindByCriteria(criteria, pagingParameters.OrderBy, pagingParameters.OrderDirection.ToLower().Equals("desc"), pagingParameters.PageSize, pagingParameters.Page);
+            return notificationUserRepository.GetPageList(criteria, pagingParameters.OrderBy, pagingParameters.OrderDirection.ToLower().Equals("desc"), pagingParameters.PageSize, pagingParameters.Page);
         } 
         public Task<PageList<NotificationUser>> GetUserNotificationsAsync(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default)
         {
             var criteria = GetNotificationUserCriteria(filters);
             criteria.Add(s => s.UserId.Equals(userId));
-            return notificationUserRepository.FindByCriteriaAsync(criteria, pagingParameters.OrderBy, pagingParameters.OrderDirection.ToLower().Equals("desc"), pagingParameters.PageSize, pagingParameters.Page);
+            return notificationUserRepository.GetPageListAsync(criteria, pagingParameters.OrderBy, pagingParameters.OrderDirection.ToLower().Equals("desc"), pagingParameters.PageSize, pagingParameters.Page);
         }
         public void ReadNotification(NotificationUser notificationUser, INotificationUserRepository notificationUserRepository)
         {
