@@ -11,7 +11,10 @@ using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.NotificationStorage.Services
 {
-    public class PushToStorageSucessOnDecorator : IPushEvent
+    /// <summary>
+    /// it is the implemetation of IPushEvent and ISendNotification to send messages and notification to user and store in database
+    /// </summary>
+    public class PushToStorageSucessOnDecorator : IPushEvent, ISendNotification
     {
         private readonly IPushEvent _pushEvent;
         private readonly IUserConnections _userConnections;
@@ -79,9 +82,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             await _users.InsertAsync(user, cancellationToken);
 
 
-        }
-
-
+        } 
 
         public async Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
@@ -135,6 +136,15 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 UserId = userId
             };
             await _users.InsertAsync(user, cancellationToken);
+        }
+
+        public Task SendNotification(IEnumerable<string> userIds, object data, CancellationToken cancellationToken = default)
+        {
+           return this.PushToUserAsync(userIds, new WebStreamMessage(nameof(SendNotification), data), cancellationToken);
+        } 
+        public Task SendNotification(string userId, object data, CancellationToken cancellationToken = default)
+        {
+            return this.PushToUserAsync(userId, new WebStreamMessage(nameof(SendNotification), data), cancellationToken);
         }
     }
 }

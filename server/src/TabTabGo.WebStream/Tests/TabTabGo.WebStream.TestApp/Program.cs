@@ -1,18 +1,16 @@
+using Microsoft.OpenApi.Models;
 using TabTabGo.WebStream.Builders;
 using TabTabGo.WebStream.Extensions;
+using TabTabGo.WebStream.NotificationStorage.API.APIs;
 using TabTabGo.WebStream.NotificationStorage.Builders;
 using TabTabGo.WebStream.NotificationStorage.EFCore;
 using TabTabGo.WebStream.Services.EventHandlers;
 using TabTabGo.WebStream.SignalR.Hub;
-using Microsoft.EntityFrameworkCore.InMemory;
-using Microsoft.EntityFrameworkCore;
-using TabTabGo.WebStream.NotificationStorage.API.APIs;
-using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
-{ 
+{
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme.",
@@ -38,7 +36,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddControllers();
 
-builder.Services.AddSignalR(); 
+builder.Services.AddSignalR();
 builder.Services.AddWebStream(builder =>
 {
     builder.RegisteEventHandler<NullReceiveEvent>();
@@ -64,13 +62,13 @@ builder.Services.AddWebStream(builder =>
     });
 
     builder.UseEfCore();
-    builder.SetupIPushEvent(s => s.AddSignalR().AddPushToStorage().LogAllOutMessages());
+    builder.SetupIPushEvent(s => s.AddSignalR().PushToStorageOnSuccess().LogAllOutMessages());
 });
 
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
-app.MapTabtabGoNotificationsEndPoints("tabtabgo"); 
+app.MapTabtabGoNotificationsEndPoints("tabtabgo");
 app.MapHub<TabtabGoHub>("TabtabgoHub");
 app.Run();

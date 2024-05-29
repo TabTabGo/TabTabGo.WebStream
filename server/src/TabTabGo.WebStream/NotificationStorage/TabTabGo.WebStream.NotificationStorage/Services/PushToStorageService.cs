@@ -11,13 +11,15 @@ using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.NotificationStorage.Services
 {
+    /// <summary>
+    /// it is the implemetation of IPushEvent and ISaveWebStreamMessage to save webstream messages and notification to database
+    /// </summary>
     public class PushToStorageService : IPushEvent, ISaveWebStreamMessage
     {
         private readonly IUserConnections _userConnections;
         private readonly IUnitOfWork _unitOfWork;
         private readonly INotificationRepository _notifications;
-        private readonly INotificationUserRepository _users;
-
+        private readonly INotificationUserRepository _users; 
         public PushToStorageService(IUserConnections userConnections, IUnitOfWork unitOfWork, INotificationRepository notifications, INotificationUserRepository users)
         {
             _userConnections = userConnections;
@@ -27,32 +29,27 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
         }
         public async Task PushAsync(IEnumerable<string> connectionIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
-
-            var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
-            if (notification == null)
-            {
-                notification = new Notification()
-                {
-                    Id = message.NotificationId,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                }; await _notifications.InsertAsync(notification, cancellationToken);
-            }
             var userIds = await _userConnections.GetUsersIdsByConnectionIdsAsync(connectionIds, cancellationToken);
-            foreach (var userId in userIds.Distinct().ToList())
-            {
-
-                var user = new NotificationUser()
-                {
-                    NotifiedDateTime = DateTime.UtcNow,
-                    NotificationId = notification.Id,
-                    UserId = userId
-                };
-                await _users.InsertAsync(user, cancellationToken);
-            }
+            await this.Save(userIds, message, cancellationToken); 
         }
 
         public async Task PushAsync(string connectionId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            var userId = await _userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken);
+            await this.Save(userId, message, cancellationToken); 
+        }
+        public Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            return Save(userIds, message, cancellationToken);
+        }
+
+        public Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            return Save(userId, message, cancellationToken);
+        }
+
+
+        public async Task Save(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
 
             var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
@@ -67,7 +64,32 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 await _notifications.InsertAsync(notification, cancellationToken);
             }
 
-            var userId = await _userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken);
+            foreach (var userId in userIds.Distinct().ToList())
+            {
+
+                var user = new NotificationUser()
+                {
+                    NotifiedDateTime = DateTime.UtcNow,
+                    NotificationId = notification.Id,
+                    UserId = userId
+                };
+                await _users.InsertAsync(user, cancellationToken);
+            }
+        }
+
+        public async Task Save(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
+            if (notification == null)
+            {
+                notification = new Notification()
+                {
+                    Id = message.NotificationId,
+                    EventName = message.EventName,
+                    Message = message.Data,
+                };
+                await _notifications.InsertAsync(notification, cancellationToken);
+            }
             var user = new NotificationUser()
             {
                 NotifiedDateTime = DateTime.UtcNow,
@@ -76,70 +98,6 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             };
             await _users.InsertAsync(user, cancellationToken);
 
-
-        }
-
-
-
-        public async Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
-        {
-
-            var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
-            if (notification == null)
-            {
-                notification = new Notification()
-                {
-                    Id = message.NotificationId,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                };
-                await _notifications.InsertAsync(notification, cancellationToken);
-            }
-
-            foreach (var userId in userIds.Distinct().ToList())
-            {
-
-                var user = new NotificationUser()
-                {
-                    NotifiedDateTime = DateTime.UtcNow,
-                    NotificationId = notification.Id,
-                    UserId = userId
-                };
-                await _users.InsertAsync(user, cancellationToken);
-            }
-
-        }
-
-        public async Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
-        { 
-            var notification = await _notifications.GetByKeyAsync(message.NotificationId, cancellationToken: cancellationToken);
-            if (notification == null)
-            {
-                notification = new Notification()
-                {
-                    Id = message.NotificationId,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                };
-                await _notifications.InsertAsync(notification, cancellationToken);
-            }
-            var user = new NotificationUser()
-            {
-                NotifiedDateTime = DateTime.UtcNow,
-                NotificationId = notification.Id,
-                UserId = userId
-            };
-            await _users.InsertAsync(user, cancellationToken); 
-        }
-
-        public Task Save(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
-        {
-           return this.PushToUserAsync(userIds, message, cancellationToken);
-        }
-
-        public Task Save(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
-        {
-            return this.PushToUserAsync(userId, message, cancellationToken);
         }
     }
 }

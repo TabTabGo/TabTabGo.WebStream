@@ -35,6 +35,10 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore
             {
                 return new PushToStorageService(serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>());
             });
+            builder.RegisteService<ISendNotification, PushToStorageSucessOnDecorator>((serviceProvider) =>
+            {
+                return new PushToStorageSucessOnDecorator(serviceProvider.GetRequiredService<IPushEvent>() , serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>() );
+            });
             return builder;
         }
     }
