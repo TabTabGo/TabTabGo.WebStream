@@ -34,7 +34,7 @@ namespace TabTabGo.WebStream.Builders
             services.Add(new NotificationBuilderService<T, Implement> { Function = func });
             return this;
         } 
-        public NotificationBuilder SetUpWebStream(Action<WebStreamBuilder> action)
+        public NotificationBuilder SetupWebStream(Action<WebStreamBuilder> action)
         {
             _webStreamBuilderAction = action;
             return this;

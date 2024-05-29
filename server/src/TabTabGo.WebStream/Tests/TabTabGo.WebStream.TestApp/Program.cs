@@ -41,7 +41,7 @@ builder.Services.AddSignalR();
 builder.Services.AddNotificationServices(NotificationBuilder => // to add notification services and you can setup webstream too
 {
     NotificationBuilder.UseEfCoreNotificationStorage();// this to store notification in database
-    NotificationBuilder.SetUpWebStream(builder =>
+    NotificationBuilder.SetupWebStream(builder =>
     {
         builder.RegisteEventHandler<NullReceiveEvent>();
         builder.SetupEventHandlers(eventHandler =>
