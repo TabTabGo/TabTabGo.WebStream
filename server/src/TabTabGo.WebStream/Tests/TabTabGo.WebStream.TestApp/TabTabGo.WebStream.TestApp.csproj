@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MessageStorage\TabTabGo.WebStream.MessageStorage.EFCore\TabTabGo.WebStream.MessageStorage.EFCore.csproj" />
     <ProjectReference Include="..\..\NotificationStorage\TabTabGo.WebStream.NotificationStorage.API\TabTabGo.WebStream.NotificationStorage.API.csproj" />
     <ProjectReference Include="..\..\NotificationStorage\TabTabGo.WebStream.NotificationStorage.EFCore\TabTabGo.WebStream.NotificationStorage.EFCore.csproj" />
     <ProjectReference Include="..\..\TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj" />

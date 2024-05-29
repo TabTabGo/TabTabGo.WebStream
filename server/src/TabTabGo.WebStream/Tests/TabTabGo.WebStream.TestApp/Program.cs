@@ -1,11 +1,11 @@
 using Microsoft.OpenApi.Models;
 using TabTabGo.WebStream.Builders;
-using TabTabGo.WebStream.Extensions;
 using TabTabGo.WebStream.NotificationStorage.API.APIs;
-using TabTabGo.WebStream.NotificationStorage.Builders;
 using TabTabGo.WebStream.NotificationStorage.EFCore;
+using TabTabGo.WebStream.NotificationStorage.Extensions;
 using TabTabGo.WebStream.Services.EventHandlers;
 using TabTabGo.WebStream.SignalR.Hub;
+using TabTabGo.WebStream.MessageStorage.Builders;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
@@ -37,32 +37,35 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
-builder.Services.AddWebStream(builder =>
+//builder.Services.AddWebStream(bu => { });// to just add webStream services
+builder.Services.AddNotificationServices(NotificationBuilder => // to add notification services and you can setup webstream too
 {
-    builder.RegisteEventHandler<NullReceiveEvent>();
-    builder.SetupEventHandlers(eventHandler =>
+    NotificationBuilder.UseEfCoreNotificationStorage();// this to store notification in database
+    NotificationBuilder.SetUpWebStream(builder =>
     {
-        eventHandler.UseAllPassedHandlers(complex => // use all handlers pass the conditions
+        builder.RegisteEventHandler<NullReceiveEvent>();
+        builder.SetupEventHandlers(eventHandler =>
         {
-            complex.AddEventHandler(s => s.EventName.StartsWith("event1"), (s) => s.UseFirstPassHandler(x => // use first event handler pass the condition
+            eventHandler.UseAllPassedHandlers(complex => // use all handlers pass the conditions
             {
-                x.AddEventHandler("event1_sub1", x1 => x1.IgnoreAllEvents())
-                .AddEventHandler("event1_sub2", x1 => x1.IgnoreAllEvents());
-            }
-            ))
-            .AddEventHandler(s => s.EventName.StartsWith("event2"), s => s.UseEventHandlers((s) =>//use all events handlers
-            {
-                s.AddEventHandler(x => x.IgnoreAllEvents())
-                .AddEventHandler((x) => x.UseEventHandler<NullReceiveEvent>()) // add handler implemented by library client 
-                .AddEventHandler(x => x.IgnoreAllEvents());
-            }));
-
-        })
-        .LogAllRecevedMessages();
+                complex.AddEventHandler(s => s.EventName.StartsWith("event1"), (s) => s.UseFirstPassHandler(x => // use first event handler pass the condition
+                {
+                    x.AddEventHandler("event1_sub1", x1 => x1.IgnoreAllEvents())
+                    .AddEventHandler("event1_sub2", x1 => x1.IgnoreAllEvents());
+                }
+                ))
+                .AddEventHandler(s => s.EventName.StartsWith("event2"), s => s.UseEventHandlers((s) =>//use all events handlers
+                {
+                    s.AddEventHandler(x => x.IgnoreAllEvents())
+                    .AddEventHandler((x) => x.UseEventHandler<NullReceiveEvent>()) // add handler implemented by library client 
+                    .AddEventHandler(x => x.IgnoreAllEvents());
+                }));
+            })
+            .LogAllRecevedMessages();
+        });
+        builder.UseEfCoreMessageStorage();// this to store messages in database
+        builder.SetupIPushEvent(s => s.AddSignalR().AddPushToStorage().LogAllOutMessages());
     });
-
-    builder.UseEfCore();
-    builder.SetupIPushEvent(s => s.AddSignalR().LogAllOutMessages());
 });
 
 var app = builder.Build();

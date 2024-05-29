@@ -9,14 +9,14 @@ using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.NotificationStorage.EFCore
 {
-    public static class EfCoreStorageBuilder
+    public static class EfCoreNotificationStorageBuilder
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static WebStreamBuilder UseEfCore(this WebStreamBuilder builder)
+        public static NotificationBuilder UseEfCoreNotificationStorage(this NotificationBuilder builder)
         {
             builder.RegisteService<INotificationUserRepository, EfNotificationUserRepository>((s) =>
             {
@@ -30,14 +30,10 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore
             builder.RegisteService<INotificationServices, DefaultNotificationServices>((s) =>
             {
                 return new DefaultNotificationServices();
-            });
-            builder.RegisteService<ISaveWebStreamMessage, PushToStorageService>((serviceProvider) =>
+            }); 
+            builder.RegisteService<ISendNotification, SendNotificationService>((serviceProvider) =>
             {
-                return new PushToStorageService(serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>());
-            });
-            builder.RegisteService<ISendNotification, PushToStorageSucessOnDecorator>((serviceProvider) =>
-            {
-                return new PushToStorageSucessOnDecorator(serviceProvider.GetRequiredService<IPushEvent>() , serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>() );
+                return new SendNotificationService(serviceProvider.GetRequiredService<IPushEvent>() , serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>() );
             });
             return builder;
         }

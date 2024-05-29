@@ -19,6 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notifica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.NotificationStorage.API", "NotificationStorage\TabTabGo.WebStream.NotificationStorage.API\TabTabGo.WebStream.NotificationStorage.API.csproj", "{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageStorage", "MessageStorage", "{7597D98D-7900-4E1D-A76B-105AA9020CBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.MessageStorage", "MessageStorage\TabTabGo.WebStream.MessageStorage\TabTabGo.WebStream.MessageStorage.csproj", "{C0184187-9989-4BB3-B712-D4EE0F35FA16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.MessageStorage.EFCore", "MessageStorage\TabTabGo.WebStream.MessageStorage.EFCore\TabTabGo.WebStream.MessageStorage.EFCore.csproj", "{66EF3359-D684-4625-9FB3-6BAA6ECDD480}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +55,14 @@ Global
 		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0184187-9989-4BB3-B712-D4EE0F35FA16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0184187-9989-4BB3-B712-D4EE0F35FA16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0184187-9989-4BB3-B712-D4EE0F35FA16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0184187-9989-4BB3-B712-D4EE0F35FA16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66EF3359-D684-4625-9FB3-6BAA6ECDD480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66EF3359-D684-4625-9FB3-6BAA6ECDD480}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66EF3359-D684-4625-9FB3-6BAA6ECDD480}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66EF3359-D684-4625-9FB3-6BAA6ECDD480}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +72,8 @@ Global
 		{B687C315-2B55-42E2-878E-789C43C23CB7} = {CCEC652F-D27A-4766-BB76-1978921451AA}
 		{BCA66185-B86C-4CD6-9356-B8660C4E702E} = {CCEC652F-D27A-4766-BB76-1978921451AA}
 		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2} = {CCEC652F-D27A-4766-BB76-1978921451AA}
+		{C0184187-9989-4BB3-B712-D4EE0F35FA16} = {7597D98D-7900-4E1D-A76B-105AA9020CBA}
+		{66EF3359-D684-4625-9FB3-6BAA6ECDD480} = {7597D98D-7900-4E1D-A76B-105AA9020CBA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DA62474-E7F3-4385-B08D-88FE745580C9}
