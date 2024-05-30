@@ -27,6 +27,8 @@ namespace TabTabGo.WebStream.Extensions
                 }
                 services.AddScoped<IPushEvent>(s => Get(action).BuildIPushEvent(s));
                 services.AddScoped<IReceiveEvent>(s => Get(action).BuildEventHandler(s));
+                services.AddScoped<IConnectionManager>(s => Get(action).BuildIConnectionManager(s));
+                
             }
             if (servicesLifetime == ServiceLifetime.Transient)
             {
@@ -40,6 +42,8 @@ namespace TabTabGo.WebStream.Extensions
                 }
                 services.AddTransient<IPushEvent>(s => Get(action).BuildIPushEvent(s));
                 services.AddTransient<IReceiveEvent>(s => Get(action).BuildEventHandler(s));
+                services.AddTransient<IConnectionManager>(s => Get(action).BuildIConnectionManager(s));
+               
             }
             if (servicesLifetime == ServiceLifetime.Singleton)
             {
@@ -53,6 +57,8 @@ namespace TabTabGo.WebStream.Extensions
                 }
                 services.AddSingleton<IPushEvent>(s => Get(action).BuildIPushEvent(s));
                 services.AddSingleton<IReceiveEvent>(s => Get(action).BuildEventHandler(s));
+                services.AddSingleton<IConnectionManager>(s => Get(action).BuildIConnectionManager(s));
+
             }
             return services;
         }

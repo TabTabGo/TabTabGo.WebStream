@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using TabTabGo.WebStream.Builders.ConnectionMangerBuilders;
 using TabTabGo.WebStream.Builders.EventHandlerBuilders;
 using TabTabGo.WebStream.Builders.PushEventBuilders;
+using TabTabGo.WebStream.Builders.UserConnectionsBuilders;
 using TabTabGo.WebStream.Services.Contract;
 using TabTabGo.WebStream.Services.EventHandlers;
 namespace TabTabGo.WebStream.Builders
@@ -25,6 +27,8 @@ namespace TabTabGo.WebStream.Builders
 
         Action<EventHandlerBuilder> _eventHandlerBuilder;
         Action<PushEventBuilders.PushEventBuilder> _pushEventBuilder;
+        Action<ConnectionManagerBuilder> _connectionManagerBuilder;
+        Action<UserConnectionsBuilder> _userConnectionBuilder;
 
         private readonly List<Type> _eventHandlerTypes = new List<Type>();
         private readonly List<WebStreamBuilderService> services = new List<WebStreamBuilderService>();
@@ -57,6 +61,11 @@ namespace TabTabGo.WebStream.Builders
             _pushEventBuilder = action;
             return this;
         }
+        public WebStreamBuilder SetupIConnectionManager(Action<ConnectionManagerBuilder> action)
+        {
+            _connectionManagerBuilder = action;
+            return this;
+        }
         public IReceiveEvent BuildEventHandler(IServiceProvider provider)
         {
             var eventHandlerBuilder = new EventHandlerBuilder();
@@ -69,6 +78,12 @@ namespace TabTabGo.WebStream.Builders
             var pushBuilder = new PushEventBuilder();
             _pushEventBuilder(pushBuilder);
             return pushBuilder.Build(serviceProvider);
+        }
+        public IConnectionManager BuildIConnectionManager(IServiceProvider serviceProvider)
+        {
+            var connectionManagerBuilder = new ConnectionManagerBuilder();
+            _connectionManagerBuilder(connectionManagerBuilder);
+            return connectionManagerBuilder.Build(serviceProvider);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore
     { 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<NotificationUser> NotificationUsers { get; set; }
+        public DbSet<UserConnection> UserConnections { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

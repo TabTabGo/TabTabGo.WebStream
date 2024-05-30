@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
+using TabTabGo.Data.EF;
 using TabTabGo.WebStream.Builders;
 using TabTabGo.WebStream.Extensions;
 using TabTabGo.WebStream.NotificationStorage.API.APIs;
@@ -62,13 +64,20 @@ builder.Services.AddWebStream(builder =>
     });
 
     builder.UseEfCore();
+    
     builder.SetupIPushEvent(s => s.AddSignalR().LogAllOutMessages());
+    builder.SetupIConnectionManager(s => s.AddSignalR());
 });
-
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.MapTabtabGoNotificationsEndPoints("tabtabgo");
-app.MapHub<TabtabGoHub>("TabtabgoHub");
+app.MapHub<TabtabGoHub>("/TabtabgoHub");
+//test broadcast api
+app.MapPost("broadcast", async (string message, IHubContext<TabtabGoHub> hubContext) =>
+{
+    await hubContext.Clients.All.SendAsync(message);
+    return Results.NoContent;
+});
 app.Run();
