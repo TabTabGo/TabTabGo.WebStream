@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using TabTabGo.Core.Models;
 using TabTabGo.WebStream.NotificationStorage.Entites;
+using TabTabGo.WebStream.NotificationStorage.Module;
 
 namespace TabTabGo.WebStream.NotificationStorage.Repository
 {
-    public interface INotificationRepository
-    {
-        Guid Create(Notification notification);
-        Notification Find(Guid Id);
-        List<Notification> FindByUserId(string UserId); 
-        Task<Guid> CreateAsync(Notification notification, CancellationToken cancellationToken = default);
-        Task<Notification> FindAsync(Guid Id, CancellationToken cancellationToken = default);
-        Task<List<Notification>> FindByUserIdAsync(string UserId, CancellationToken cancellationToken = default); 
+    public interface INotificationRepository  :TabTabGo.Core.Data.IGenericRepository<Notification,Guid>
+    { 
+        List<Notification> GetByUserId(string UserId);   
+        Task<List<Notification>> GetByUserIdAsync(string UserId, CancellationToken cancellationToken = default);  
+        Task<PageList<Notification>> GetPageListAsync(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default);
+        PageList<Notification> GetPageList(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber); 
     }
 }

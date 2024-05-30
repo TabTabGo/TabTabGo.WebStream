@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Numerics;
+﻿using System;
 using System.Threading.Tasks;
-using System.Xml;
 using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Services.Contract;
+using TabTabGo.WebStream.SignalR.RecivedEvent;
 
 namespace TabTabGo.WebStream.SignalR.Hub
 {
@@ -13,7 +11,7 @@ namespace TabTabGo.WebStream.SignalR.Hub
         IReceiveEvent _eventHandler;
         public TabtabGoHub(IReceiveEvent eventHandler)
         {
-            _eventHandler=eventHandler;
+            _eventHandler = eventHandler;
         }
         public override Task OnConnectedAsync()
         {
@@ -24,10 +22,10 @@ namespace TabTabGo.WebStream.SignalR.Hub
         {
             //farah 
             return base.OnDisconnectedAsync(exception);
-        } 
-        public Task ClientEvent(WebStreamMessage webStreamMessage)
+        }
+        public Task ClientEvent(SignalReceiveEvent webStreamMessage)
         {
-            return _eventHandler.OnEventReceived(this.Context.ConnectionId, webStreamMessage);
-        } 
+            return _eventHandler.OnEventReceived(this.Context.UserIdentifier, new WebStreamMessage(webStreamMessage.EventName, webStreamMessage.Data));
+        }
     }
 }

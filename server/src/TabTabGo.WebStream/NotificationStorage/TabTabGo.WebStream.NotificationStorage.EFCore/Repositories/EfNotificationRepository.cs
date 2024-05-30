@@ -1,44 +1,37 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using TabTabGo.Core.Models;
 using TabTabGo.WebStream.NotificationStorage.Entites;
+using TabTabGo.WebStream.NotificationStorage.Module;
 using TabTabGo.WebStream.NotificationStorage.Repository;
 
 namespace TabTabGo.WebStream.NotificationStorage.EFCore.Repositories
 {
-    class EfNotificationRepository(NotificationDbContext context) : INotificationRepository
+    class EfNotificationRepository(DbContext context) : TabTabGo.Data.EF.Repositories.GenericRepository<Notification, Guid>(context), INotificationRepository
     {
-        public Guid Create(Notification notification)
+      
+        public Task<PageList<Notification>> GetPageListAsync(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
         {
-            context.Notifications.Entry(notification).State = EntityState.Added;
-            context.SaveChanges();
-            return notification.Id;
+            IQueryable<Notification> query = context.Set<Notification>().AppleyCriteria(criteria);
+            return new PageingListBuilder<Notification>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCountAsync(cancellationToken);
         }
 
-        public async Task<Guid> CreateAsync(Notification notification, CancellationToken cancellationToken = default)
+       
+        public PageList<Notification> GetPageList(List<Expression<Func<Notification, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
         {
-            context.Notifications.Entry(notification).State = EntityState.Added;
-            await context.SaveChangesAsync(cancellationToken);
-            return notification.Id;
+            IQueryable<Notification> query = context.Set<Notification>().AppleyCriteria(criteria);
+            return new PageingListBuilder<Notification>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         }
 
-        public Notification Find(Guid id)
+        public List<Notification> GetByUserId(string userId)
         {
-            return context.Notifications.Find(id);
-        }
-
-        public Task<Notification> FindAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            return context.Notifications.FindAsync(keyValues: [id], cancellationToken: cancellationToken).AsTask();
-        }
-
-        public List<Notification> FindByUserId(string userId)
-        {
-            return context.NotificationUsers.Where(s => s.UserId.Equals(userId)).Select(s => s.Notification).ToList();
+            return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId)).Select(s => s.Notification).ToList();
 
         }
 
-        public Task<List<Notification>> FindByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+        public Task<List<Notification>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
         {
-            return context.NotificationUsers.Where(s => s.UserId.Equals(userId)).Select(s => s.Notification).ToListAsync(cancellationToken);
+            return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId)).Select(s => s.Notification).ToListAsync(cancellationToken);
         }
     }
-}
+} 

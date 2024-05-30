@@ -11,6 +11,6 @@ namespace TabTabGo.WebStream.Services.Contract
     /// </summary>
     public interface IReceiveEvent
     {
-        Task OnEventReceived(string connectionId, WebStreamMessage message);
+        Task OnEventReceived(string userId, WebStreamMessage message);
     }
 }

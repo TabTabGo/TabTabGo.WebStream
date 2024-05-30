@@ -11,29 +11,31 @@ namespace TabTabGo.WebStream.Services
 {
     public class PushSignalREvent : IPushEvent
     {
+
         private readonly IHubContext<TabtabGoHub> _hubContext;
-        public PushSignalREvent(IHubContext<TabtabGoHub> hubContext)
+        private readonly IUserConnections _userConnections;
+        public PushSignalREvent(IHubContext<TabtabGoHub> hubContext, IUserConnections userConnections)
         {
-            _hubContext=hubContext;
+            _hubContext = hubContext;
+            _userConnections = userConnections;
         }
         public Task PushAsync(IEnumerable<string> connectionIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
-           return _hubContext.Clients.Clients(connectionIds.ToList()).SendAsync(message.EventName,message.Data,cancellationToken);  
+            return _hubContext.Clients.Clients(connectionIds.ToList()).SendAsync(message.EventName, message.Data, cancellationToken);
         }
-
         public Task PushAsync(string connectionId, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             return _hubContext.Clients.Client(connectionId).SendAsync(message.EventName, message.Data, cancellationToken);
         }
-
-        public Task PushAsync(IEnumerable<string> connectionIds, string eventName, object data, CancellationToken cancellationToken = default)
+        public Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
-            return _hubContext.Clients.Clients(connectionIds.ToList()).SendAsync(eventName, data, cancellationToken);
+            var connectionsIds = _userConnections.GetUsersConnections(userIds);
+            return _hubContext.Clients.Clients(connectionsIds).SendAsync(message.EventName, message.Data, cancellationToken);
         }
-
-        public Task PushAsync(string connectionId, string eventName, object data, CancellationToken cancellationToken = default)
+        public Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
-            return _hubContext.Clients.Client(connectionId).SendAsync(eventName, data, cancellationToken);
+            var connectionsIds = _userConnections.GetUserConnectionIds(userId);
+            return _hubContext.Clients.Clients(connectionsIds).SendAsync(message.EventName, message.Data, cancellationToken);
         }
     }
 }

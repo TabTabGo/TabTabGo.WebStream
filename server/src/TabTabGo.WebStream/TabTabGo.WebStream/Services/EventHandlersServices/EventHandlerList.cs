@@ -18,11 +18,11 @@ namespace TabTabGo.WebStream.Services.EventHandlers
             _handlers = handlers ?? new List<EventHandlerBuilder>();
             _provider = serviceProvider;
         }
-        public Task OnEventReceived(string connectionId, WebStreamMessage message)
+        public Task OnEventReceived(string userId, WebStreamMessage message)
         {
             foreach (var handler in _handlers)
             {
-                handler.Build(_provider).OnEventReceived(connectionId, message);
+                handler.Build(_provider).OnEventReceived(userId, message);
             }
             return Task.CompletedTask;
         }

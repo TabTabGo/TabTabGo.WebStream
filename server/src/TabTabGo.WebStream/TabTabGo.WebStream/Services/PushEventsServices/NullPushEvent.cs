@@ -29,5 +29,25 @@ namespace TabTabGo.WebStream.Services.PushEventsServices
         {
             return Task.CompletedTask;
         }
+
+        public Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task PushToUserAsync(string UserId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task PushToUserAsync(IEnumerable<string> userIds, string eventName, object data, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task PushToUserAsync(string UserId, string eventName, object data, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

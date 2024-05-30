@@ -17,12 +17,12 @@ namespace TabTabGo.WebStream.Services.EventHandlers
             _handlers = handlers ?? new List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)>();
             _serviceProvider = serviceProvider;
         }
-        public Task OnEventReceived(string connectionId, WebStreamMessage message)
+        public Task OnEventReceived(string userId, WebStreamMessage message)
         {
             var handlerBuilder = _handlers.Where(s => s.Item1(message)).ToList();
             foreach (var handler in handlerBuilder)
             {
-                handler.Item2.Build(_serviceProvider).OnEventReceived(connectionId, message);
+                handler.Item2.Build(_serviceProvider).OnEventReceived(userId, message);
             }
             return Task.CompletedTask;
         }

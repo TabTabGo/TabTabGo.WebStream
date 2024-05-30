@@ -8,15 +8,15 @@ namespace TabTabGo.WebStream.Builders
 {
     internal abstract class WebStreamBuilderService
     {
-        internal abstract object Get();
+        internal abstract object Get(IServiceProvider serviceProvider);
         internal abstract Type GetTypeToRegest();
     }
     internal class WebStreamBuilderService<T, Imp> : WebStreamBuilderService where Imp:T
     {
-        internal Func<Imp> Function;
-        internal override object Get()
+        internal Func<IServiceProvider, Imp> Function;
+        internal override object Get(IServiceProvider serviceProvider)
         {
-            return Function();
+            return Function(serviceProvider);
         }
         internal override Type GetTypeToRegest() { return typeof(T); }
     }
@@ -42,7 +42,7 @@ namespace TabTabGo.WebStream.Builders
             _eventHandlerTypes.Add(typeof(T));
             return this;
         }
-        public WebStreamBuilder RegisteService<T, Implement>(Func<Implement> func) where Implement : T
+        public WebStreamBuilder RegisteService<T, Implement>(Func<IServiceProvider,Implement> func) where Implement : T
         {
             services.Add(new WebStreamBuilderService<T, Implement> { Function = func });
             return this;

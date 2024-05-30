@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using TabTabGo.WebStream.Services.Contract;
 using TabTabGo.WebStream.Services.EventHandlers;
@@ -7,7 +8,7 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
 {
     public class EventHandlerBuilder
     {
-        Func<IServiceProvider, IReceiveEvent> Object = null; 
+        Func<IServiceProvider, IReceiveEvent> Object = null;
         public EventHandlerBuilder IgnoreAllEvents()
         {
             var nullresult = new NullReceiveEvent();
@@ -21,6 +22,7 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
         /// <returns></returns>
         public EventHandlerBuilder UseEventHandler(IReceiveEvent handler)
         {
+            if (Object != null) throw new Exception("Please set up this handler Once");
             Object = (s) => handler;
             return this;
         }
@@ -29,18 +31,22 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
         /// </summary>
         /// <param name="handler"></param>
         /// <returns></returns>
-        public EventHandlerBuilder UseEventHandler(Func<IServiceProvider,IReceiveEvent> action)
+        public EventHandlerBuilder UseEventHandler(Func<IServiceProvider, IReceiveEvent> action)
         {
+            if (Object != null) throw new Exception("Please set up this handler Once");
             Object = action;
             return this;
         }
         public EventHandlerBuilder UseEventHandler<T>() where T : IReceiveEvent
         {
+            if (Object != null) throw new Exception("Please set up this handler Once");
             Object = s => s.GetRequiredService<T>();
             return this;
         }
         public EventHandlerBuilder UseFirstPassHandler(Action<FirstPassEventHandlerBuilder> action)
         {
+            if (Object != null) throw new Exception("Please set up this handler Once");
+
             Object = (s) =>
             {
                 FirstPassEventHandlerBuilder builder = new FirstPassEventHandlerBuilder();
@@ -52,6 +58,8 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
 
         public EventHandlerBuilder UseAllPassedHandlers(Action<AllPassEventHandlersBuilder> action)
         {
+            if (Object != null) throw new Exception("Please set up this handler Once");
+
             Object = (s) =>
             {
                 AllPassEventHandlersBuilder builder = new AllPassEventHandlersBuilder();
@@ -63,6 +71,7 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
 
         public EventHandlerBuilder UseEventHandlers(Action<EventHandlerListBuilders> action)
         {
+            if (Object != null) throw new Exception("Please set up this handler Once");
             Object = (s) =>
             {
                 EventHandlerListBuilders builder = new EventHandlerListBuilders();
@@ -71,6 +80,31 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
             };
             return this;
         }
+        bool logEnabled = false;
+
+
+        /// <summary>
+        /// log message of the this configured handler
+        /// </summary> 
+        public EventHandlerBuilder LogAllRecevedMessages()
+        {
+            if (Object == null) throw new Exception("please set up this handler before enable logging");
+            if (!logEnabled)
+            {
+                logEnabled = true;
+                var oldEvent = Object;
+                Object = (s) =>
+                {
+                    EventHandlerListBuilders builder = new EventHandlerListBuilders();
+                    builder.AddEventHandler(x => x.UseEventHandler(t => new LogRecevedEvents(t.GetRequiredService<ILogger<IReceiveEvent>>())));
+                    builder.AddEventHandler(x => x.UseEventHandler(t => oldEvent(t)));
+                    return builder.Build(s);
+                };
+            }
+            return this;
+        }
+
+
         public IReceiveEvent Build(IServiceProvider serviceProvider)
         {
             return Object(serviceProvider);
