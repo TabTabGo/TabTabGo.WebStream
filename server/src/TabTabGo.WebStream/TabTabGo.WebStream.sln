@@ -21,9 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notifica
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageStorage", "MessageStorage", "{7597D98D-7900-4E1D-A76B-105AA9020CBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.MessageStorage", "MessageStorage\TabTabGo.WebStream.MessageStorage\TabTabGo.WebStream.MessageStorage.csproj", "{C0184187-9989-4BB3-B712-D4EE0F35FA16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.MessageStorage", "MessageStorage\TabTabGo.WebStream.MessageStorage\TabTabGo.WebStream.MessageStorage.csproj", "{C0184187-9989-4BB3-B712-D4EE0F35FA16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.MessageStorage.EFCore", "MessageStorage\TabTabGo.WebStream.MessageStorage.EFCore\TabTabGo.WebStream.MessageStorage.EFCore.csproj", "{66EF3359-D684-4625-9FB3-6BAA6ECDD480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.MessageStorage.EFCore", "MessageStorage\TabTabGo.WebStream.MessageStorage.EFCore\TabTabGo.WebStream.MessageStorage.EFCore.csproj", "{66EF3359-D684-4625-9FB3-6BAA6ECDD480}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.ClientTest", "TabTabGo.WebStream.ClientTest\TabTabGo.WebStream.ClientTest.csproj", "{9BCDAE57-5031-47B5-BF73-BB23CA993A9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{66EF3359-D684-4625-9FB3-6BAA6ECDD480}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66EF3359-D684-4625-9FB3-6BAA6ECDD480}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66EF3359-D684-4625-9FB3-6BAA6ECDD480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BCDAE57-5031-47B5-BF73-BB23CA993A9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BCDAE57-5031-47B5-BF73-BB23CA993A9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BCDAE57-5031-47B5-BF73-BB23CA993A9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BCDAE57-5031-47B5-BF73-BB23CA993A9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +80,7 @@ Global
 		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2} = {CCEC652F-D27A-4766-BB76-1978921451AA}
 		{C0184187-9989-4BB3-B712-D4EE0F35FA16} = {7597D98D-7900-4E1D-A76B-105AA9020CBA}
 		{66EF3359-D684-4625-9FB3-6BAA6ECDD480} = {7597D98D-7900-4E1D-A76B-105AA9020CBA}
+		{9BCDAE57-5031-47B5-BF73-BB23CA993A9F} = {4AF33E86-9916-4F1E-9776-A6A0D3381DD0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DA62474-E7F3-4385-B08D-88FE745580C9}

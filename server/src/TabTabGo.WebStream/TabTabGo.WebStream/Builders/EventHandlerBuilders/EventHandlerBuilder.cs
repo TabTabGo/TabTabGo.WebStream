@@ -34,13 +34,12 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
         public EventHandlerBuilder UseEventHandler(Func<IServiceProvider, IReceiveEvent> action)
         {
             if (Object != null) throw new Exception("Please set up this handler Once");
-
             Object = action;
             return this;
         }
         public EventHandlerBuilder UseEventHandler<T>() where T : IReceiveEvent
         {
-            if (Object != null) throw new Exception("Please set up this handler Once"); 
+            if (Object != null) throw new Exception("Please set up this handler Once");
             Object = s => s.GetRequiredService<T>();
             return this;
         }
@@ -72,7 +71,7 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
 
         public EventHandlerBuilder UseEventHandlers(Action<EventHandlerListBuilders> action)
         {
-            if (Object != null) throw new Exception("Please set up this handler Once"); 
+            if (Object != null) throw new Exception("Please set up this handler Once");
             Object = (s) =>
             {
                 EventHandlerListBuilders builder = new EventHandlerListBuilders();
@@ -89,7 +88,7 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
         /// </summary> 
         public EventHandlerBuilder LogAllRecevedMessages()
         {
-            if (Object == null) throw new Exception("please set up this handler before enable logging"); 
+            if (Object == null) throw new Exception("please set up this handler before enable logging");
             if (!logEnabled)
             {
                 logEnabled = true;
@@ -97,8 +96,8 @@ namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
                 Object = (s) =>
                 {
                     EventHandlerListBuilders builder = new EventHandlerListBuilders();
-                    builder.AddEventHandler(x => x.UseEventHandler(new LogRecevedEvents(s.GetRequiredService<ILogger<IReceiveEvent>>())));
-                    builder.AddEventHandler(x => oldEvent(s));
+                    builder.AddEventHandler(x => x.UseEventHandler(t => new LogRecevedEvents(t.GetRequiredService<ILogger<IReceiveEvent>>())));
+                    builder.AddEventHandler(x => x.UseEventHandler(t => oldEvent(t)));
                     return builder.Build(s);
                 };
             }
