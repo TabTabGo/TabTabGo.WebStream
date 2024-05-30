@@ -19,32 +19,32 @@ namespace TabTabGo.WebStream.SignalR.Services
             _hubContext = hubContext;
         }
 
-        public void RegisterConnection(string connectionId, string userId)
+        public void RegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
             _hubContext.Clients.User(userId).SendAsync(Constants.HandShakeMessage, $"You connected with connection ID: {connectionId}");
         }
 
-        public async Task RegisterConnectionAsync(string connectionId, string userId, CancellationToken cancellationToken = default)
+        public async Task RegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             await _hubContext.Clients.User(userId).SendAsync(Constants.HandShakeMessage, $"You connected with connection ID: {connectionId}");
         }
 
-        public void ReRegisterConnection(string connectionId, string userId)
+        public void ReRegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
             _hubContext.Clients.User(userId).SendAsync(Constants.HandShakeMessage, $"You reconnected with connection ID: {connectionId}");
         }
 
-        public async Task ReRegisterConnectionAsync(string connectionId, string userId, CancellationToken cancellationToken = default)
+        public async Task ReRegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             await _hubContext.Clients.User(userId).SendAsync(Constants.HandShakeMessage, $"You reconnected with connection ID: {connectionId}");
         }
 
-        public void UnRegisterConnection(string connectionId, string userId)
+        public void UnRegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
             _hubContext.Clients.User(userId).SendAsync(Constants.HandShakeMessage, $"You disconnected with connection ID: {connectionId}");
         }
 
-        public async Task UnRegisterConnectionAsync(string connectionId, string userId, CancellationToken cancellationToken = default)
+        public async Task UnRegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
            await _hubContext.Clients.User(userId).SendAsync(Constants.HandShakeMessage, $"You disconnected with connection ID: {connectionId}");
         }

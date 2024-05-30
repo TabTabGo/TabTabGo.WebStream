@@ -4,7 +4,10 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 var builder = new Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder();
-builder.WithUrl("wss://localhost:7297/TabtabgoHub");
+builder.WithUrl("wss://localhost:7297/TabtabgoHub", options =>
+{
+}); 
+
 builder.WithAutomaticReconnect();
 var connection = builder.Build();
 

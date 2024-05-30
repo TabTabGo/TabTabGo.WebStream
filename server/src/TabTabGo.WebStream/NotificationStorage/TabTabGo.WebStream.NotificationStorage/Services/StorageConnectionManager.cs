@@ -23,34 +23,36 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             _userConnectionRepository = userConnectionRepository;
         }
 
-        public void RegisterConnection(string connectionId, string userId)
+        public void RegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
             _userConnectionRepository.Insert(new UserConnection
             {
                 ConnectionId = connectionId,
-                UserId = userId
+                UserId = userId,
+                ExtraProperties = parameters
             });
         }
 
-        public async Task RegisterConnectionAsync(string connectionId, string userId, CancellationToken cancellationToken = default)
+        public async Task RegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             await _userConnectionRepository.InsertAsync(new UserConnection
             {
                 ConnectionId = connectionId,
-                UserId = userId
+                UserId = userId,
+                ExtraProperties = parameters
             }, cancellationToken);
 
         }
-        public void UnRegisterConnection(string connectionId, string userId)
+        public void UnRegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
             _userConnectionRepository.Delete(filter: userConn => userConn.ConnectionId == connectionId && userConn.UserId == userId);
         }
 
-        public async Task UnRegisterConnectionAsync(string connectionId, string userId, CancellationToken cancellationToken = default)
+        public async Task UnRegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             _userConnectionRepository.Delete(filter: userConn => userConn.ConnectionId == connectionId && userConn.UserId == userId);
         }
-        public void ReRegisterConnection(string connectionId, string userId)
+        public void ReRegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
             var userConnection = _userConnectionRepository.FirstOrDefault(filter: userConn => userConn.ConnectionId == connectionId && userConn.UserId == userId);
             if (userConnection != null)
@@ -60,7 +62,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             }
         }
 
-        public async Task ReRegisterConnectionAsync(string connectionId, string userId, CancellationToken cancellationToken = default)
+        public async Task ReRegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             var userConnection = await _userConnectionRepository.FirstOrDefaultAsync(filter: userConn => userConn.ConnectionId == connectionId && userConn.UserId == userId, cancellationToken: cancellationToken);
             if (userConnection != null)
