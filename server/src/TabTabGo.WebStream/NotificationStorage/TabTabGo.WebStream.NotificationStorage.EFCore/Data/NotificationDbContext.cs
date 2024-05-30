@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TabTabGo.WebStream.NotificationStorage.EFCore.Mappers;
 using TabTabGo.WebStream.NotificationStorage.Entites;
 
 namespace TabTabGo.WebStream.NotificationStorage.EFCore
 {
-    class NotificationDbContext(DbContextOptions options) : DbContext(options)
+   public class NotificationDbContext(DbContextOptions options) : DbContext(options)
     { 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<NotificationUser> NotificationUsers { get; set; }
@@ -11,6 +12,9 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Notification>().DataMapperBuilder();
+            modelBuilder.Entity<NotificationUser>().DataMapperBuilder();
+            modelBuilder.Entity<UserConnection>().DataMapperBuilder();
         }
     }
 }

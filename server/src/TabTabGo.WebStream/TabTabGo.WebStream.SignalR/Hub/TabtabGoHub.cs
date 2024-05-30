@@ -23,19 +23,15 @@ namespace TabTabGo.WebStream.SignalR.Hub
         }
         public override async Task OnConnectedAsync()
         {
-            Console.WriteLine("hi");
-            Console.WriteLine("hi");
-            Console.WriteLine("hi");
-            Console.WriteLine("hi");
             var userConnections = await _userConnections.GetUserConnectionIdsAsync(this.Context.UserIdentifier);
             if(!userConnections.Contains(this.Context.ConnectionId)) 
             {
-                await _connectionManager.ReRegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier);
+                await _connectionManager.RegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier);
 
             }
             else
             {
-                await _connectionManager.RegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier);
+                await _connectionManager.ReRegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier);
             }
 
                

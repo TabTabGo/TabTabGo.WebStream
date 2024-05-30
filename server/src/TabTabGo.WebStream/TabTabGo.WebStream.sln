@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notifica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.NotificationStorage.API", "NotificationStorage\TabTabGo.WebStream.NotificationStorage.API\TabTabGo.WebStream.NotificationStorage.API.csproj", "{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.TestClient", "TabTabGo.WebStream.TestClient\TabTabGo.WebStream.TestClient.csproj", "{6E024D8D-775E-4785-B517-826EDC9CFB0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.TestClient", "TabTabGo.WebStream.TestClient\TabTabGo.WebStream.TestClient.csproj", "{6E024D8D-775E-4785-B517-826EDC9CFB0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
