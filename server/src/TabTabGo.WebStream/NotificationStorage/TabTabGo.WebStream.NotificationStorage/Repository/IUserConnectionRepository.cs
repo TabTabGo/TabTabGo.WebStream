@@ -8,9 +8,9 @@ namespace TabTabGo.WebStream.NotificationStorage.Repository
 {
     public interface IUserConnectionRepository : TabTabGo.Core.Data.IGenericRepository<UserConnection, Guid>
     {
-        List<UserConnection> FindByUserId(string userId);
-        UserConnection FindByConnectionId(string connectionId);
-        Task<List<UserConnection>> FindByUserIdAsync(string userId, CancellationToken cancellationToken = default);
-        Task<UserConnection> FindByConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default);
+        List<UserConnection> GetByUserId(string userId);
+        UserConnection GetByConnectionId(string connectionId);
+        Task<List<UserConnection>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default);
+        Task<UserConnection> GetByConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default);
     }
 }
