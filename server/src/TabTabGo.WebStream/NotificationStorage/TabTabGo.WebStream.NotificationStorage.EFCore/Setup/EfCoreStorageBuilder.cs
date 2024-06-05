@@ -2,11 +2,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using TabTabGo.Core.Data;
 using TabTabGo.WebStream.Builders;
+using TabTabGo.WebStream.Builders.ConnectionMangerBuilders;
+using TabTabGo.WebStream.Builders.PushEventBuilders;
 using TabTabGo.WebStream.NotificationStorage.EFCore.Repositories;
 using TabTabGo.WebStream.NotificationStorage.Repository;
 using TabTabGo.WebStream.NotificationStorage.Services;
 using TabTabGo.WebStream.Services.Contract;
-
 namespace TabTabGo.WebStream.NotificationStorage.EFCore
 {
     public static class EfCoreStorageBuilder
@@ -26,7 +27,10 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore
             {
                 return new EfNotificationRepository(s.GetRequiredService<DbContext>());
             });
-
+            builder.RegisteService<IUserConnectionRepository, EfUserConnectionRepository>((s) =>
+            {
+                return new EfUserConnectionRepository(s.GetRequiredService<DbContext>());
+            });
             builder.RegisteService<INotificationServices, DefaultNotificationServices>((s) =>
             {
                 return new DefaultNotificationServices();
@@ -39,6 +43,16 @@ namespace TabTabGo.WebStream.NotificationStorage.EFCore
             {
                 return new PushToStorageSucessOnDecorator(serviceProvider.GetRequiredService<IPushEvent>() , serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>() );
             });
+            builder.RegisteService<IConnectionManager, StorageConnectionManager>((serviceProvider) =>
+            {
+                return new StorageConnectionManager(serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<IUserConnectionRepository>());
+            });
+            builder.RegisteService<IUserConnections, StorageUserConnections>((serviceProvider) =>
+            {
+                return new StorageUserConnections(serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<IUserConnectionRepository>());
+            });
+          
+
             return builder;
         }
     }
