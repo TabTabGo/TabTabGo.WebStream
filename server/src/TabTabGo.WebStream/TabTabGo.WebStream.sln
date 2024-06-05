@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream", "TabTabGo.WebStream\TabTabGo.WebStream.csproj", "{D76A76C7-49B7-4D22-B257-AF87B7D60C14}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.SignalR", "TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj", "{B451E71B-3311-4211-B39D-443132E5C6DB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4AF33E86-9916-4F1E-9776-A6A0D3381DD0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.TestApp", "Tests\TabTabGo.WebStream.TestApp\TabTabGo.WebStream.TestApp.csproj", "{EBF69406-49DF-44A1-90B0-D07CB96A811A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NotificationStorage", "NotificationStorage", "{CCEC652F-D27A-4766-BB76-1978921451AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.NotificationStorage", "NotificationStorage\TabTabGo.WebStream.NotificationStorage\TabTabGo.WebStream.NotificationStorage.csproj", "{B687C315-2B55-42E2-878E-789C43C23CB7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.NotificationStorage.EFCore", "NotificationStorage\TabTabGo.WebStream.NotificationStorage.EFCore\TabTabGo.WebStream.NotificationStorage.EFCore.csproj", "{BCA66185-B86C-4CD6-9356-B8660C4E702E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.NotificationStorage.API", "NotificationStorage\TabTabGo.WebStream.NotificationStorage.API\TabTabGo.WebStream.NotificationStorage.API.csproj", "{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.TestClient", "TabTabGo.WebStream.TestClient\TabTabGo.WebStream.TestClient.csproj", "{6E024D8D-775E-4785-B517-826EDC9CFB0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D76A76C7-49B7-4D22-B257-AF87B7D60C14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D76A76C7-49B7-4D22-B257-AF87B7D60C14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D76A76C7-49B7-4D22-B257-AF87B7D60C14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D76A76C7-49B7-4D22-B257-AF87B7D60C14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B451E71B-3311-4211-B39D-443132E5C6DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B451E71B-3311-4211-B39D-443132E5C6DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B451E71B-3311-4211-B39D-443132E5C6DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B451E71B-3311-4211-B39D-443132E5C6DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBF69406-49DF-44A1-90B0-D07CB96A811A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBF69406-49DF-44A1-90B0-D07CB96A811A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBF69406-49DF-44A1-90B0-D07CB96A811A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBF69406-49DF-44A1-90B0-D07CB96A811A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B687C315-2B55-42E2-878E-789C43C23CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B687C315-2B55-42E2-878E-789C43C23CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B687C315-2B55-42E2-878E-789C43C23CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B687C315-2B55-42E2-878E-789C43C23CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCA66185-B86C-4CD6-9356-B8660C4E702E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCA66185-B86C-4CD6-9356-B8660C4E702E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCA66185-B86C-4CD6-9356-B8660C4E702E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCA66185-B86C-4CD6-9356-B8660C4E702E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E024D8D-775E-4785-B517-826EDC9CFB0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E024D8D-775E-4785-B517-826EDC9CFB0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E024D8D-775E-4785-B517-826EDC9CFB0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E024D8D-775E-4785-B517-826EDC9CFB0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EBF69406-49DF-44A1-90B0-D07CB96A811A} = {4AF33E86-9916-4F1E-9776-A6A0D3381DD0}
+		{B687C315-2B55-42E2-878E-789C43C23CB7} = {CCEC652F-D27A-4766-BB76-1978921451AA}
+		{BCA66185-B86C-4CD6-9356-B8660C4E702E} = {CCEC652F-D27A-4766-BB76-1978921451AA}
+		{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2} = {CCEC652F-D27A-4766-BB76-1978921451AA}
+		{6E024D8D-775E-4785-B517-826EDC9CFB0F} = {4AF33E86-9916-4F1E-9776-A6A0D3381DD0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3DA62474-E7F3-4385-B08D-88FE745580C9}
+	EndGlobalSection
+EndGlobal
