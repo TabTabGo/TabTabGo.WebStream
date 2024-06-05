@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using TabTabGo.Core.Models;
-using TabTabGo.WebStream.NotificationHub.Entities;
-using TabTabGo.WebStream.NotificationHub.Module;
-using TabTabGo.WebStream.NotificationHub.Repository;
+using TabTabGo.WebStream.Notification.Entities;
+using TabTabGo.WebStream.Notification.Module;
+using TabTabGo.WebStream.Notification.Repository;
 
-namespace TabTabGo.WebStream.NotificationHub.EFCore.Repositories
+namespace TabTabGo.WebStream.Notification.EFCore.Repositories
 {
     class EfNotificationUserRepository(DbContext context) : TabTabGo.Data.EF.Repositories.GenericRepository<NotificationUser, Guid>(context), INotificationUserRepository
     { 
@@ -24,11 +24,12 @@ namespace TabTabGo.WebStream.NotificationHub.EFCore.Repositories
         {
             return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId)).ToList();
         } 
-        public NotificationUser GetByUserIdAndNotificationId(string userId, Guid notificationId)
+        public NotificationUser? GetByUserIdAndNotificationId(string userId, Guid notificationId)
         {
-            return context.Set<NotificationUser>().Where(s => s.NotificationId.Equals(notificationId) && s.UserId.Equals(userId)).FirstOrDefault();
+            return context.Set<NotificationUser>().FirstOrDefault(s => s.NotificationId.Equals(notificationId) && s.UserId.Equals(userId));
         } 
-        public Task<NotificationUser> GetByUserIdAndNotificationIdAsync(string userId, Guid notificationId, CancellationToken cancellationToken = default)
+        public Task<NotificationUser?> GetByUserIdAndNotificationIdAsync(string userId, Guid notificationId,
+            CancellationToken cancellationToken = default)
         {
             return context.Set<NotificationUser>().Where(s => s.NotificationId.Equals(notificationId) && s.UserId.Equals(userId)).FirstOrDefaultAsync(cancellationToken);
         } 

@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.Core.Models;
-using TabTabGo.WebStream.NotificationHub.Entities;
-using TabTabGo.WebStream.NotificationHub.Entities.Enums;
-using TabTabGo.WebStream.NotificationHub.Module;
-using TabTabGo.WebStream.NotificationHub.Repository;
+using TabTabGo.WebStream.Notification.Entities;
+using TabTabGo.WebStream.Notification.Entities.Enums;
+using TabTabGo.WebStream.Notification.Module;
+using TabTabGo.WebStream.Notification.Repository;
 
-namespace TabTabGo.WebStream.NotificationHub.Services
+namespace TabTabGo.WebStream.Notification.Services
 {
     public class DefaultNotificationServices : INotificationServices
     {
@@ -22,13 +22,13 @@ namespace TabTabGo.WebStream.NotificationHub.Services
                 if (string.IsNullOrEmpty(filters.Q))
                 {
                     filters.Q = filters.Q.ToLower();
-                    criteria.Add(s => s.Notification.EventName.ToLower().Contains(filters.Q));
+                    criteria.Add(s => s.NotificationMessage.EventName.ToLower().Contains(filters.Q));
                 }
 
                 if (string.IsNullOrEmpty(filters.EventsNames))
                 {
                     var list = filters.EventsNames.ToLower().Split('|').ToList();
-                    criteria.Add(s => list.Contains(s.Notification.EventName));
+                    criteria.Add(s => list.Contains(s.NotificationMessage.EventName));
                 }
                 if (string.IsNullOrEmpty(filters.Status))
                 {

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TabTabGo.WebStream.NotificationHub.Entities;
+using TabTabGo.WebStream.Notification.Entities;
 
-namespace TabTabGo.WebStream.NotificationHub.EFCore
+namespace TabTabGo.WebStream.Notification.EFCore
 {
     class NotificationDbContext(DbContextOptions options) : DbContext(options)
     { 
-        public DbSet<NotificationHub.Entities.Notification> Notifications { get; set; }
+        public DbSet<Notification.Entities.NotificationMessage> Notifications { get; set; }
         public DbSet<NotificationUser> NotificationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,4 @@
-﻿namespace TabTabGo.WebStream.NotificationHub.Entities.Enums
+﻿namespace TabTabGo.WebStream.Notification.Entities.Enums
 {
     public enum NotificationUserStatus
     {

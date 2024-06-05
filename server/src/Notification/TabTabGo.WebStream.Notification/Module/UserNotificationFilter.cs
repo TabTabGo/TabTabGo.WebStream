@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TabTabGo.WebStream.NotificationHub.Module
+namespace TabTabGo.WebStream.Notification.Module
 {
     public class UserNotificationFilter
     {

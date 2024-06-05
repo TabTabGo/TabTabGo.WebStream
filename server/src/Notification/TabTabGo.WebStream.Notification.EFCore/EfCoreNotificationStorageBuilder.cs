@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TabTabGo.Core.Data;
-using TabTabGo.WebStream.NotificationHub.Builders;
-using TabTabGo.WebStream.NotificationHub.EFCore.Repositories;
-using TabTabGo.WebStream.NotificationHub.Repository;
-using TabTabGo.WebStream.NotificationHub.Services;
+using TabTabGo.WebStream.Notification.Builders;
+using TabTabGo.WebStream.Notification.EFCore.Repositories;
+using TabTabGo.WebStream.Notification.Repository;
+using TabTabGo.WebStream.Notification.Services;
 using TabTabGo.WebStream.Services.Contract;
 
-namespace TabTabGo.WebStream.NotificationHub.EFCore
+namespace TabTabGo.WebStream.Notification.EFCore
 {
     public static class EfCoreNotificationStorageBuilder
     {

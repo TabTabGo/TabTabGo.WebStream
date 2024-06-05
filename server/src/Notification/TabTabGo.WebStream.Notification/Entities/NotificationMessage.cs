@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using TabTabGo.Core.Entities;
 
-namespace TabTabGo.WebStream.NotificationHub.Entities
+namespace TabTabGo.WebStream.Notification.Entities
 {
-    public class Notification: IEntity
+    public class NotificationMessage: IEntity
     {
         public Guid Id { get; set; }
         public object Message { get; set; }

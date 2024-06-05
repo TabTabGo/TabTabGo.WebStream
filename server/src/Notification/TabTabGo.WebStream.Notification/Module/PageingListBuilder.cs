@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.WebStream.Notification;
 
-namespace TabTabGo.WebStream.NotificationHub.Module
+namespace TabTabGo.WebStream.Notification.Module
 {
     public class PagingException : ApplicationException
     {

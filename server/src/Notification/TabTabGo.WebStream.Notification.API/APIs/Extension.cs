@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Routing;
 using TabTabGo.Core.Data;
 using TabTabGo.Core.Models;
 using TabTabGo.Core.Services;
-using TabTabGo.WebStream.NotificationHub.Entities;
-using TabTabGo.WebStream.NotificationHub.Module;
-using TabTabGo.WebStream.NotificationHub.Repository;
-using TabTabGo.WebStream.NotificationHub.Services;
+using TabTabGo.WebStream.Notification.Entities;
+using TabTabGo.WebStream.Notification.Module;
+using TabTabGo.WebStream.Notification.Repository;
+using TabTabGo.WebStream.Notification.Services;
 
-namespace TabTabGo.WebStream.NotificationHub.APIs
+namespace TabTabGo.WebStream.Notification.APIs
 {
     public static class Extension
     {
@@ -29,7 +29,7 @@ namespace TabTabGo.WebStream.NotificationHub.APIs
                         unitOfWork.BeginTransaction();
 
                         var userNotification =
-                            repo.GetByUserIdAndNotificationId(securityService.GetUser().UserId.ToString(), Id);
+                            repo.GetByUserIdAndNotificationId(securityService.GetUser()?.UserId.ToString(), Id);
                         if (userNotification != null)
                         {
                             return Results.NotFound();
@@ -56,7 +56,7 @@ namespace TabTabGo.WebStream.NotificationHub.APIs
                         [AsParameters] TabTabGo.Core.ViewModels.PagingOptionRequest page // need to fix binding
                     ) =>
                     {
-                        var result = service.GetUserNotifications(securityService.GetUser().UserId.ToString()
+                        var result = service.GetUserNotifications(securityService.GetUser()?.UserId.ToString()
                             //how to get Current user ??? do we need to use tabtabgo.ISecureityService or add new Service 
                             , filter, page, repo);
                         return Results.Ok(result);
@@ -74,7 +74,7 @@ namespace TabTabGo.WebStream.NotificationHub.APIs
                         [FromServices] INotificationServices service, Guid Id) =>
                     {
                         var userNotification =
-                            repo.GetByUserIdAndNotificationId(securityService.GetUser().UserId.ToString(), Id);
+                            repo.GetByUserIdAndNotificationId(securityService.GetUser()?.UserId.ToString(), Id);
                         if (userNotification != null)
                         {
                             return Results.NotFound();

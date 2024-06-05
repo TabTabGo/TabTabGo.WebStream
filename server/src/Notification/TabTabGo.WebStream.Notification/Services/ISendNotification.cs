@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TabTabGo.WebStream.NotificationHub.Services
+namespace TabTabGo.WebStream.Notification.Services
 {
 
     /// <summary>

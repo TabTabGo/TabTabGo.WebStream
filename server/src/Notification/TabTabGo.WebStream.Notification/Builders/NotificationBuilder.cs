@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TabTabGo.WebStream.Builders;
 
-namespace TabTabGo.WebStream.NotificationHub.Builders
+namespace TabTabGo.WebStream.Notification.Builders
 {
     internal abstract class NotificationBuilderService
     {

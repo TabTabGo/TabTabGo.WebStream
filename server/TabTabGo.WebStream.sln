@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4AF33E86-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "src\Notification", "{CCEC652F-D27A-4766-BB76-1978921451AA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.NotificationHub", "src\Notification\TabTabGo.WebStream.Notification\TabTabGo.WebStream.NotificationHub.csproj", "{B687C315-2B55-42E2-878E-789C43C23CB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notification", "src\Notification\TabTabGo.WebStream.Notification\TabTabGo.WebStream.Notification.csproj", "{B687C315-2B55-42E2-878E-789C43C23CB7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.NotificationHub.EFCore", "src\Notification\TabTabGo.WebStream.NotificationHub.EFCore\TabTabGo.WebStream.NotificationHub.EFCore.csproj", "{BCA66185-B86C-4CD6-9356-B8660C4E702E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notification.EFCore", "src\Notification\TabTabGo.WebStream.Notification.EFCore\TabTabGo.WebStream.Notification.EFCore.csproj", "{BCA66185-B86C-4CD6-9356-B8660C4E702E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.NotificationHub.API", "src\Notification\TabTabGo.WebStream.NotificationHub.API\TabTabGo.WebStream.NotificationHub.API.csproj", "{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notification.API", "src\Notification\TabTabGo.WebStream.Notification.API\TabTabGo.WebStream.Notification.API.csproj", "{9B27759B-12BD-4B3F-8A31-8C217CD7CBE2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageStorage", "src\MessageStorage", "{7597D98D-7900-4E1D-A76B-105AA9020CBA}"
 EndProject

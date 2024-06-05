@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TabTabGo.WebStream.NotificationHub.Entities;
+using TabTabGo.WebStream.Notification.Entities;
 
-namespace TabTabGo.WebStream.NotificationHub.EFCore.Mappers
+namespace TabTabGo.WebStream.Notification.EFCore.Mappers
 {
     internal class UserNotificationMapper : IEntityTypeConfiguration<NotificationUser>
     {

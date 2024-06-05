@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using TabTabGo.WebStream.Extensions;
-using TabTabGo.WebStream.NotificationHub.Builders;
+using TabTabGo.WebStream.Notification.Builders;
 
-namespace TabTabGo.WebStream.NotificationHub.Extensions
+namespace TabTabGo.WebStream.Notification.Extensions
 {
     public static class BuilderExtensions
     {

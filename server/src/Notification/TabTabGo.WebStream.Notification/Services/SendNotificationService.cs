@@ -5,11 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.Core.Data;
 using TabTabGo.WebStream.Model;
-using TabTabGo.WebStream.NotificationHub.Entities;
-using TabTabGo.WebStream.NotificationHub.Repository;
+using TabTabGo.WebStream.Notification.Entities;
+using TabTabGo.WebStream.Notification.Repository;
 using TabTabGo.WebStream.Services.Contract;
 
-namespace TabTabGo.WebStream.NotificationHub.Services
+namespace TabTabGo.WebStream.Notification.Services
 {
     /// <summary>
     ///   send messages to user and store in notification database
@@ -32,7 +32,7 @@ namespace TabTabGo.WebStream.NotificationHub.Services
             var notification = await notifications.GetByKeyAsync(message.Id, cancellationToken: cancellationToken);
             if (notification == null)
             {
-                notification = new Entities.Notification()
+                notification = new Entities.NotificationMessage()
                 {
                     Id = message.Id,
                     EventName = message.EventName,
@@ -59,7 +59,7 @@ namespace TabTabGo.WebStream.NotificationHub.Services
             var notification = await notifications.GetByKeyAsync(message.Id, cancellationToken: cancellationToken);
             if (notification == null)
             {
-                notification = new Entities.Notification()
+                notification = new Entities.NotificationMessage()
                 {
                     Id = message.Id,
                     EventName = message.EventName,

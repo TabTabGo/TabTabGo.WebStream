@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using TabTabGo.Core.Entities;
-using TabTabGo.WebStream.NotificationHub.Entities.Enums;
+using TabTabGo.WebStream.Notification.Entities.Enums;
 
-namespace TabTabGo.WebStream.NotificationHub.Entities
+namespace TabTabGo.WebStream.Notification.Entities
 {
 
     public class NotificationUser : IEntity
@@ -14,7 +14,7 @@ namespace TabTabGo.WebStream.NotificationHub.Entities
         public DateTime NotifiedDateTime { get; set; } = DateTime.UtcNow;
         public DateTime? ReadDateTime { get; set; }
         public Guid NotificationId { get; set; }
-        public NotificationHub.Entities.Notification Notification { get; set; }
+        public NotificationMessage NotificationMessage { get; set; }
 
         public string CreatedBy { get; set; }
         public DateTimeOffset CreatedDate { get; set; } = DateTime.UtcNow;

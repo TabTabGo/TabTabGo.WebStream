@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TabTabGo.WebStream.NotificationHub.API\TabTabGo.WebStream.NotificationHub.API.csproj" />
-    <ProjectReference Include="..\TabTabGo.WebStream.Notification\TabTabGo.WebStream.NotificationHub.csproj" />
+    <ProjectReference Include="..\TabTabGo.WebStream.Notification.API\TabTabGo.WebStream.Notification.API.csproj" />
+    <ProjectReference Include="..\TabTabGo.WebStream.Notification\TabTabGo.WebStream.Notification.csproj" />
   </ItemGroup>
 
 </Project>

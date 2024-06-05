@@ -13,6 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TabTabGo.WebStream.Notification\TabTabGo.WebStream.NotificationHub.csproj" />
+    <ProjectReference Include="..\TabTabGo.WebStream.Notification\TabTabGo.WebStream.Notification.csproj" />
   </ItemGroup> 
 </Project>

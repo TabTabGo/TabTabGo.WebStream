@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using TabTabGo.WebStream.NotificationHub.Entities;
-using TabTabGo.WebStream.NotificationHub.Module;
-using TabTabGo.WebStream.NotificationHub.Repository;
+using TabTabGo.WebStream.Notification.Entities;
+using TabTabGo.WebStream.Notification.Module;
+using TabTabGo.WebStream.Notification.Repository;
 
-namespace TabTabGo.WebStream.NotificationHub.Services
+namespace TabTabGo.WebStream.Notification.Services
 {
     public interface INotificationServices
     {
