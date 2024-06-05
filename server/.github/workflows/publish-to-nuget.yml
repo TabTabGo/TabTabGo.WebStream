@@ -10,51 +10,60 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Publish TabTabGo.Core to NuGet
+      - name: Publish TabTabGo.WebStream to NuGet
         uses: tabtabgo/publish-to-nuget-action@v1.7
         with:
-          project_path: 'src/core/TabTabGo.Core/TabTabGo.Core.csproj'
+          project_path: 'src/TabTabGo.WebStream/TabTabGo.WebStream.csproj'
           package_version: ${GITHUB_REF#refs/*/v}
-          package_name: 'TabTabGo.Core'
+          package_name: 'TabTabGo.WebStream'
           nuget_api_key: ${{ secrets.NUGET_API_KEY }}
 
-      - name: Publish TabTabGo.Core.Services to NuGet
+      - name: Publish TabTabGo.WebStream.SignalR to NuGet
         uses: tabtabgo/publish-to-nuget-action@v1.7
         with:
-          project_path: 'src/core/TabTabGo.Core.Services/TabTabGo.Core.Services.csproj'
+          project_path: 'src/TabTabGo.WebStream.SignalR/TabTabGo.WebStream.SignalR.csproj'
           package_version: ${GITHUB_REF#refs/*/v}
-          package_name: 'TabTabGo.Core.Services'
+          package_name: 'TabTabGo.WebStream.SignalR'
           nuget_api_key: ${{ secrets.NUGET_API_KEY }}
 
-      - name: Publish TabTabGo.Core.Infrastructure to NuGet
+      - name: Publish TabTabGo.WebStream.Notification to NuGet
         uses: tabtabgo/publish-to-nuget-action@v1.7
         with:
-          project_path: 'src/core/TabTabGo.Core.Infrastructure/TabTabGo.Core.Infrastructure.csproj'
+          project_path: 'src/core/TabTabGo.WebStream.Notification/TabTabGo.WebStream.Notification.csproj'
           package_version: ${GITHUB_REF#refs/*/v}
-          package_name: 'TabTabGo.Core.Infrastructure'
+          package_name: 'TabTabGo.WebStream.Notification'
           nuget_api_key: ${{ secrets.NUGET_API_KEY }}
 
-      - name: Publish TabTabGo.Core.Api to NuGet
+      - name: Publish TabTabGo.WebStream.Api to NuGet
         uses: tabtabgo/publish-to-nuget-action@v1.7
         with:
-          project_path: 'src/core/TabTabGo.Core.Api/TabTabGo.Core.Api.csproj'
+          project_path: 'src/core/TabTabGo.WebStream.Notification.Api/TabTabGo.WebStream.Notification.Api.csproj'
           package_version: ${GITHUB_REF#refs/*/v}
-          package_name: 'TabTabGo.Core.Api'
+          package_name: 'TabTabGo.WebStream.Notification.Api'
           nuget_api_key: ${{ secrets.NUGET_API_KEY }}
 
-      - name: Publish TabTabGo.Data.EF to NuGet
+      - name: Publish TabTabGo.WebStream.Notification.EFCore to NuGet
         uses: tabtabgo/publish-to-nuget-action@v1.7
         with:
-          project_path: 'src/data/TabTabGo.Data.EF/TabTabGo.Data.EF.csproj'
+          project_path: 'src/data/TabTabGo.WebStream.Notification.EFCore/TabTabGo.WebStream.Notification.EFCore.csproj'
           package_version: ${GITHUB_REF#refs/*/v}
-          package_name: 'TabTabGo.Data.EF'
+          package_name: 'TabTabGo.WebStream.Notification.EFCore'
           nuget_api_key: ${{ secrets.NUGET_API_KEY }}
 
-      - name: Publish TabTabGo.Core.Country to NuGet
+      - name: Publish TabTabGo.WebStream.MessageStorage to NuGet
         uses: tabtabgo/publish-to-nuget-action@v1.7
         with:
-          project_path: 'src/core/TabTabGo.Core.Country/TabTabGo.Core.Country.csproj'
+          project_path: 'src/core/TabTabGo.WebStream.MessageStorage/TabTabGo.WebStream.MessageStorage.csproj'
           package_version: ${GITHUB_REF#refs/*/v}
-          package_name: 'TabTabGo.Core.Country'
+          package_name: 'TabTabGo.WebStream.Country'
+          nuget_api_key: ${{ secrets.NUGET_API_KEY }}
+
+      - name: Publish TabTabGo.WebStream.MessageStorage.EFCore to NuGet
+        uses: tabtabgo/publish-to-nuget-action@v1.7
+        with:
+          project_path: 'src/core/TabTabGo.WebStream.MessageStorage/TabTabGo.WebStream.MessageStorage.csproj'
+          package_version: ${GITHUB_REF#refs/*/v}
+          package_name: 'TabTabGo.WebStream.Country'
           nuget_api_key: ${{ secrets.NUGET_API_KEY }}    
+
   
