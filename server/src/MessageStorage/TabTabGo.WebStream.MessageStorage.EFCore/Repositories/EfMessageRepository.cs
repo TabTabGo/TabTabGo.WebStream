@@ -10,12 +10,12 @@ namespace TabTabGo.WebStream.MessageStorage.EFCore.Repositories
     { 
         public Task<PageList<WebStreamStorageMessage>> GetPageListAsync(List<Expression<Func<WebStreamStorageMessage, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
         {
-            IQueryable<WebStreamStorageMessage> query = context.Set<WebStreamStorageMessage>().AppleyCriteria(criteria);
+            IQueryable<WebStreamStorageMessage> query = context.Set<WebStreamStorageMessage>().ApplyCriteria(criteria);
             return new PageingListBuilder<WebStreamStorageMessage>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCountAsync(cancellationToken);
         } 
         public PageList<WebStreamStorageMessage> GetPageList(List<Expression<Func<WebStreamStorageMessage, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
         {
-            IQueryable<WebStreamStorageMessage> query = context.Set<WebStreamStorageMessage>().AppleyCriteria(criteria);
+            IQueryable<WebStreamStorageMessage> query = context.Set<WebStreamStorageMessage>().ApplyCriteria(criteria);
             return new PageingListBuilder<WebStreamStorageMessage>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         } 
         public List<WebStreamStorageMessage> GetByUserId(string userId)

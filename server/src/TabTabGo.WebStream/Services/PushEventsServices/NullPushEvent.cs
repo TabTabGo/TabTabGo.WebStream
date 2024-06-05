@@ -35,7 +35,7 @@ namespace TabTabGo.WebStream.Services.PushEventsServices
             return Task.CompletedTask;
         }
 
-        public Task PushToUserAsync(string UserId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        public Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }
@@ -45,7 +45,7 @@ namespace TabTabGo.WebStream.Services.PushEventsServices
             return Task.CompletedTask;
         }
 
-        public Task PushToUserAsync(string UserId, string eventName, object data, CancellationToken cancellationToken = default)
+        public Task PushToUserAsync(string userId, string eventName, object data, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }

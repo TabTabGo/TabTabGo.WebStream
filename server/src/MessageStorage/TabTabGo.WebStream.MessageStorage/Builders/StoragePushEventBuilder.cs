@@ -26,7 +26,7 @@ namespace TabTabGo.WebStream.MessageStorage.Builders
         /// </summary>
         public static PushEventBuilder PushToStorageOnSuccess(this PushEventBuilder webStreamBuilder)
         {
-            webStreamBuilder.DecorateWith((serviceProvider, oldService) => new PushToStorageSucessOnDecorator(oldService, serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<IMessageRepository>(), serviceProvider.GetRequiredService<IUserStreamStorageMessageRepository>()));
+            webStreamBuilder.DecorateWith((serviceProvider, oldService) => new PushToStorageOnSuccess(oldService, serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<IMessageRepository>(), serviceProvider.GetRequiredService<IUserStreamStorageMessageRepository>()));
             return webStreamBuilder;
         }
     }

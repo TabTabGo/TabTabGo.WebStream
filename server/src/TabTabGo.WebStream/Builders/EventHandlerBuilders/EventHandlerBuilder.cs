@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using TabTabGo.WebStream.Services.Contract;
-using TabTabGo.WebStream.Services.EventHandlers;
+using TabTabGo.WebStream.Services.EventHandlersServices;
 
 namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
 {

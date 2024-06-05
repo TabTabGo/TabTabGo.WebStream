@@ -4,9 +4,9 @@ using System.Linq.Expressions;
 
 namespace TabTabGo.WebStream.MessageStorage
 {
-    public static class QueryExt
+    public static class QueryExtensions
     {
-        public static IQueryable<T> AppleyCriteria<T>(this IQueryable<T> query, List<Expression<Func<T, bool>>> criteria)
+        public static IQueryable<T> ApplyCriteria<T>(this IQueryable<T> query, List<Expression<Func<T, bool>>> criteria)
         {
             foreach (var item in criteria ?? new List<Expression<Func<T, bool>>>())
             {

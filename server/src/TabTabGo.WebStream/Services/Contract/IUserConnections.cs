@@ -10,10 +10,10 @@ namespace TabTabGo.WebStream.Services.Contract
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="connectionId"></param>
-        /// <returns>List of user Connectin</returns>
+        /// <param name="userId"></param>
+        /// <returns>List of user Connection</returns>
 
-        List<string> GetUserConnectionIds(string UserId);
+        List<string> GetUserConnectionIds(string userId);
 
         /// <summary>
         /// 
@@ -27,15 +27,17 @@ namespace TabTabGo.WebStream.Services.Contract
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="connectionId"></param>
-        /// <returns>List of user Connectin</returns>
+        /// <param name="userId"></param>
+        ///  <param name="cancellationToken"></param>
+        /// <returns>List of user Connection</returns>
 
-        Task<List<string>> GetUserConnectionIdsAsync(string UserId, CancellationToken cancellationToken = default);
+        Task<List<string>> GetUserConnectionIdsAsync(string userId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="connectionId"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns>User Id of this connection</returns>
         Task<string> GetUserIdByConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default);
 
@@ -47,6 +49,7 @@ namespace TabTabGo.WebStream.Services.Contract
         /// 
         /// </summary>
         /// <param name="connectionIds"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns>List Users Ids </returns>
         Task<List<string>> GetUsersIdsByConnectionIdsAsync(IEnumerable<string> connectionIds, CancellationToken cancellationToken = default);
 

@@ -1,25 +1,15 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Services.Contract;
 
-namespace TabTabGo.WebStream.Services.EventHandlers
+namespace TabTabGo.WebStream.Services.EventHandlersServices
 {
-    internal class LogRecevedEvents : IReceiveEvent
+    internal class LogRecevedEvents(ILogger<IReceiveEvent> logger) : IReceiveEvent
     {
-        ILogger<IReceiveEvent> _logger;
-        public LogRecevedEvents(ILogger<IReceiveEvent> logger)
-        {
-            _logger = logger;
-        }
-
         public Task OnEventReceived(string userId, WebStreamMessage message)
         {
-            _logger.LogTrace("the user of id {userId}, just sent a message {@message}",userId,message);
+            logger.LogTrace("the user of id {userId}, just sent a message {@message}",userId,message);
             return Task.CompletedTask;
         }
     }

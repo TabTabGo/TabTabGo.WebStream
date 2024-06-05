@@ -25,7 +25,7 @@ namespace TabTabGo.WebStream.Builders.PushEventBuilders
                 var oldPushBuilder = _pushBuilder.ToList();
                 oldPushBuilder.Insert(0, s => new LogPushEvents(s.GetRequiredService<ILogger<IPushEvent>>()));
                 _pushBuilder.Clear();
-                _pushBuilder.Add(s => new CompositPushEvent(oldPushBuilder.Select(x => x(s))));
+                _pushBuilder.Add(s => new CompositePushEvent(oldPushBuilder.Select(x => x(s))));
             }
             return this;
         }
@@ -34,13 +34,13 @@ namespace TabTabGo.WebStream.Builders.PushEventBuilders
         {
             var oldPushBuilder = _pushBuilder.ToList();
             _pushBuilder.Clear();
-            _pushBuilder.Add(s => func(s, new CompositPushEvent(oldPushBuilder.Select(x => x(s)))));
+            _pushBuilder.Add(s => func(s, new CompositePushEvent(oldPushBuilder.Select(x => x(s)))));
             return this;
         }
 
         public IPushEvent Build(IServiceProvider serviceProvider)
         {
-            return new CompositPushEvent(_pushBuilder.Select(x => x(serviceProvider)));
+            return new CompositePushEvent(_pushBuilder.Select(x => x(serviceProvider)));
         }
     }
 }

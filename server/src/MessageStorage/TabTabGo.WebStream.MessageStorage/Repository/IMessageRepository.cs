@@ -10,8 +10,8 @@ namespace TabTabGo.WebStream.MessageStorage.Repository
 {
     public interface IMessageRepository  :TabTabGo.Core.Data.IGenericRepository<WebStreamStorageMessage, Guid>
     { 
-        List<WebStreamStorageMessage> GetByUserId(string UserId);   
-        Task<List<WebStreamStorageMessage>> GetByUserIdAsync(string UserId, CancellationToken cancellationToken = default);  
+        List<WebStreamStorageMessage> GetByUserId(string userId);   
+        Task<List<WebStreamStorageMessage>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default);  
         Task<PageList<WebStreamStorageMessage>> GetPageListAsync(List<Expression<Func<WebStreamStorageMessage, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default);
         PageList<WebStreamStorageMessage> GetPageList(List<Expression<Func<WebStreamStorageMessage, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber); 
     }
