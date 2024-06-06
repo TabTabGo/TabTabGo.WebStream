@@ -19,38 +19,12 @@ namespace TabTabGo.WebStream.Notification.EFCore
         /// <returns></returns>
         public static WebStreamBuilder UseEfCore(this WebStreamBuilder builder)
         {
-            builder.RegisteService<INotificationUserRepository, EfNotificationUserRepository>((s) =>
-            {
-                return new EfNotificationUserRepository(s.GetRequiredService<DbContext>());
-            });
-            builder.RegisteService<INotificationRepository, EfNotificationRepository>((s) =>
-            {
-                return new EfNotificationRepository(s.GetRequiredService<DbContext>());
-            });
-            builder.RegisteService<IUserConnectionRepository, EfUserConnectionRepository>((s) =>
-            {
-                return new EfUserConnectionRepository(s.GetRequiredService<DbContext>());
-            });
-            builder.RegisteService<INotificationServices, DefaultNotificationServices>((s) =>
-            {
-                return new DefaultNotificationServices();
-            });
-            builder.RegisteService<ISaveWebStreamMessage, PushToStorageService>((serviceProvider) =>
-            {
-                return new PushToStorageService(serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>());
-            });
-            builder.RegisteService<ISendNotification, PushToStorageSucessOnDecorator>((serviceProvider) =>
-            {
-                return new PushToStorageSucessOnDecorator(serviceProvider.GetRequiredService<IPushEvent>() , serviceProvider.GetRequiredService<IUserConnections>(), serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<INotificationRepository>(), serviceProvider.GetRequiredService<INotificationUserRepository>() );
-            });
-            builder.RegisteService<IConnectionManager, StorageConnectionManager>((serviceProvider) =>
-            {
-                return new StorageConnectionManager(serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<IUserConnectionRepository>());
-            });
-            builder.RegisteService<IUserConnections, StorageUserConnections>((serviceProvider) =>
-            {
-                return new StorageUserConnections(serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<IUserConnectionRepository>());
-            });
+            builder.RegisteService<INotificationUserRepository, EfNotificationUserRepository>((s) => new EfNotificationUserRepository(s.GetRequiredService<DbContext>()));
+            builder.RegisteService<INotificationRepository, EfNotificationRepository>((s) => new EfNotificationRepository(s.GetRequiredService<DbContext>()));
+            builder.RegisteService<IUserConnectionRepository, EfUserConnectionRepository>((s) => new EfUserConnectionRepository(s.GetRequiredService<DbContext>()));
+            builder.RegisteService<INotificationServices, DefaultNotificationServices>((s) => new DefaultNotificationServices());
+            builder.RegisteService<IConnectionManager, StorageConnectionManager>((serviceProvider) => new StorageConnectionManager(serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<IUserConnectionRepository>()));
+            builder.RegisteService<IUserConnections, StorageUserConnections>((serviceProvider) => new StorageUserConnections(serviceProvider.GetRequiredService<IUnitOfWork>(), serviceProvider.GetRequiredService<IUserConnectionRepository>()));
           
 
             return builder;

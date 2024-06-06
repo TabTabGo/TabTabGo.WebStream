@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.Core.Models;
 using TabTabGo.WebStream.Notification.Entities;
-using TabTabGo.WebStream.Notification.Module;
 
 namespace TabTabGo.WebStream.Notification.Repository
 {
@@ -13,7 +12,8 @@ namespace TabTabGo.WebStream.Notification.Repository
     { 
         Task<List<NotificationUser>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default);
         List<NotificationUser> GetByUserId(string userId);
-        Task<NotificationUser> GetByUserIdAndNotificationIdAsync(string userId, Guid notificationId, CancellationToken cancellationToken = default);
+        Task<NotificationUser> GetByUserIdAndNotificationIdAsync(string userId, Guid notificationId,
+            CancellationToken cancellationToken = default);
         NotificationUser GetByUserIdAndNotificationId(string userId, Guid notificationId);  
         Task<PageList<NotificationUser>> GetPageListAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize,int pageNumber, CancellationToken cancellationToken = default);
         PageList<NotificationUser> GetPageList(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber); 

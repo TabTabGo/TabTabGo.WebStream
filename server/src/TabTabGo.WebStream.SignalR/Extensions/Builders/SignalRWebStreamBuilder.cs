@@ -8,18 +8,18 @@ using TabTabGo.WebStream.Services.Contract;
 using TabTabGo.WebStream.SignalR.Hub;
 using TabTabGo.WebStream.SignalR.Services;
 
-namespace TabTabGo.WebStream.Builders
+namespace TabTabGo.WebStream.SignalR.Extensions.Builders
 {
     public static class SignalRWebStreamBuilder
     {
         public static PushEventBuilder AddSignalR(this PushEventBuilder webStreamBuilder)
         {
-            webStreamBuilder.AddPushEvent((serviceProvider) => new PushSignalREvent(serviceProvider.GetRequiredService<IHubContext<TabtabGoHub>>(), serviceProvider.GetRequiredService<IUserConnections>()));
+            webStreamBuilder.AddPushEvent((serviceProvider) => new PushSignalREvent(serviceProvider.GetRequiredService<IHubContext<WebStreamHub>>(), serviceProvider.GetRequiredService<IUserConnections>()));
             return webStreamBuilder;
         }
         public static ConnectionManagerBuilder AddSignalR(this ConnectionManagerBuilder webStreamBuilder)
         {
-            webStreamBuilder.AddConnectionManager((serviceProvider) => new SignalRConnectionManager(serviceProvider.GetRequiredService<IHubContext<TabtabGoHub>>()));
+            webStreamBuilder.AddConnectionManager((serviceProvider) => new SignalRConnectionManager(serviceProvider.GetRequiredService<IHubContext<WebStreamHub>>()));
             return webStreamBuilder;
         }
     }

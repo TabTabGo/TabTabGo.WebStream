@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using TabTabGo.WebStream.Services.EventHandlers;
+using TabTabGo.WebStream.Services.EventHandlersServices;
 
 namespace TabTabGo.WebStream.Builders.EventHandlerBuilders
 {

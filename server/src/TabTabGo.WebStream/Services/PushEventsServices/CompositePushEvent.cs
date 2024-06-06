@@ -7,10 +7,10 @@ using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.Services.PushEventsServices
 {
-    public class CompositPushEvent : IPushEvent
+    public class CompositePushEvent : IPushEvent
     {
         private readonly List<IPushEvent> _pushEvents = null;
-        public CompositPushEvent(IEnumerable<IPushEvent> pushEvents)
+        public CompositePushEvent(IEnumerable<IPushEvent> pushEvents)
         {
             _pushEvents = pushEvents.ToList();
         }
@@ -29,9 +29,7 @@ namespace TabTabGo.WebStream.Services.PushEventsServices
             }
 
         }
-       
-
-
+        
         public async Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             foreach (var s in _pushEvents)
@@ -40,11 +38,11 @@ namespace TabTabGo.WebStream.Services.PushEventsServices
             }
         }
 
-        public async Task PushToUserAsync(string UserId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        public async Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             foreach (var s in _pushEvents)
             {
-                await s.PushToUserAsync(UserId, message, cancellationToken);
+                await s.PushToUserAsync(userId, message, cancellationToken);
             }
         } 
     }

@@ -6,23 +6,21 @@ using TabTabGo.WebStream.Builders.EventHandlerBuilders;
 using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Services.Contract;
 
-namespace TabTabGo.WebStream.Services.EventHandlers
+namespace TabTabGo.WebStream.Services.EventHandlersServices
 {
-    public class AllPassedEventHandlers : IReceiveEvent
+    public class AllPassedEventHandlers(
+        List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)> handlers,
+        IServiceProvider serviceProvider)
+        : IReceiveEvent
     {
-        private readonly List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)> _handlers;
-        private readonly IServiceProvider _serviceProvider;
-        public AllPassedEventHandlers(List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)> handlers, IServiceProvider serviceProvider)
-        {
-            _handlers = handlers ?? new List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)>();
-            _serviceProvider = serviceProvider;
-        }
+        private readonly List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)> _handlers = handlers ?? new List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)>();
+
         public Task OnEventReceived(string userId, WebStreamMessage message)
         {
             var handlerBuilder = _handlers.Where(s => s.Item1(message)).ToList();
             foreach (var handler in handlerBuilder)
             {
-                handler.Item2.Build(_serviceProvider).OnEventReceived(userId, message);
+                handler.Item2.Build(serviceProvider).OnEventReceived(userId, message);
             }
             return Task.CompletedTask;
         }

@@ -1,16 +1,13 @@
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.OpenApi.Models;
-using TabTabGo.Core.Data;
-using TabTabGo.Data.EF;
-using TabTabGo.WebStream.Builders;
 using TabTabGo.WebStream.Extensions;
 using TabTabGo.WebStream.Notification.API.APIs;
 using TabTabGo.WebStream.Notification.Builders;
 using TabTabGo.WebStream.Notification.EFCore;
-using TabTabGo.WebStream.Services.EventHandlers;
+using TabTabGo.WebStream.Services.EventHandlersServices;
+using TabTabGo.WebStream.SignalR.Extensions.Builders;
 using TabTabGo.WebStream.SignalR.Hub;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
@@ -80,10 +77,10 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
-app.MapTabtabGoNotificationsEndPoints("tabtabgo");
-app.MapHub<TabtabGoHub>("/TabtabgoHub");
+app.MapNotificationsEndPoints("tabtabgo");
+app.MapHub<WebStreamHub>("/WebStreamHub");
 //test broadcast api
-app.MapPost("broadcast", async (string message, IHubContext<TabtabGoHub> hubContext) =>
+app.MapPost("broadcast", async (string message, IHubContext<WebStreamHub> hubContext) =>
 {
     await hubContext.Clients.All.SendAsync(message);
     return Results.NoContent;

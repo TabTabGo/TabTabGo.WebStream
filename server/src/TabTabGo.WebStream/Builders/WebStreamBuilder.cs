@@ -5,7 +5,8 @@ using TabTabGo.WebStream.Builders.EventHandlerBuilders;
 using TabTabGo.WebStream.Builders.PushEventBuilders;
 using TabTabGo.WebStream.Builders.UserConnectionsBuilders;
 using TabTabGo.WebStream.Services.Contract;
-using TabTabGo.WebStream.Services.EventHandlers;
+using TabTabGo.WebStream.Services.EventHandlersServices;
+
 namespace TabTabGo.WebStream.Builders
 {
     internal abstract class WebStreamBuilderService

@@ -1,4 +1,4 @@
-﻿namespace TabTabGo.WebStream.SignalR.RecivedEvent
+﻿namespace TabTabGo.WebStream.SignalR.ReceivedEvent
 {
     public class SignalReceiveEvent
     {
