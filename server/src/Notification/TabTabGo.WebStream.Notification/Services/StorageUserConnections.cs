@@ -19,14 +19,14 @@ namespace TabTabGo.WebStream.Notification.Services
             _userConnectionRepository = userConnectionRepository;
         }
 
-        public List<string> GetUserConnectionIds(string UserId)
+        public List<string> GetUserConnectionIds(string userId)
         {
-            return _userConnectionRepository.GetByUserId(UserId).Select(userConnection => userConnection.ConnectionId).ToList();
+            return _userConnectionRepository.GetByUserId(userId).Select(userConnection => userConnection.ConnectionId).ToList();
         }
 
-        public async Task<List<string>> GetUserConnectionIdsAsync(string UserId, CancellationToken cancellationToken = default)
+        public async Task<List<string>> GetUserConnectionIdsAsync(string userId, CancellationToken cancellationToken = default)
         {
-            return (await _userConnectionRepository.GetByUserIdAsync(UserId)).Select(userConnection => userConnection.ConnectionId).ToList();
+            return (await _userConnectionRepository.GetByUserIdAsync(userId, cancellationToken)).Select(userConnection => userConnection.ConnectionId).ToList();
         }
 
         public string GetUserIdByConnectionId(string connectionId)
@@ -36,7 +36,7 @@ namespace TabTabGo.WebStream.Notification.Services
 
         public async Task<string> GetUserIdByConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default)
         {
-            return _userConnectionRepository.GetByConnectionId(connectionId).UserId;
+            return (await _userConnectionRepository.GetByConnectionIdAsync(connectionId, cancellationToken)).UserId;
         }
 
         public List<string> GetUsersConnections(IEnumerable<string> userIds)

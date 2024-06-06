@@ -17,12 +17,12 @@ namespace TabTabGo.WebStream.Services.UserConnectionsServices
             _userConnections = userConnections.ToList();
         }
 
-        public List<string> GetUserConnectionIds(string UserId)
+        public List<string> GetUserConnectionIds(string userId)
         {
-            return _userConnections.FirstOrDefault().GetUserConnectionIds(UserId);
+            return _userConnections.FirstOrDefault().GetUserConnectionIds(userId);
         }
 
-        public Task<List<string>> GetUserConnectionIdsAsync(string UserId, CancellationToken cancellationToken = default)
+        public Task<List<string>> GetUserConnectionIdsAsync(string userId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
