@@ -37,7 +37,7 @@ jobs:
       - name: Publish TabTabGo.WebStream.Api to NuGet
         uses: tabtabgo/publish-to-nuget-action@v1.8
         with:
-          project_path: 'server/src/Notification/TabTabGo.WebStream.Notification.Api/TabTabGo.WebStream.Notification.Api.csproj'
+          project_path: 'server/src/Notification/TabTabGo.WebStream.Notification.API/TabTabGo.WebStream.Notification.API.csproj'
           package_version: ${GITHUB_REF#refs/*/v}
           package_name: 'TabTabGo.WebStream.Notification.Api'
           nuget_api_key: ${{ secrets.NUGET_API_KEY }}
