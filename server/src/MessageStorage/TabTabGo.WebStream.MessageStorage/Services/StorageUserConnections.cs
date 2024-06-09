@@ -2,11 +2,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using TabTabGo.Core.Data;
-using TabTabGo.WebStream.Notification.Repository;
+using TabTabGo.Core.Data; 
 using TabTabGo.WebStream.Services.Contract;
 
-namespace TabTabGo.WebStream.Notification.Services
+namespace TabTabGo.WebStream.MessageStorage.Services
 {
     public class StorageUserConnections : IUserConnections
     {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using TabTabGo.Core.Entities;
-namespace TabTabGo.WebStream.Notification.Entities
+
+namespace TabTabGo.WebStream.MessageStorage.Entites
 {
     public class UserConnection : IEntity
     {

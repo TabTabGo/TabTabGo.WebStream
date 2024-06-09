@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TabTabGo.Data.EF.Extensions;
-using TabTabGo.WebStream.Notification.Entities;
+using TabTabGo.WebStream.MessageStorage.Entites;
 
-namespace TabTabGo.WebStream.Notification.EFCore.Mappers
+namespace TabTabGo.WebStream.MessageStorage.EFCore.Mappers
 {
-    internal static class UserConnectionDataMapper
+    public static class UserConnectionDataMapper
     {
         public static void DataMapperBuilder(this EntityTypeBuilder<UserConnection> builder)
         {
@@ -13,9 +13,7 @@ namespace TabTabGo.WebStream.Notification.EFCore.Mappers
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
             builder.HasKey(p => p.Id);
             builder.HasQueryFilter(x => x.IsEnabled);
-            builder.EntityBuilder<UserConnection>();
-
-
+            builder.EntityBuilder<UserConnection>(); 
         }
     }
 }

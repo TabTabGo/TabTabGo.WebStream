@@ -6,7 +6,7 @@ using TabTabGo.WebStream.MessageStorage.Entites;
 
 namespace TabTabGo.WebStream.MessageStorage.EFCore.Mappers
 {
-    internal class WebStreamStorageMessageMapper : IEntityTypeConfiguration<WebStreamStorageMessage>
+    public class WebStreamStorageMessageMapper : IEntityTypeConfiguration<WebStreamStorageMessage>
     {
         public void Configure(EntityTypeBuilder<WebStreamStorageMessage> builder)
         { 

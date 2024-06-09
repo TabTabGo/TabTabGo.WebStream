@@ -7,7 +7,11 @@ using TabTabGo.WebStream.Notification.EFCore;
 using TabTabGo.WebStream.Services.EventHandlersServices;
 using TabTabGo.WebStream.SignalR.Extensions.Builders;
 using TabTabGo.WebStream.SignalR.Hub;
-
+using TabTabGo.WebStream.MessageStorage.Builders;
+using Microsoft.EntityFrameworkCore.InMemory;
+using TabTabGo.WebStream.TestApp;
+using Microsoft.EntityFrameworkCore;
+using TabTabGo.Core.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
@@ -38,10 +42,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddControllers();
 
-builder.Services.AddSignalR();
-builder.Services.DatabaseFactory(builder.Configuration);
-builder.Services.UseUnitOfWork(builder.Configuration);
-
+/*
+ * please setup the UnitOfWork of TabTabGo.Core Here
+*/
+builder.Services.AddDbContext<DbContext, NotificationDbContext>(s=>s.UseMySql("Server=127.0.0.1;Database=WebStream;Uid=root;Pwd=root;Allow User Variables=true", ServerVersion.AutoDetect("Server=127.0.0.1;Database=WebStream;Uid=root;Pwd=root;Allow User Variables=true"))); 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddSignalR(s=>s.EnableDetailedErrors=true); 
 builder.Services.AddWebStream(builder =>
 {
     builder.RegisteEventHandler<NullReceiveEvent>();
@@ -65,12 +71,9 @@ builder.Services.AddWebStream(builder =>
         })
         .LogAllRecevedMessages();
     });
-
-    builder.UseEfCore();
-    
+    builder.UseEFCore();
     builder.SetupIPushEvent(s => s.AddSignalR().LogAllOutMessages());
-
-    builder.SetupIConnectionManager(s => s.AddSignalR().AddConnectionToStorage());
+    builder.SetupIConnectionManager(s => s.AddConnectionToStorage().AddSignalR()); 
 });
 
 var app = builder.Build();
@@ -79,6 +82,11 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.MapNotificationsEndPoints("tabtabgo");
 app.MapHub<WebStreamHub>("/WebStreamHub");
+var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
+dbContext.Database.EnsureCreated();
+dbContext.Dispose();
+scope.Dispose();
 //test broadcast api
 app.MapPost("broadcast", async (string message, IHubContext<WebStreamHub> hubContext) =>
 {
