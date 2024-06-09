@@ -14,6 +14,8 @@ namespace TabTabGo.WebStream.Notification.EFCore.Mappers
             builder.HasKey(p => p.Id);
             builder.HasQueryFilter(x => x.IsEnabled);
             builder.EntityBuilder<NotificationUser>();
+            builder.Property(s => s.CreatedBy).IsRequired(false);
+            builder.Property(s => s.UpdatedBy).IsRequired(false);
             builder.HasIndex(m => new { m.UserId, m.NotifiedDateTime, m.Status });
             builder.HasIndex(m => new { m.UserId, m.ReadDateTime });
         }

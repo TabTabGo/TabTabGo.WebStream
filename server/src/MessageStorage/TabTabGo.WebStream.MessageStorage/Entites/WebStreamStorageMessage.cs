@@ -11,7 +11,7 @@ namespace TabTabGo.WebStream.MessageStorage.Entites
         public string CreatedBy { get; set; } 
         public Direction MessageDirection { get; set; }
         public DateTimeOffset CreatedDate { get; set; } = DateTime.UtcNow;
-        public bool IsEnabled { get; set; } 
+        public bool IsEnabled { get; set; } = true;
         public IDictionary<string, object> ExtraProperties { get; set; }
         public string UpdatedBy { get; set; }
         public DateTimeOffset UpdatedDate { get; set; } = DateTime.UtcNow;
