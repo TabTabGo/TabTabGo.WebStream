@@ -56,6 +56,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 };
                 await _users.InsertAsync(user, cancellationToken);
             }
+            await _unitOfWork.SaveChangesAsync();
         }
         public async Task SendNotification(string userId, object data, CancellationToken cancellationToken = default)
         {
@@ -79,6 +80,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 UserId = userId
             };
             await _users.InsertAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

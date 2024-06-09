@@ -11,10 +11,11 @@ connection.StartAsync().Wait();// this will Invoke OnConnectedAsync in tabtabgoH
 await connection.InvokeAsync("ClientEvent", new  { EventName = "event1_sub1", Data =new { }  });
 connection.On<string>("HandShake", s =>
 {
-    Console.Write(s.ToString());
+    Console.WriteLine(s.ToString());
 });
 while (true)
 {
+    Console.WriteLine(connection.State.ToString()); 
 Console.ReadLine();
 
 }

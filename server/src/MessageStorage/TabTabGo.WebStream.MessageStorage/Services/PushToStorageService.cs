@@ -72,6 +72,7 @@ namespace TabTabGo.WebStream.MessageStorage.Services
                 };
                 await users.InsertAsync(user, cancellationToken);
             }
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task Save(string userId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
@@ -95,7 +96,7 @@ namespace TabTabGo.WebStream.MessageStorage.Services
                 UserId = userId
             };
             await users.InsertAsync(user, cancellationToken);
-
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

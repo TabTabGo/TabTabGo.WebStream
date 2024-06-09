@@ -15,6 +15,8 @@ namespace TabTabGo.WebStream.Notification.EFCore.Mappers
             builder.ToTable("notifications");
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
             builder.HasKey(p => p.Id);
+            builder.Property(s => s.CreatedBy).IsRequired(false);
+            builder.Property(s => s.UpdatedBy).IsRequired(false);
             builder.HasQueryFilter(x => x.IsEnabled);
             builder.EntityBuilder<NotificationMessage>();
 

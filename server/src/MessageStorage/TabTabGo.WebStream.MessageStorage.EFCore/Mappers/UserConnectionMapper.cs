@@ -13,6 +13,8 @@ namespace TabTabGo.WebStream.MessageStorage.EFCore.Mappers
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
             builder.HasKey(p => p.Id);
             builder.HasQueryFilter(x => x.IsEnabled);
+            builder.Property(s => s.CreatedBy).IsRequired(false);
+            builder.Property(s => s.UpdatedBy).IsRequired(false);
             builder.EntityBuilder<UserConnection>(); 
         }
     }
