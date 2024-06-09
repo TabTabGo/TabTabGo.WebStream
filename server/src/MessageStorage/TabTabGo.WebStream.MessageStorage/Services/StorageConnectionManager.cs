@@ -6,11 +6,10 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.Core.Data;
-using TabTabGo.WebStream.Notification.Entities;
-using TabTabGo.WebStream.Notification.Repository;
+using TabTabGo.WebStream.MessageStorage.Entites;
 using TabTabGo.WebStream.Services.Contract;
 
-namespace TabTabGo.WebStream.Notification.Services
+namespace TabTabGo.WebStream.MessageStorage.Services
 {
     public class StorageConnectionManager : IConnectionManager
     {

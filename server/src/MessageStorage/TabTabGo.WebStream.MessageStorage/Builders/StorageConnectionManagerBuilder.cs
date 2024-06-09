@@ -1,12 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TabTabGo.Core.Data;
-using TabTabGo.WebStream.Builders.ConnectionMangerBuilders;
-using TabTabGo.WebStream.Builders.PushEventBuilders;
-using TabTabGo.WebStream.Notification.Repository;
-using TabTabGo.WebStream.Notification.Services;
-using TabTabGo.WebStream.Services.Contract;
-
-namespace TabTabGo.WebStream.Notification.Builders
+using TabTabGo.WebStream.Builders.ConnectionMangerBuilders; 
+using TabTabGo.WebStream.MessageStorage.Services; 
+namespace TabTabGo.WebStream.MessageStorage.Builders
 {
     public static class StorageConnectionManagerBuilder
     {

@@ -5,7 +5,7 @@ using TabTabGo.WebStream.Notification.Entities;
 
 namespace TabTabGo.WebStream.Notification.EFCore.Mappers
 {
-    internal static class NotificationUserDataMapper
+    public static class NotificationUserDataMapper
     {
         public static void DataMapperBuilder(this EntityTypeBuilder<NotificationUser> builder)
         {

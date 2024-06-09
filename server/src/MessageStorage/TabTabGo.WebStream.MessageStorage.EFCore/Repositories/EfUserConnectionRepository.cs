@@ -4,12 +4,11 @@ using System.Linq.Expressions;
 using TabTabGo.Core;
 using TabTabGo.Core.Models;
 using TabTabGo.Core.Services;
-using TabTabGo.WebStream.Notification.Entities;
-using TabTabGo.WebStream.Notification.Module;
-using TabTabGo.WebStream.Notification.Repository;
+using TabTabGo.WebStream.MessageStorage.Entites;
+using TabTabGo.WebStream.MessageStorage.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace TabTabGo.WebStream.Notification.EFCore.Repositories
+namespace TabTabGo.WebStream.MessageStorage.EFCore.Repositories
 {
     class EfUserConnectionRepository(DbContext context) : TabTabGo.Data.EF.Repositories.GenericRepository<UserConnection, Guid>(context), IUserConnectionRepository
     {

@@ -16,11 +16,10 @@ namespace TabTabGo.WebStream.SignalR.Hub
         IConnectionManager connectionManager,
         IUserConnections connections)
         : Microsoft.AspNetCore.SignalR.Hub
-    {
-        IReceiveEvent _eventHandler = eventHandler;
-
+    {  
         public override async Task OnConnectedAsync()
         {
+            await base.OnConnectedAsync();
             // get relative client info from headers
             var host = Context.GetHttpContext().Request.Headers["Host"];
             var userAgent = Context.GetHttpContext().Request.Headers["User-Agent"];
@@ -41,11 +40,12 @@ namespace TabTabGo.WebStream.SignalR.Hub
             else
             {
                 await connectionManager.ReRegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier);
-            }     
+            } 
         }
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             await connectionManager.UnRegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier);
+            
         }
         public Task ClientEvent(SignalReceiveEvent webStreamMessage)
         {
