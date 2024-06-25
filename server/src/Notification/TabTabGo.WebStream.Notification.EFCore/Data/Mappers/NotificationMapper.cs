@@ -8,13 +8,15 @@ using TabTabGo.WebStream.Notification.Entities;
 
 namespace TabTabGo.WebStream.Notification.EFCore.Mappers
 {
-    internal static class NotificationDataMapper
+    public static class NotificationDataMapper
     {
         public static void DataMapperBuilder(this EntityTypeBuilder<NotificationMessage> builder)
         {
             builder.ToTable("notifications");
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
             builder.HasKey(p => p.Id);
+            builder.Property(s => s.CreatedBy).IsRequired(false);
+            builder.Property(s => s.UpdatedBy).IsRequired(false);
             builder.HasQueryFilter(x => x.IsEnabled);
             builder.EntityBuilder<NotificationMessage>();
 

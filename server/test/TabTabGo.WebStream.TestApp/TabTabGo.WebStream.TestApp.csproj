@@ -7,13 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup> 
+	<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.1" /> 
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\MessageStorage\TabTabGo.WebStream.MessageStorage.EFCore\TabTabGo.WebStream.MessageStorage.EFCore.csproj" />
     <ProjectReference Include="..\..\src\Notification\TabTabGo.WebStream.Notification.API\TabTabGo.WebStream.Notification.API.csproj" />
     <ProjectReference Include="..\..\src\Notification\TabTabGo.WebStream.Notification.EFCore\TabTabGo.WebStream.Notification.EFCore.csproj" />
+	  
+    <ProjectReference Include="..\..\src\Notification\TabTabGo.WebStream.Notification.EFCore\TabTabGo.WebStream.Notification.EFCore.csproj" />
+	  	  
+    
     <ProjectReference Include="..\..\src\TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj" />
   </ItemGroup>
 

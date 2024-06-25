@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using TabTabGo.WebStream.Notification.Entities;
+using TabTabGo.WebStream.MessageStorage.Entites;
 
-namespace TabTabGo.WebStream.Notification.Repository
+namespace TabTabGo.WebStream.MessageStorage.Services
 {
     public interface IUserConnectionRepository : TabTabGo.Core.Data.IGenericRepository<UserConnection, Guid>
     {

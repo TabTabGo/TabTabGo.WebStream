@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using System.Security.Claims;
 using TabTabGo.Core.Data;
 using TabTabGo.Core.Models;
 using TabTabGo.Core.Services;
@@ -19,14 +20,16 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             endpointRouteBuilder.MapPost(prefix + "/notifications/{Id}/read",
                 (
                 [FromServices] INotificationUserRepository repo,
-                [FromServices] ISecurityService securityService,
                 [FromServices] IUnitOfWork unitOfWork,
                 [FromServices] INotificationServices service,
+                HttpRequest request,
                 Guid Id) =>
             {
+                var userId = request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userId)) return Results.Forbid();
                 unitOfWork.BeginTransaction();
 
-                var userNotification = repo.GetByUserIdAndNotificationId(securityService.GetUser()?.UserId.ToString(), Id);
+                var userNotification = repo.GetByUserIdAndNotificationId(userId, Id);
                 if (userNotification != null) { return Results.NotFound(); }
                 service.ReadNotification(userNotification, repo);
                 unitOfWork.Commit();
@@ -43,16 +46,16 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             endpointRouteBuilder.MapGet(prefix + "/notifications",
                  (
                  [FromServices] INotificationServices service,
-                 [FromServices] INotificationUserRepository repo,
-                 [FromServices] ISecurityService securityService,
+                 [FromServices] INotificationUserRepository repo, 
                  [AsParameters] UserNotificationFilter filter,  // need to fix binding
-                 [AsParameters] TabTabGo.Core.ViewModels.PagingOptionRequest page// need to fix binding
-
+                 [AsParameters] TabTabGo.Core.ViewModels.PagingOptionRequest page,// need to fix binding
+                 HttpRequest request
             ) =>
              {
 
-
-                 var result = service.GetUserNotifications(securityService.GetUser()?.UserId.ToString()
+                 var userId = request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 if (string.IsNullOrEmpty(userId)) return Results.Forbid();
+                 var result = service.GetUserNotifications(userId
                 //how to get Current user ??? do we need to use tabtabgo.ISecureityService or add new Service 
                 , filter, page, repo);
                  return Results.Ok(result);
@@ -65,10 +68,12 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             .WithOpenApi(); ;
 
 
-            endpointRouteBuilder.MapGet(prefix + "/notifications/{Id}", ([FromServices] INotificationUserRepository repo, [FromServices] ISecurityService securityService, [FromServices] INotificationServices service, Guid Id) =>
+            endpointRouteBuilder.MapGet(prefix + "/notifications/{Id}", (HttpRequest request,  [FromServices] INotificationUserRepository repo,[FromServices] INotificationServices service, Guid Id) =>
             {
 
-                var userNotification = repo.GetByUserIdAndNotificationId(securityService.GetUser()?.UserId.ToString(), Id);
+                var userId = request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if(string.IsNullOrEmpty(userId)) return Results.Forbid();
+                var userNotification = repo.GetByUserIdAndNotificationId(userId, Id);
                 if (userNotification != null) { return Results.NotFound(); }
                 return Results.Ok(userNotification);
             }

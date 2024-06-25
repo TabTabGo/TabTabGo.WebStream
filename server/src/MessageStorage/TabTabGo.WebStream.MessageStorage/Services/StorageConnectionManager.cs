@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading;
-using System.Threading.Tasks;
-using TabTabGo.Core.Data;
-using TabTabGo.WebStream.Notification.Entities;
-using TabTabGo.WebStream.Notification.Repository;
+﻿using TabTabGo.Core.Data;
+using TabTabGo.WebStream.MessageStorage.Entites;
 using TabTabGo.WebStream.Services.Contract;
 
-namespace TabTabGo.WebStream.Notification.Services
+namespace TabTabGo.WebStream.MessageStorage.Services
 {
     public class StorageConnectionManager : IConnectionManager
     {
@@ -29,8 +21,12 @@ namespace TabTabGo.WebStream.Notification.Services
             {
                 ConnectionId = connectionId,
                 UserId = userId,
-                ExtraProperties = parameters
+                ExtraProperties = parameters, 
+                UpdatedBy = userId,
+                CreatedBy= userId,
+                UpdatedDate = DateTime.Now
             });
+            _unitOfWork.SaveChanges();
         }
 
         public async Task RegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
@@ -39,18 +35,24 @@ namespace TabTabGo.WebStream.Notification.Services
             {
                 ConnectionId = connectionId,
                 UserId = userId,
-                ExtraProperties = parameters
+                ExtraProperties = parameters,
+                UpdatedBy= userId,
+                UpdatedDate= DateTime.Now,
+                CreatedBy= userId,
             }, cancellationToken);
+            await _unitOfWork.SaveChangesAsync();
 
         }
         public void UnRegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
             _userConnectionRepository.Delete(filter: userConn => userConn.ConnectionId == connectionId && userConn.UserId == userId);
+            _unitOfWork.SaveChanges();
         }
 
         public async Task UnRegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             _userConnectionRepository.Delete(filter: userConn => userConn.ConnectionId == connectionId && userConn.UserId == userId);
+            await _unitOfWork.SaveChangesAsync();
         }
         public void ReRegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
@@ -59,6 +61,7 @@ namespace TabTabGo.WebStream.Notification.Services
             {
                 userConnection.ReConnectedDate = DateTime.Now;
                 _userConnectionRepository.Update(userConnection);
+                _unitOfWork.SaveChanges();
             }
         }
 
@@ -69,6 +72,7 @@ namespace TabTabGo.WebStream.Notification.Services
             {
                 userConnection.ReConnectedDate = DateTime.Now;
                 await _userConnectionRepository.UpdateAsync(userConnection, cancellationToken);
+                await _unitOfWork.SaveChangesAsync();
             }
         }
 

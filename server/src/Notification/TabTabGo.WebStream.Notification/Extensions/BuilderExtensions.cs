@@ -1,7 +1,12 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
+using TabTabGo.Core.Data;
 using TabTabGo.WebStream.Extensions;
 using TabTabGo.WebStream.Notification.Builders;
+using TabTabGo.WebStream.Notification.Repository;
+using TabTabGo.WebStream.Notification.Services;
+using TabTabGo.WebStream.NotificationStorage.Services;
+using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.Notification.Extensions
 {
@@ -23,6 +28,9 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddScoped(item.GetTypeToRegest(), s => item.Get(s));
                 }
+                services.AddScoped<INotificationServices, DefaultNotificationServices>((s) => new DefaultNotificationServices());
+                services.AddScoped<ISendNotification, SendNotificationService>((s) => new SendNotificationService(s.GetRequiredService<IPushEvent>(), s.GetRequiredService<IUserConnections>(), s.GetRequiredService<IUnitOfWork>(), s.GetRequiredService<INotificationRepository>(), s.GetRequiredService<INotificationUserRepository>() ));
+
             }
             if (servicesLifetime == ServiceLifetime.Transient)
             {
@@ -30,6 +38,9 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddTransient(item.GetTypeToRegest(), s => item.Get(s));
                 }
+                services.AddTransient<INotificationServices, DefaultNotificationServices>((s) => new DefaultNotificationServices());
+                services.AddTransient<ISendNotification, SendNotificationService>((s) => new SendNotificationService(s.GetRequiredService<IPushEvent>(), s.GetRequiredService<IUserConnections>(), s.GetRequiredService<IUnitOfWork>(), s.GetRequiredService<INotificationRepository>(), s.GetRequiredService<INotificationUserRepository>()));
+
             }
             if (servicesLifetime == ServiceLifetime.Singleton)
             {
@@ -37,6 +48,8 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddSingleton(item.GetTypeToRegest(), s => item.Get(s));
                 }
+                services.AddSingleton<INotificationServices, DefaultNotificationServices>((s) => new DefaultNotificationServices());
+                services.AddSingleton<ISendNotification, SendNotificationService>((s) => new SendNotificationService(s.GetRequiredService<IPushEvent>(), s.GetRequiredService<IUserConnections>(), s.GetRequiredService<IUnitOfWork>(), s.GetRequiredService<INotificationRepository>(), s.GetRequiredService<INotificationUserRepository>()));
             }
             return services;
         }

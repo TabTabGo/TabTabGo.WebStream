@@ -23,13 +23,13 @@ namespace TabTabGo.WebStream.MessageStorage.Services
 
             await pushEvent.PushAsync(connectionIds, message, cancellationToken);
             var userIds = await userConnections.GetUsersIdsByConnectionIdsAsync(connectionIds, cancellationToken);
-            await this.PushToUserAsync(connectionIds, message, cancellationToken); 
-        } 
+            await this.PushToUserAsync(connectionIds, message, cancellationToken);
+        }
         public async Task PushAsync(string connectionId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             await pushEvent.PushAsync(connectionId, message, cancellationToken);
-            var userId = await userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken); 
-            await this.PushToUserAsync(userId, message, cancellationToken);  
+            var userId = await userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken);
+            await this.PushToUserAsync(userId, message, cancellationToken);
         }
 
         public async Task PushToUserAsync(IEnumerable<string> userIds, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
@@ -61,6 +61,7 @@ namespace TabTabGo.WebStream.MessageStorage.Services
                 };
                 await users.InsertAsync(user, cancellationToken);
             }
+            await _unitOfWork.SaveChangesAsync();
 
         }
 
@@ -87,6 +88,7 @@ namespace TabTabGo.WebStream.MessageStorage.Services
                 UserId = userId
             };
             await users.InsertAsync(user, cancellationToken);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
