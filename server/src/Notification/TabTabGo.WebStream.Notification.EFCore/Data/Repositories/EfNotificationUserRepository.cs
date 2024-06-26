@@ -12,13 +12,13 @@ namespace TabTabGo.WebStream.Notification.EFCore.Repositories
     { 
         public Task<PageList<NotificationUser>> GetPageListAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
         {
-            IQueryable<NotificationUser> query = context.Set<NotificationUser>().AppleyCriteria(criteria);
+            IQueryable<NotificationUser> query = context.Set<NotificationUser>().AppleyCriteria(criteria).Include(s=>s.NotificationMessage);
             return new PageingListBuilder<NotificationUser>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCountAsync(cancellationToken);
         }
 
         public PageList<NotificationUser> GetPageList(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
         {
-            IQueryable<NotificationUser> query = context.Set<NotificationUser>().AppleyCriteria(criteria);
+            IQueryable<NotificationUser> query = context.Set<NotificationUser>().AppleyCriteria(criteria).Include(s => s.NotificationMessage);
             return new PageingListBuilder<NotificationUser>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         } 
         public List<NotificationUser> GetByUserId(string userId)
@@ -27,11 +27,11 @@ namespace TabTabGo.WebStream.Notification.EFCore.Repositories
         } 
         public NotificationUser GetByUserIdAndNotificationId(string userId, Guid notificationId)
         {
-            return context.Set<NotificationUser>().Where(s => s.NotificationId.Equals(notificationId) && s.UserId.Equals(userId)).FirstOrDefault();
+            return context.Set<NotificationUser>().Where(s => s.NotificationMessageId.Equals(notificationId) && s.UserId.Equals(userId)).FirstOrDefault();
         } 
         public Task<NotificationUser> GetByUserIdAndNotificationIdAsync(string userId, Guid notificationId, CancellationToken cancellationToken = default)
         {
-            return context.Set<NotificationUser>().Where(s => s.NotificationId.Equals(notificationId) && s.UserId.Equals(userId)).FirstOrDefaultAsync(cancellationToken);
+            return context.Set<NotificationUser>().Where(s => s.NotificationMessageId.Equals(notificationId) && s.UserId.Equals(userId)).FirstOrDefaultAsync(cancellationToken);
         } 
         public Task<List<NotificationUser>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
         {

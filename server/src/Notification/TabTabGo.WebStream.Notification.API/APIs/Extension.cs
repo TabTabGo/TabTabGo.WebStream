@@ -30,7 +30,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                 unitOfWork.BeginTransaction();
 
                 var userNotification = repo.GetByUserIdAndNotificationId(userId, Id);
-                if (userNotification != null) { return Results.NotFound(); }
+                if (userNotification == null) { return Results.NotFound(); }
                 service.ReadNotification(userNotification, repo);
                 unitOfWork.Commit();
                 return Results.Ok(userNotification);
@@ -74,7 +74,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                 var userId = request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if(string.IsNullOrEmpty(userId)) return Results.Forbid();
                 var userNotification = repo.GetByUserIdAndNotificationId(userId, Id);
-                if (userNotification != null) { return Results.NotFound(); }
+                if (userNotification == null) { return Results.NotFound(); }
                 return Results.Ok(userNotification);
             }
           ).WithSummary($"Get notification")
