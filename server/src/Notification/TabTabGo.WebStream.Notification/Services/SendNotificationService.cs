@@ -51,7 +51,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 var user = new NotificationUser()
                 {
                     NotifiedDateTime = DateTime.UtcNow,
-                    NotificationId = notification.Id,
+                    NotificationMessageId = notification.Id,
                     UserId = userId
                 };
                 await _users.InsertAsync(user, cancellationToken);
@@ -76,7 +76,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             var user = new NotificationUser()
             {
                 NotifiedDateTime = DateTime.UtcNow,
-                NotificationId = notification.Id,
+                NotificationMessageId = notification.Id,
                 UserId = userId
             };
             await _users.InsertAsync(user, cancellationToken);
