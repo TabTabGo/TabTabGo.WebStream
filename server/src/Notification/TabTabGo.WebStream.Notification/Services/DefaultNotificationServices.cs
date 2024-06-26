@@ -19,18 +19,18 @@ namespace TabTabGo.WebStream.Notification.Services
             var criteria = new List<Expression<Func<NotificationUser, bool>>>();
             if (filters != null)
             {
-                if (string.IsNullOrEmpty(filters.Q))
+                if (!string.IsNullOrEmpty(filters.Q))
                 {
                     filters.Q = filters.Q.ToLower();
                     criteria.Add(s => s.NotificationMessage.EventName.ToLower().Contains(filters.Q));
                 }
 
-                if (string.IsNullOrEmpty(filters.EventsNames))
+                if (!string.IsNullOrEmpty(filters.EventsNames))
                 {
                     var list = filters.EventsNames.ToLower().Split('|').ToList();
                     criteria.Add(s => list.Contains(s.NotificationMessage.EventName));
                 }
-                if (string.IsNullOrEmpty(filters.Status))
+                if (!string.IsNullOrEmpty(filters.Status))
                 {
                     var list = filters.Status.ToLower().Split('|').Where(s => Enum.TryParse<NotificationUserStatus>(s, true, out var _)).Select(s =>(NotificationUserStatus) Enum.Parse(typeof(NotificationUserStatus),s, true)).ToList();
                     criteria.Add(s => list.Contains(s.Status));
