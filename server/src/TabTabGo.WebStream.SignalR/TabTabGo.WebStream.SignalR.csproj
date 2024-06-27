@@ -8,7 +8,9 @@
 
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="TabTabGo.Core" Version="8.0.1-alpha-01" />
+	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\TabTabGo.WebStream\TabTabGo.WebStream.csproj" />
 	</ItemGroup>

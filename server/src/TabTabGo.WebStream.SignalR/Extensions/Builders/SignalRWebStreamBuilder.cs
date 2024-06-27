@@ -12,14 +12,14 @@ namespace TabTabGo.WebStream.SignalR.Extensions.Builders
 {
     public static class SignalRWebStreamBuilder
     {
-        public static PushEventBuilder AddSignalR(this PushEventBuilder webStreamBuilder)
+        public static PushEventBuilder AddSignalR<TUserKey, TTenantKey>(this PushEventBuilder webStreamBuilder) where TUserKey : struct where TTenantKey : struct
         {
-            webStreamBuilder.AddPushEvent((serviceProvider) => new PushSignalREvent(serviceProvider.GetRequiredService<IHubContext<WebStreamHub>>(), serviceProvider.GetRequiredService<IUserConnections>()));
+            webStreamBuilder.AddPushEvent((serviceProvider) => new PushSignalREvent<TUserKey, TTenantKey>(serviceProvider.GetRequiredService<IHubContext<WebStreamHub<TUserKey, TTenantKey>>>(), serviceProvider.GetRequiredService<IUserConnections>()));
             return webStreamBuilder;
         }
-        public static ConnectionManagerBuilder AddSignalR(this ConnectionManagerBuilder webStreamBuilder)
+        public static ConnectionManagerBuilder AddSignalR<TUserKey, TTenantKey>(this ConnectionManagerBuilder webStreamBuilder) where TUserKey : struct where TTenantKey : struct
         {
-            webStreamBuilder.AddConnectionManager((serviceProvider) => new SignalRConnectionManager(serviceProvider.GetRequiredService<IHubContext<WebStreamHub>>()));
+            webStreamBuilder.AddConnectionManager((serviceProvider) => new SignalRConnectionManager<TUserKey, TTenantKey>(serviceProvider.GetRequiredService<IHubContext<WebStreamHub<TUserKey, TTenantKey>>>()));
             return webStreamBuilder;
         }
     }

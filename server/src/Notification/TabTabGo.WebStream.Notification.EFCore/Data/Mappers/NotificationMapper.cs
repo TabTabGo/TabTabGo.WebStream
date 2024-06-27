@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Newtonsoft.Json;
+using System.Text.Json;
 using TabTabGo.Core.Entities;
 using TabTabGo.Core.Extensions;
 using TabTabGo.Data.EF.Extensions;
@@ -21,8 +21,8 @@ namespace TabTabGo.WebStream.Notification.EFCore.Mappers
             builder.EntityBuilder<NotificationMessage>();
 
             builder.Property(x => x.Message).HasConversion(
-            v => JsonConvert.SerializeObject(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
-            v => JsonConvert.DeserializeObject<object>(v, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
+            v => JsonSerializer.Serialize(v, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull }),
+            v => JsonSerializer.Deserialize<dynamic>(v, new JsonSerializerOptions { DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull }));
         }
     }
 

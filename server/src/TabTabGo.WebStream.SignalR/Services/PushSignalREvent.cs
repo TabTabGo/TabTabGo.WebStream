@@ -9,8 +9,8 @@ using TabTabGo.WebStream.SignalR.Hub;
 
 namespace TabTabGo.WebStream.SignalR.Services
 {
-    public class PushSignalREvent(IHubContext<WebStreamHub> hubContext, IUserConnections userConnections)
-        : IPushEvent
+    public class PushSignalREvent<TUserKey, TTenantKey>(IHubContext<WebStreamHub<TUserKey,TTenantKey>> hubContext, IUserConnections userConnections) 
+        : IPushEvent where TUserKey : struct where TTenantKey : struct
     {
         public Task PushAsync(IEnumerable<string> connectionIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {

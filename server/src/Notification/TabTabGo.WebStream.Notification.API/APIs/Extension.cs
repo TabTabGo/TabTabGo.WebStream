@@ -14,22 +14,23 @@ namespace TabTabGo.WebStream.Notification.API.APIs
 {
     public static class Extension
     {
-        public static IEndpointRouteBuilder MapNotificationsEndPoints(this IEndpointRouteBuilder endpointRouteBuilder, string prefix)
+        public static IEndpointRouteBuilder MapNotificationsEndPoints<TUserKey, TTenantKey>(this IEndpointRouteBuilder endpointRouteBuilder, string prefix) where TUserKey : struct where TTenantKey : struct
         {
             const string tag = "Notification";
-            endpointRouteBuilder.MapPost(prefix + "/notifications/{Id}/read",
+            endpointRouteBuilder.MapPost(prefix + "/notifications/{notificationMessageId}/read",
                 (
                 [FromServices] INotificationUserRepository repo,
                 [FromServices] IUnitOfWork unitOfWork,
                 [FromServices] INotificationServices service,
+                [FromServices] TabTabGo.Core.Services.ISecurityService<TUserKey, TTenantKey> securityService,
                 HttpRequest request,
-                Guid Id) =>
+                Guid notificationMessageId) =>
             {
-                var userId = request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userId = securityService?.GetUserId().ToString();
                 if (string.IsNullOrEmpty(userId)) return Results.Forbid();
                 unitOfWork.BeginTransaction();
 
-                var userNotification = repo.GetByUserIdAndNotificationId(userId, Id);
+                var userNotification = repo.GetByUserIdAndNotificationId(userId, notificationMessageId);
                 if (userNotification == null) { return Results.NotFound(); }
                 service.ReadNotification(userNotification, repo);
                 unitOfWork.Commit();
@@ -47,13 +48,14 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                  (
                  [FromServices] INotificationServices service,
                  [FromServices] INotificationUserRepository repo, 
+                 [FromServices] TabTabGo.Core.Services.ISecurityService<TUserKey, TTenantKey> securityService,
                  [AsParameters] UserNotificationFilter filter,  // need to fix binding
                  [AsParameters] TabTabGo.Core.ViewModels.PagingOptionRequest page,// need to fix binding
                  HttpRequest request
             ) =>
              {
 
-                 var userId = request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 var userId = securityService?.GetUserId().ToString();
                  if (string.IsNullOrEmpty(userId)) return Results.Forbid();
                  var result = service.GetUserNotifications(userId
                 //how to get Current user ??? do we need to use tabtabgo.ISecureityService or add new Service 
@@ -68,12 +70,18 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             .WithOpenApi(); ;
 
 
-            endpointRouteBuilder.MapGet(prefix + "/notifications/{Id}", (HttpRequest request,  [FromServices] INotificationUserRepository repo,[FromServices] INotificationServices service, Guid Id) =>
+            endpointRouteBuilder.MapGet(prefix + "/notifications/{notificationMessageId}", 
+                (
+                    HttpRequest request,  
+                    [FromServices] INotificationUserRepository repo,
+                    [FromServices] INotificationServices service,
+                    [FromServices] TabTabGo.Core.Services.ISecurityService<TUserKey, TTenantKey> securityService,
+                    Guid notificationMessageId) =>
             {
 
-                var userId = request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if(string.IsNullOrEmpty(userId)) return Results.Forbid();
-                var userNotification = repo.GetByUserIdAndNotificationId(userId, Id);
+                var userId = securityService?.GetUserId().ToString();
+                if (string.IsNullOrEmpty(userId)) return Results.Forbid();
+                var userNotification = repo.GetByUserIdAndNotificationId(userId, notificationMessageId);
                 if (userNotification == null) { return Results.NotFound(); }
                 return Results.Ok(userNotification);
             }
