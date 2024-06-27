@@ -2,21 +2,20 @@
 
 
 var builder = new Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder();
-builder.WithUrl("wss://localhost:7297/WebStreamHub");
+var token = Console.ReadLine();
+builder.WithUrl("https://localhost:7008/WebStreamHub",s=>s.AccessTokenProvider=() =>Task.FromResult(token));
 builder.WithAutomaticReconnect();
 var connection = builder.Build();
 
 connection.StartAsync().Wait();// this will Invoke OnConnectedAsync in tabtabgoHub
-
-await connection.InvokeAsync("ClientEvent", new  { EventName = "event1_sub1", Data =new { }  });
-connection.On<string>("HandShake", s =>
+Console.WriteLine(connection.State.ToString()); 
+connection.On<dynamic>("SendNotification", s =>
 {
     Console.WriteLine(s.ToString());
 });
 while (true)
 {
-    Console.WriteLine(connection.State.ToString()); 
-Console.ReadLine();
+    await Task.Delay(25100000);
 
 }
 

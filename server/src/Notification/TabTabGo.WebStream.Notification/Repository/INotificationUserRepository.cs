@@ -14,7 +14,12 @@ namespace TabTabGo.WebStream.Notification.Repository
         List<NotificationUser> GetByUserId(string userId);
         Task<NotificationUser> GetByUserIdAndNotificationIdAsync(string userId, Guid notificationId,
             CancellationToken cancellationToken = default);
-        NotificationUser GetByUserIdAndNotificationId(string userId, Guid notificationId);  
+        NotificationUser GetByUserIdAndNotificationId(string userId, Guid notificationId);
+
+        NotificationUser GetByUserIdAndUserNotificationId(string userId, Guid userNotificationId);
+        Task<NotificationUser> GetByUserIdAndUserNotificationId(string userId, Guid userNotificationId, CancellationToken cancellationToken);
+
+
         Task<PageList<NotificationUser>> GetPageListAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize,int pageNumber, CancellationToken cancellationToken = default);
         PageList<NotificationUser> GetPageList(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber); 
     }

@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Services.Contract;
@@ -11,12 +9,13 @@ using TabTabGo.WebStream.SignalR.ReceivedEvent;
 namespace TabTabGo.WebStream.SignalR.Hub
 {
 
-    public class WebStreamHub(
+    public class WebStreamHub<TUserKey, TTenantKey>(
         IReceiveEvent eventHandler,
         IConnectionManager connectionManager,
+        TabTabGo.Core.Services.ISecurityService<TUserKey, TTenantKey> securityService,
         IUserConnections connections)
-        : Microsoft.AspNetCore.SignalR.Hub
-    {  
+        : Microsoft.AspNetCore.SignalR.Hub where TUserKey : struct where TTenantKey : struct
+    {
         public override async Task OnConnectedAsync()
         {
             await base.OnConnectedAsync();
@@ -32,24 +31,27 @@ namespace TabTabGo.WebStream.SignalR.Hub
                 {"Real-IP", realIP},
                 {"Forward-For", forwardeds},
             };
-            var userConnections = await connections.GetUserConnectionIdsAsync(this.Context.UserIdentifier);
-            if(!userConnections.Contains(this.Context.ConnectionId)) 
+            var userId = securityService?.GetUserId().ToString();
+            var userConnections = await connections.GetUserConnectionIdsAsync(userId);
+            if (!userConnections.Contains(this.Context.ConnectionId))
             {
-                await connectionManager.RegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier, connectedInfo);
+                await connectionManager.RegisterConnectionAsync(this.Context.ConnectionId, userId, connectedInfo);
             }
             else
             {
-                await connectionManager.ReRegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier);
-            } 
+                await connectionManager.ReRegisterConnectionAsync(this.Context.ConnectionId, userId);
+            }
         }
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            await connectionManager.UnRegisterConnectionAsync(this.Context.ConnectionId, this.Context.UserIdentifier);
-            
+            var userId = securityService?.GetUserId().ToString();
+            await connectionManager.UnRegisterConnectionAsync(this.Context.ConnectionId, userId);
+
         }
         public Task ClientEvent(SignalReceiveEvent webStreamMessage)
         {
-            return eventHandler.OnEventReceived(this.Context.UserIdentifier, new WebStreamMessage(webStreamMessage.EventName, webStreamMessage.Data));
+            var userId = securityService?.GetUserId().ToString();
+            return eventHandler.OnEventReceived(userId, new WebStreamMessage(webStreamMessage.EventName, webStreamMessage.Data));
         }
     }
 }

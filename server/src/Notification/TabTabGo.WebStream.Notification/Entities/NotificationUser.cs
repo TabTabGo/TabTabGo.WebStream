@@ -1,5 +1,7 @@
-﻿using System;
+﻿ 
+using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using TabTabGo.Core.Entities;
 using TabTabGo.WebStream.Notification.Entities.Enums;
 
@@ -10,6 +12,8 @@ namespace TabTabGo.WebStream.Notification.Entities
     {
         public Guid Id { get; set; }
         public string UserId { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public NotificationUserStatus Status { get; set; } = NotificationUserStatus.Unread;
         public DateTime NotifiedDateTime { get; set; } = DateTime.UtcNow;
         public DateTime? ReadDateTime { get; set; }

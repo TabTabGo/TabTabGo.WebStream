@@ -10,7 +10,7 @@ using TabTabGo.WebStream.SignalR.Hub;
 
 namespace TabTabGo.WebStream.SignalR.Services
 {
-    public class SignalRConnectionManager(IHubContext<WebStreamHub> hubContext) : IConnectionManager
+    public class SignalRConnectionManager<TUserKey, TTenantKey>(IHubContext<WebStreamHub<TUserKey,TTenantKey>> hubContext) : IConnectionManager where TUserKey : struct where TTenantKey : struct
     {
         public void RegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
         {
