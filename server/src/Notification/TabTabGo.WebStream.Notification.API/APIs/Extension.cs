@@ -38,9 +38,9 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                     unitOfWork.Commit();
                     return Results.Ok();
                 })
-                .WithSummary($"Read notification")
-                .WithDescription($"# set notification as read")
-                .WithName($"Read_notification")
+                .WithSummary($"Read all notifications")
+                .WithDescription($"# set notifications as read")
+                .WithName($"ReadAllNotificationMessages")
                 .WithTags(tag)
                 .Produces(StatusCodes.Status200OK)
                 .Produces(StatusCodes.Status404NotFound)
@@ -72,7 +72,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                 })
                 .WithSummary($"Read notification")
                 .WithDescription($"# set notification as read")
-                .WithName($"Read_notification")
+                .WithName($"ReadNotificationMessage")
                 .WithTags(tag)
                 .Produces(StatusCodes.Status200OK, typeof(NotificationMessageDto))
                 .Produces(StatusCodes.Status404NotFound)
@@ -98,7 +98,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                     ));
                 }).WithSummary($"search notifications")
                 .WithDescription($"# search about notification")
-                .WithName($"search_notifications")
+                .WithName($"SearchNotificationMessages")
                 .WithTags(tag)
                 .Produces(StatusCodes.Status200OK, typeof(PageList<NotificationMessageDto>))
                 .WithOpenApi();
@@ -124,7 +124,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                     }
                 ).WithSummary($"Get notification")
                 .WithDescription($"# Get notification")
-                .WithName($"get_notification")
+                .WithName($"GetNotificationMessage")
                 .WithTags(tag)
                 .Produces(StatusCodes.Status200OK, typeof(NotificationMessageDto))
                 .Produces(StatusCodes.Status404NotFound)
