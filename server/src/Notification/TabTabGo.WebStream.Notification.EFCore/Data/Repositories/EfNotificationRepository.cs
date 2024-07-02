@@ -13,14 +13,14 @@ namespace TabTabGo.WebStream.Notification.EFCore.Repositories
         public Task<PageList<NotificationMessage>> GetPageListAsync(List<Expression<Func<NotificationMessage, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber, CancellationToken cancellationToken = default)
         {
             IQueryable<NotificationMessage> query = context.Set<NotificationMessage>().AppleyCriteria(criteria);
-            return new PageingListBuilder<NotificationMessage>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCountAsync(cancellationToken);
+            return new PagingListBuilder<NotificationMessage>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCountAsync(cancellationToken);
         }
 
        
         public PageList<NotificationMessage> GetPageList(List<Expression<Func<NotificationMessage, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber)
         {
             IQueryable<NotificationMessage> query = context.Set<NotificationMessage>().AppleyCriteria(criteria);
-            return new PageingListBuilder<NotificationMessage>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
+            return new PagingListBuilder<NotificationMessage>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         }
 
         public List<NotificationMessage> GetByUserId(string userId)

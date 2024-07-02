@@ -78,7 +78,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
-app.MapNotificationsEndPoints<Guid, Guid>("tabtabgo");
+app.MapGroup("tabtabgo").MapNotificationsEndPoints<Guid, Guid>();
 app.MapHub<WebStreamHub<Guid, Guid>>("/WebStreamHub");
 var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();

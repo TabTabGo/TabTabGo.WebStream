@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.Core.Models;
 using TabTabGo.WebStream.Notification.Entities;
+using TabTabGo.WebStream.Notification.Entities.Enums;
 
 namespace TabTabGo.WebStream.Notification.Repository
 {
@@ -18,9 +19,10 @@ namespace TabTabGo.WebStream.Notification.Repository
 
         NotificationUser GetByUserIdAndUserNotificationId(string userId, Guid userNotificationId);
         Task<NotificationUser> GetByUserIdAndUserNotificationId(string userId, Guid userNotificationId, CancellationToken cancellationToken);
-
-
+        
         Task<PageList<NotificationUser>> GetPageListAsync(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize,int pageNumber, CancellationToken cancellationToken = default);
-        PageList<NotificationUser> GetPageList(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber); 
+        PageList<NotificationUser> GetPageList(List<Expression<Func<NotificationUser, bool>>> criteria, string orderBy, bool isDesc, int pageSize, int pageNumber);
+        void UpdateAllUnreadNotifications(string userId, NotificationUserStatus read, DateTime utcNow);
+        Task UpdateAllUnreadNotificationsAsync(string userId, NotificationUserStatus read, DateTime utcNow);
     }
 }

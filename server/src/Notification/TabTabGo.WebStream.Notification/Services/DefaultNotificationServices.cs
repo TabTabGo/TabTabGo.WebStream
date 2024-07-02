@@ -12,7 +12,8 @@ using TabTabGo.WebStream.Notification.Repository;
 
 namespace TabTabGo.WebStream.Notification.Services
 {
-    public class DefaultNotificationServices : INotificationServices
+    public class DefaultNotificationServices(INotificationUserRepository notificationUserRepository)
+        : INotificationServices<string>
     {
         List<Expression<Func<NotificationUser, bool>>> GetNotificationUserCriteria(UserNotificationFilter filters)
         {
@@ -30,9 +31,12 @@ namespace TabTabGo.WebStream.Notification.Services
                     var list = filters.EventsNames.ToLower().Split('|').ToList();
                     criteria.Add(s => list.Contains(s.NotificationMessage.EventName));
                 }
+
                 if (!string.IsNullOrEmpty(filters.Status))
                 {
-                    var list = filters.Status.ToLower().Split('|').Where(s => Enum.TryParse<NotificationUserStatus>(s, true, out var _)).Select(s => (NotificationUserStatus)Enum.Parse(typeof(NotificationUserStatus), s, true)).ToList();
+                    var list = filters.Status.ToLower().Split('|')
+                        .Where(s => Enum.TryParse<NotificationUserStatus>(s, true, out var _)).Select(s =>
+                            (NotificationUserStatus)Enum.Parse(typeof(NotificationUserStatus), s, true)).ToList();
                     criteria.Add(s => list.Contains(s.Status));
                 }
 
@@ -45,36 +49,43 @@ namespace TabTabGo.WebStream.Notification.Services
                 {
                     criteria.Add(s => s.NotifiedDateTime <= filters.NotifiedDateTimeRangeEnd.Value);
                 }
+
                 if (filters.ReadDateRangeStart.HasValue)
                 {
                     criteria.Add(s => s.ReadDateTime >= filters.ReadDateRangeStart.Value);
                 }
+
                 if (filters.ReadDateRangeEnd.HasValue)
                 {
                     criteria.Add(s => s.ReadDateTime <= filters.ReadDateRangeEnd.Value);
                 }
             }
+
             return criteria;
         }
-        public PageList<NotificationUser> GetUserNotifications(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository)
+     
+        public  Task<PageList<NotificationUser>> GetUserNotifications(string userId,
+            UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters,
+            CancellationToken cancellationToken = default)
         {
             var criteria = GetNotificationUserCriteria(filters);
             criteria.Add(s => s.UserId.Equals(userId));
-            return notificationUserRepository.GetPageList(criteria, pagingParameters.OrderBy, pagingParameters.OrderDirection != null ? pagingParameters.OrderDirection.ToLower().Equals("desc") : false, pagingParameters.PageSize, pagingParameters.Page);
+
+            return notificationUserRepository.GetPageListAsync(criteria,
+                pagingParameters.OrderBy,
+                pagingParameters.OrderDirection != null && pagingParameters.OrderDirection.ToLower().Equals("desc"),
+                pagingParameters.PageSize, pagingParameters.Page, cancellationToken);
         }
-        public Task<PageList<NotificationUser>> GetUserNotificationsAsync(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default)
+     
+        public Task ReadAllNotifications(string userId,
+            CancellationToken cancellationToken = default)
         {
-            var criteria = GetNotificationUserCriteria(filters);
-            criteria.Add(s => s.UserId.Equals(userId));
-            return notificationUserRepository.GetPageListAsync(criteria, pagingParameters.OrderBy, pagingParameters.OrderDirection != null ? pagingParameters.OrderDirection.ToLower().Equals("desc") : false, pagingParameters.PageSize, pagingParameters.Page);
+           return notificationUserRepository.UpdateAllUnreadNotificationsAsync(userId, NotificationUserStatus.Read,
+                DateTime.UtcNow);
         }
-        public void ReadNotification(NotificationUser notificationUser, INotificationUserRepository notificationUserRepository)
-        {
-            notificationUser.ReadDateTime = DateTime.UtcNow;
-            notificationUser.Status = NotificationUserStatus.Read;
-            notificationUserRepository.Update(notificationUser);
-        }
-        public Task ReadNotificationAsync(NotificationUser notificationUser, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default)
+        
+        public Task ReadNotification(NotificationUser notificationUser,
+            CancellationToken cancellationToken = default)
         {
             notificationUser.ReadDateTime = DateTime.UtcNow;
             notificationUser.Status = NotificationUserStatus.Read;

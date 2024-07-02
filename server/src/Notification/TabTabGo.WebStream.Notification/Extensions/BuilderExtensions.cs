@@ -28,8 +28,8 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddScoped(item.GetTypeToRegest(), s => item.Get(s));
                 }
-                services.AddScoped<INotificationServices, DefaultNotificationServices>((s) => new DefaultNotificationServices());
-                services.AddScoped<ISendNotification, SendNotificationService>((s) => new SendNotificationService(s.GetRequiredService<IPushEvent>(), s.GetRequiredService<IUserConnections>(), s.GetRequiredService<IUnitOfWork>(), s.GetRequiredService<INotificationRepository>(), s.GetRequiredService<INotificationUserRepository>() ));
+                services.AddScoped<INotificationServices<string>, DefaultNotificationServices>();
+                services.AddScoped<ISendNotification, SendNotificationService>();
 
             }
             if (servicesLifetime == ServiceLifetime.Transient)
@@ -38,8 +38,8 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddTransient(item.GetTypeToRegest(), s => item.Get(s));
                 }
-                services.AddTransient<INotificationServices, DefaultNotificationServices>((s) => new DefaultNotificationServices());
-                services.AddTransient<ISendNotification, SendNotificationService>((s) => new SendNotificationService(s.GetRequiredService<IPushEvent>(), s.GetRequiredService<IUserConnections>(), s.GetRequiredService<IUnitOfWork>(), s.GetRequiredService<INotificationRepository>(), s.GetRequiredService<INotificationUserRepository>()));
+                services.AddTransient<INotificationServices<string>, DefaultNotificationServices>();
+                services.AddTransient<ISendNotification, SendNotificationService>();
 
             }
             if (servicesLifetime == ServiceLifetime.Singleton)
@@ -48,8 +48,8 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddSingleton(item.GetTypeToRegest(), s => item.Get(s));
                 }
-                services.AddSingleton<INotificationServices, DefaultNotificationServices>((s) => new DefaultNotificationServices());
-                services.AddSingleton<ISendNotification, SendNotificationService>((s) => new SendNotificationService(s.GetRequiredService<IPushEvent>(), s.GetRequiredService<IUserConnections>(), s.GetRequiredService<IUnitOfWork>(), s.GetRequiredService<INotificationRepository>(), s.GetRequiredService<INotificationUserRepository>()));
+                services.AddSingleton<INotificationServices<string>, DefaultNotificationServices>();
+                services.AddSingleton<ISendNotification, SendNotificationService>();
             }
             return services;
         }

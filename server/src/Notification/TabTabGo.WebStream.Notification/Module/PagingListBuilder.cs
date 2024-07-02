@@ -21,7 +21,7 @@ namespace TabTabGo.WebStream.Notification.Module
 
         }
     }
-    public sealed class PageingListBuilder<T> where T : class
+    public sealed class PagingListBuilder<T> where T : class
     {
         private readonly bool NeedOrder;
         private readonly IQueryable<T> Query;
@@ -29,14 +29,14 @@ namespace TabTabGo.WebStream.Notification.Module
         private readonly int PageSize;
         private readonly string Order;
         private readonly bool IsDesc;
-        public PageingListBuilder(IQueryable<T> query, int pageNumber, int pageSize, string order, bool isDesc) : this(query, pageNumber, pageSize)
+        public PagingListBuilder(IQueryable<T> query, int pageNumber, int pageSize, string order, bool isDesc) : this(query, pageNumber, pageSize)
         {
             this.NeedOrder = true;
             this.Order = order;
             this.IsDesc = isDesc;
 
         }
-        public PageingListBuilder(IQueryable<T> query, int pageNumber, int pageSize)
+        public PagingListBuilder(IQueryable<T> query, int pageNumber, int pageSize)
         {
             if (pageNumber <= 0)
             {

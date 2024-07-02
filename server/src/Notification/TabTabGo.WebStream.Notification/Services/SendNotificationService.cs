@@ -5,9 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.Core.Data;
 using TabTabGo.WebStream.Model;
+using TabTabGo.WebStream.Notification.DTOs;
 using TabTabGo.WebStream.Notification.Entities;
 using TabTabGo.WebStream.Notification.Repository;
-using TabTabGo.WebStream.Notification.Services; 
+using TabTabGo.WebStream.Notification.Services;
 using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.NotificationStorage.Services
@@ -15,72 +16,64 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
     /// <summary>
     ///   send messages to user and store in notification database
     /// </summary>
-    public class SendNotificationService : ISendNotification
+    public class SendNotificationService(
+        IPushEvent pushEvent,
+        IUserConnections userConnections,
+        IUnitOfWork unitOfWork,
+        INotificationRepository notifications,
+        INotificationUserRepository users)
+        : ISendNotification
     {
-        private readonly IPushEvent _pushEvent;
-        private readonly IUserConnections _userConnections;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly INotificationRepository _notifications;
-        private readonly INotificationUserRepository _users;
-        public SendNotificationService(IPushEvent pushEvent, IUserConnections userConnections, IUnitOfWork unitOfWork, INotificationRepository notifications, INotificationUserRepository users)
+        public async Task SendNotification(IEnumerable<string> userIds, object data,
+            CancellationToken cancellationToken = default)
         {
-            _pushEvent = pushEvent;
-            _userConnections = userConnections;
-            _unitOfWork = unitOfWork;
-            _users = users;
-            _notifications = notifications;
-        }
-        public async Task SendNotification(IEnumerable<string> userIds, object data, CancellationToken cancellationToken = default)
-        {
-            var message = new WebStreamMessage(nameof(SendNotification), data);
-            await _pushEvent.PushToUserAsync(userIds, message, cancellationToken);
-            var notification = await _notifications.GetByKeyAsync(message.Id, cancellationToken: cancellationToken);
-            if (notification == null)
+            var currentDateTime = DateTime.UtcNow;
+            var notification = new NotificationMessage()
             {
-                notification = new NotificationMessage()
-                {
-                    Id = message.Id,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                };
-                await _notifications.InsertAsync(notification, cancellationToken);
-            }
-            foreach (var userId in userIds.Distinct().ToList())
-            {
+                Id = Guid.NewGuid(),
+                Message = data,
+            };
+            var message = new WebStreamMessage(nameof(SendNotification), NotificationMessageDto.Map(notification, currentDateTime));
+            notification.EventName = nameof(SendNotification);
+            await pushEvent.PushToUserAsync(userIds, message, cancellationToken);
 
-                var user = new NotificationUser()
-                {
-                    NotifiedDateTime = DateTime.UtcNow,
-                    NotificationMessageId = notification.Id,
-                    UserId = userId
-                };
-                await _users.InsertAsync(user, cancellationToken);
+            await notifications.InsertAsync(notification, cancellationToken);
+
+            foreach (var user in userIds.Distinct().ToList().Select(userId => new NotificationUser()
+                     {
+                         NotifiedDateTime = currentDateTime,
+                         NotificationMessageId = notification.Id,
+                         UserId = userId
+                     }))
+            {
+                await users.InsertAsync(user, cancellationToken);
             }
-            await _unitOfWork.SaveChangesAsync();
+
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
+
         public async Task SendNotification(string userId, object data, CancellationToken cancellationToken = default)
         {
-            var message = new WebStreamMessage(nameof(SendNotification), data);
-            await _pushEvent.PushToUserAsync(userId, message, cancellationToken);
-            var notification = await _notifications.GetByKeyAsync(message.Id, cancellationToken: cancellationToken);
-            if (notification == null)
+            var currentDateTime = DateTime.UtcNow;
+            var notification = new NotificationMessage()
             {
-                notification = new NotificationMessage()
-                {
-                    Id = message.Id,
-                    EventName = message.EventName,
-                    Message = message.Data,
-                };
-                await _notifications.InsertAsync(notification, cancellationToken);
-            }
+                Id = Guid.NewGuid(),
+                Message = data,
+            };
+            var message = new WebStreamMessage(nameof(SendNotification), NotificationMessageDto.Map(notification, currentDateTime));
+            notification.EventName = nameof(SendNotification);
+            await pushEvent.PushToUserAsync(userId, message, cancellationToken);
+            await notifications.InsertAsync(notification, cancellationToken);
+            
+
             var user = new NotificationUser()
             {
-                NotifiedDateTime = DateTime.UtcNow,
+                NotifiedDateTime = currentDateTime,
                 NotificationMessageId = notification.Id,
                 UserId = userId
             };
-            await _users.InsertAsync(user, cancellationToken);
-            await _unitOfWork.SaveChangesAsync();
+            await users.InsertAsync(user, cancellationToken);
+            await unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

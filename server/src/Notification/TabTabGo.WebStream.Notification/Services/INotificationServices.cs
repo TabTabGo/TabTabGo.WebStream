@@ -2,15 +2,13 @@
 using System.Threading.Tasks;
 using TabTabGo.WebStream.Notification.Entities;
 using TabTabGo.WebStream.Notification.Module;
-using TabTabGo.WebStream.Notification.Repository;
 
 namespace TabTabGo.WebStream.Notification.Services
 {
-    public interface INotificationServices
+    public interface INotificationServices<in TUserKey>
     {
-        void ReadNotification(NotificationUser notificationUser, INotificationUserRepository notificationUserRepository);
-        Task ReadNotificationAsync(NotificationUser notificationUser, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default);
-        TabTabGo.Core.Models.PageList<NotificationUser> GetUserNotifications(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository);
-        Task<TabTabGo.Core.Models.PageList<NotificationUser>> GetUserNotificationsAsync(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, INotificationUserRepository notificationUserRepository, CancellationToken cancellationToken = default);
+        Task ReadAllNotifications(TUserKey userKey, CancellationToken cancellationToken = default);
+        Task ReadNotification(NotificationUser notificationUser, CancellationToken cancellationToken = default);
+        Task<TabTabGo.Core.Models.PageList<NotificationUser>> GetUserNotifications(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, CancellationToken cancellationToken = default);
     }
 }
