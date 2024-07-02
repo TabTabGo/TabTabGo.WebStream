@@ -26,8 +26,6 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                     [FromServices] IUnitOfWork unitOfWork,
                     [FromServices] INotificationServices<string> service,
                     [FromServices] ISecurityService<TUserKey, TTenantKey> securityService,
-                    HttpRequest request,
-                    Guid notificationMessageId,
                     CancellationToken cancellationToken) =>
                 {
                     var userId = securityService?.GetUserId().ToString();
