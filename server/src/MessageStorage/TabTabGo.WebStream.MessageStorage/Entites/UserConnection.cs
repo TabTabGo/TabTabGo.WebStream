@@ -8,6 +8,7 @@ namespace TabTabGo.WebStream.MessageStorage.Entites
     {
         public Guid Id { get; set; }
         public string UserId { get; set; }
+        public string TenantId { get; set; }
         public string ConnectionId { get; set; }
         public DateTimeOffset? ReConnectedDate { get; set; }
         public string CreatedBy { get; set; }

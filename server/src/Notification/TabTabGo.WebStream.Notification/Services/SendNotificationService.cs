@@ -30,7 +30,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             _users = users;
             _notifications = notifications;
         }
-        public async Task SendNotification(IEnumerable<string> userIds, object data, CancellationToken cancellationToken = default)
+        public async Task SendNotification(IEnumerable<UserIdData> userIds, object data, CancellationToken cancellationToken = default)
         {
             var message = new WebStreamMessage(nameof(SendNotification), data);
             await _pushEvent.PushToUserAsync(userIds, message, cancellationToken);
@@ -51,14 +51,15 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                 var user = new NotificationUser()
                 {
                     NotifiedDateTime = DateTime.UtcNow,
-                    NotificationId = notification.Id,
-                    UserId = userId
+                    NotificationMessageId = notification.Id,
+                    UserId = userId.UserId,
+                    TenantId = userId.TenantId,
                 };
                 await _users.InsertAsync(user, cancellationToken);
             }
             await _unitOfWork.SaveChangesAsync();
         }
-        public async Task SendNotification(string userId, object data, CancellationToken cancellationToken = default)
+        public async Task SendNotification(UserIdData userId, object data, CancellationToken cancellationToken = default)
         {
             var message = new WebStreamMessage(nameof(SendNotification), data);
             await _pushEvent.PushToUserAsync(userId, message, cancellationToken);
@@ -76,8 +77,9 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             var user = new NotificationUser()
             {
                 NotifiedDateTime = DateTime.UtcNow,
-                NotificationId = notification.Id,
-                UserId = userId
+                NotificationMessageId = notification.Id,
+                UserId = userId.UserId,
+                TenantId= userId.TenantId,  
             };
             await _users.InsertAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync();

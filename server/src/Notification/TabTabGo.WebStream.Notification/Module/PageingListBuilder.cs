@@ -62,7 +62,7 @@ namespace TabTabGo.WebStream.Notification.Module
             {
                 if (NeedOrder)
                 {
-                    queryToGetReuslt = queryToGetReuslt.OrderBy(Order, IsDesc);
+                    queryToGetReuslt = queryToGetReuslt.OrderBy(Order??"Id", IsDesc);
                 }
             }
             catch { }
@@ -77,7 +77,7 @@ namespace TabTabGo.WebStream.Notification.Module
             {
                 if (NeedOrder)
                 {
-                    queryToGetReuslt = queryToGetReuslt.OrderBy(Order, IsDesc);
+                    queryToGetReuslt = queryToGetReuslt.OrderBy(Order??"Id", IsDesc);
                 }
             }
             catch { }

@@ -15,7 +15,7 @@ namespace TabTabGo.WebStream.Services.EventHandlersServices
     {
         List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)> _handlers = handlers ?? new List<(Func<WebStreamMessage, bool>, EventHandlerBuilder)>();
 
-        public Task OnEventReceived(string userId, WebStreamMessage message)
+        public Task OnEventReceived(UserIdData userId, WebStreamMessage message)
         {
             var handlerBuilder = _handlers.FirstOrDefault(s => s.Item1(message));
             if (handlerBuilder != default)

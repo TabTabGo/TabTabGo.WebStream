@@ -1,17 +1,15 @@
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using TabTabGo.Core.Data;
 using TabTabGo.WebStream.Extensions;
+using TabTabGo.WebStream.MessageStorage.Builders;
 using TabTabGo.WebStream.Notification.API.APIs;
-using TabTabGo.WebStream.Notification.Builders;
 using TabTabGo.WebStream.Notification.EFCore;
 using TabTabGo.WebStream.Services.EventHandlersServices;
 using TabTabGo.WebStream.SignalR.Extensions.Builders;
 using TabTabGo.WebStream.SignalR.Hub;
-using TabTabGo.WebStream.MessageStorage.Builders;
-using Microsoft.EntityFrameworkCore.InMemory;
 using TabTabGo.WebStream.TestApp;
-using Microsoft.EntityFrameworkCore;
-using TabTabGo.Core.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
@@ -45,9 +43,9 @@ builder.Services.AddControllers();
 /*
  * please setup the UnitOfWork of TabTabGo.Core Here
 */
-builder.Services.AddDbContext<DbContext, NotificationDbContext>(s=>s.UseMySql("Server=127.0.0.1;Database=WebStream;Uid=root;Pwd=root;Allow User Variables=true", ServerVersion.AutoDetect("Server=127.0.0.1;Database=WebStream;Uid=root;Pwd=root;Allow User Variables=true"))); 
+builder.Services.AddDbContext<DbContext, NotificationDbContext>(s => s.UseMySql("Server=127.0.0.1;Database=WebStream;Uid=root;Pwd=root;Allow User Variables=true", ServerVersion.AutoDetect("Server=127.0.0.1;Database=WebStream;Uid=root;Pwd=root;Allow User Variables=true")));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddSignalR(s=>s.EnableDetailedErrors=true); 
+builder.Services.AddSignalR(s => s.EnableDetailedErrors = true);
 builder.Services.AddWebStream(builder =>
 {
     builder.RegisteEventHandler<NullReceiveEvent>();
@@ -72,23 +70,23 @@ builder.Services.AddWebStream(builder =>
         .LogAllRecevedMessages();
     });
     builder.UseEFCore();
-    builder.SetupIPushEvent(s => s.AddSignalR().LogAllOutMessages());
-    builder.SetupIConnectionManager(s => s.AddConnectionToStorage().AddSignalR()); 
+    builder.SetupIPushEvent(s => s.AddSignalR<Guid,Guid>().LogAllOutMessages());
+    builder.SetupIConnectionManager(s => s.AddConnectionToStorage().AddSignalR<Guid, Guid>());
 });
 
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
-app.MapNotificationsEndPoints("tabtabgo");
-app.MapHub<WebStreamHub>("/WebStreamHub");
+app.MapNotificationsEndPoints<Guid, Guid>("tabtabgo");
+app.MapHub<WebStreamHub<Guid, Guid>>("/WebStreamHub");
 var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
 dbContext.Database.EnsureCreated();
 dbContext.Dispose();
 scope.Dispose();
 //test broadcast api
-app.MapPost("broadcast", async (string message, IHubContext<WebStreamHub> hubContext) =>
+app.MapPost("broadcast", async (string message, IHubContext<WebStreamHub<Guid, Guid>> hubContext) =>
 {
     await hubContext.Clients.All.SendAsync(message);
     return Results.NoContent;

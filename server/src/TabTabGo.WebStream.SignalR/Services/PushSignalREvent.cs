@@ -9,8 +9,8 @@ using TabTabGo.WebStream.SignalR.Hub;
 
 namespace TabTabGo.WebStream.SignalR.Services
 {
-    public class PushSignalREvent(IHubContext<WebStreamHub> hubContext, IUserConnections userConnections)
-        : IPushEvent
+    public class PushSignalREvent<TUserKey, TTenantKey>(IHubContext<WebStreamHub<TUserKey,TTenantKey>> hubContext, IUserConnections userConnections) 
+        : IPushEvent where TUserKey : struct where TTenantKey : struct
     {
         public Task PushAsync(IEnumerable<string> connectionIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
@@ -20,13 +20,14 @@ namespace TabTabGo.WebStream.SignalR.Services
         {
             return hubContext.Clients.Client(connectionId).SendAsync(message.EventName, message.Data, cancellationToken);
         }
-        public Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
+        public Task PushToUserAsync(IEnumerable<UserIdData> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             var connectionsIds = userConnections.GetUsersConnections(userIds);
             return hubContext.Clients.Clients(connectionsIds).SendAsync(message.EventName, message.Data, cancellationToken);
         }
-        public Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        public Task PushToUserAsync(UserIdData userId, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
+            if (userId == null) return Task.CompletedTask;
             var connectionsIds = userConnections.GetUserConnectionIds(userId);
             return hubContext.Clients.Clients(connectionsIds).SendAsync(message.EventName, message.Data, cancellationToken);
         }

@@ -12,7 +12,7 @@ namespace TabTabGo.WebStream.Services.EventHandlersServices
     {
         List<EventHandlerBuilder> _handlers = handlers ?? new List<EventHandlerBuilder>();
 
-        public Task OnEventReceived(string userId, WebStreamMessage message)
+        public Task OnEventReceived(UserIdData userId, WebStreamMessage message)
         {
             foreach (var handler in _handlers)
             {

@@ -15,6 +15,8 @@ namespace TabTabGo.WebStream.MessageStorage.EFCore.Mappers
             builder.HasQueryFilter(x => x.IsEnabled);
             builder.Property(s => s.CreatedBy).IsRequired(false);
             builder.Property(s => s.UpdatedBy).IsRequired(false);
+            builder.HasIndex(s => s.ConnectionId);
+            builder.HasIndex(s => s.UserId);
             builder.EntityBuilder<UserConnection>(); 
         }
     }

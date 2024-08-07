@@ -1,6 +1,7 @@
 ﻿using TabTabGo.Core.Data;
 using TabTabGo.WebStream.MessageStorage.Entites;
 using TabTabGo.WebStream.MessageStorage.Repository;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.MessageStorage.Services
@@ -23,16 +24,17 @@ namespace TabTabGo.WebStream.MessageStorage.Services
 
             await pushEvent.PushAsync(connectionIds, message, cancellationToken);
             var userIds = await userConnections.GetUsersIdsByConnectionIdsAsync(connectionIds, cancellationToken);
-            await this.PushToUserAsync(connectionIds, message, cancellationToken);
+            await this.PushToUserAsync(userIds, message, cancellationToken);
         }
         public async Task PushAsync(string connectionId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             await pushEvent.PushAsync(connectionId, message, cancellationToken);
             var userId = await userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken);
+            if (userId == null) return;
             await this.PushToUserAsync(userId, message, cancellationToken);
         }
 
-        public async Task PushToUserAsync(IEnumerable<string> userIds, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
+        public async Task PushToUserAsync(IEnumerable<UserIdData> userIds, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             await pushEvent.PushToUserAsync(userIds, message, cancellationToken);
 
@@ -56,7 +58,8 @@ namespace TabTabGo.WebStream.MessageStorage.Services
                 {
                     SentDate = DateTime.UtcNow,
                     MessageId = dbMessage.Id,
-                    UserId = userId,
+                    UserId = userId.UserId,
+                    TenantId = userId.TenantId
 
                 };
                 await users.InsertAsync(user, cancellationToken);
@@ -65,8 +68,9 @@ namespace TabTabGo.WebStream.MessageStorage.Services
 
         }
 
-        public async Task PushToUserAsync(string userId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
+        public async Task PushToUserAsync(UserIdData userId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
         {
+            if (userId == null) return;
             await pushEvent.PushToUserAsync(userId, message, cancellationToken);
 
             var dbMessage = await messages.GetByKeyAsync(message.Id, cancellationToken: cancellationToken);
@@ -85,7 +89,8 @@ namespace TabTabGo.WebStream.MessageStorage.Services
             {
                 SentDate = DateTime.UtcNow,
                 MessageId = dbMessage.Id,
-                UserId = userId
+                UserId = userId.UserId,
+                TenantId = userId.TenantId
             };
             await users.InsertAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync();
