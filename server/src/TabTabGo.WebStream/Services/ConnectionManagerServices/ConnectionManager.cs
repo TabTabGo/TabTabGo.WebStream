@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.Services.ConnectionManagerServices
@@ -15,7 +16,7 @@ namespace TabTabGo.WebStream.Services.ConnectionManagerServices
         {
             _connectionManagers = connectionManagers.ToList();
         }
-        public void RegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
+        public void RegisterConnection(string connectionId, UserIdData userId, IDictionary<string, object>? parameters = null)
         {
             foreach (var cm in _connectionManagers)
             {
@@ -23,7 +24,7 @@ namespace TabTabGo.WebStream.Services.ConnectionManagerServices
             }
         }
 
-        public async Task RegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
+        public async Task RegisterConnectionAsync(string connectionId, UserIdData userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             foreach (var cm in _connectionManagers)
             {
@@ -31,7 +32,7 @@ namespace TabTabGo.WebStream.Services.ConnectionManagerServices
             }
         }
 
-        public void ReRegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
+        public void ReRegisterConnection(string connectionId, UserIdData userId, IDictionary<string, object>? parameters = null)
         {
             foreach (var cm in _connectionManagers)
             {
@@ -39,7 +40,7 @@ namespace TabTabGo.WebStream.Services.ConnectionManagerServices
             }
         }
 
-        public async Task ReRegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
+        public async Task ReRegisterConnectionAsync(string connectionId, UserIdData userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             foreach (var cm in _connectionManagers)
             {
@@ -47,7 +48,7 @@ namespace TabTabGo.WebStream.Services.ConnectionManagerServices
             }
         }
 
-        public void UnRegisterConnection(string connectionId, string userId, IDictionary<string, object>? parameters = null)
+        public void UnRegisterConnection(string connectionId, UserIdData userId, IDictionary<string, object>? parameters = null)
         {
             foreach (var cm in _connectionManagers)
             {
@@ -55,7 +56,7 @@ namespace TabTabGo.WebStream.Services.ConnectionManagerServices
             }
         }
 
-        public async Task UnRegisterConnectionAsync(string connectionId, string userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
+        public async Task UnRegisterConnectionAsync(string connectionId, UserIdData userId, IDictionary<string, object>? parameters = null, CancellationToken cancellationToken = default)
         {
             foreach (var cm in _connectionManagers)
             {

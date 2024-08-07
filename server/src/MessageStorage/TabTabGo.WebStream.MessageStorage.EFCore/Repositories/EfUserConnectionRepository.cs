@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Linq.Expressions;
-using TabTabGo.Core;
-using TabTabGo.Core.Models;
-using TabTabGo.Core.Services;
 using TabTabGo.WebStream.MessageStorage.Entites;
 using TabTabGo.WebStream.MessageStorage.Services;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using TabTabGo.WebStream.Model;
 
 namespace TabTabGo.WebStream.MessageStorage.EFCore.Repositories
 {
@@ -22,14 +17,16 @@ namespace TabTabGo.WebStream.MessageStorage.EFCore.Repositories
             return context.Set<UserConnection>().Where(s => s.ConnectionId.Equals(connectionId)).FirstOrDefaultAsync(cancellationToken);
         }
 
-        public List<UserConnection> GetByUserId(string userId)
+        public List<UserConnection> GetByUserId(UserIdData userId)
         {
-            return context.Set<UserConnection>().Where(s => s.UserId.Equals(userId)).ToList();
+            if (userId == null) return null;
+            return context.Set<UserConnection>().Where(s => s.UserId.Equals(userId.UserId) && s.TenantId.Equals(userId.TenantId)).ToList();
         }
 
-        public Task<List<UserConnection>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+        public Task<List<UserConnection>> GetByUserIdAsync(UserIdData userId, CancellationToken cancellationToken = default)
         {
-            return context.Set<UserConnection>().Where(s => s.UserId.Equals(userId)).ToListAsync(cancellationToken);
+            if (userId == null) return Task.FromResult( new  List<UserConnection>());
+            return context.Set<UserConnection>().Where(s => s.UserId.Equals(userId.UserId) && s.TenantId.Equals(userId.TenantId)).ToListAsync(cancellationToken);
         }
     }
 }

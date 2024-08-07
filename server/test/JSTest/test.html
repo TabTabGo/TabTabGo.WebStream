@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <script src="./signalr.min.js" ></script>
+</head>
+<body>
+
+    <script>
+       const connection = new signalR.HubConnectionBuilder()
+      .withUrl("https://securepay-orchestra-dev.azurewebsites.net/WebStreamHub",
+      
+      { accessTokenFactory: () => 
+    
+   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiI3IiwiZW1haWwiOiJtb2hhbW1hZC5zYXJ5YUB0YWJ0YWJnby5jb20iLCJzdWIiOiJtb2hhbW1hZC5zYXJ5YUB0YWJ0YWJnby5jb20iLCJuYW1lIjoiTW9oYW1tYWQgU2FyeWEiLCJqdGkiOiI2UVVEN1UzUk9XQU8yU1dBWVJDWDVCQkNWNEYyUEJGSSIsInRlbmFudElkIjoiMSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiaG90ZWxDb2RlIjoibWV5ZGFuSG90ZWwiLCJuYmYiOjE3MTk4NDc5MDAsImV4cCI6MTcxOTg0OTcwMCwiaXNzIjoiaHR0cDovL3d3dy5zZWN1cmVwYXkuYWUvIiwiYXVkIjoiaHR0cDovL3d3dy5zZWN1cmVwYXkuYWUvIn0.LAINI55mIODkk-UBIWm4kaJqyz5dlKFTlKjYjY34b5o'
+      }) 
+    
+    .build();
+    try {
+
+      connection.start();
+      console.log("SignalR Connected.");
+      } catch (err) {
+          console.log(err);
+          setTimeout(start, 5000);
+      }
+  
+    </script>
+</body>
+
+</html>

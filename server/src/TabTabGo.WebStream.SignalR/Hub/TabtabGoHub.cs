@@ -30,28 +30,30 @@ namespace TabTabGo.WebStream.SignalR.Hub
                 {"UserAgent", userAgent},
                 {"Real-IP", realIP},
                 {"Forward-For", forwardeds},
-            };
-            var userId = securityService?.GetUserId().ToString();
-            var userConnections = await connections.GetUserConnectionIdsAsync(userId);
+            }; 
+            var userConnections = await connections.GetUserConnectionIdsAsync(this.GetUserId());
             if (!userConnections.Contains(this.Context.ConnectionId))
             {
-                await connectionManager.RegisterConnectionAsync(this.Context.ConnectionId, userId, connectedInfo);
+                await connectionManager.RegisterConnectionAsync(this.Context.ConnectionId, this.GetUserId(), connectedInfo);
             }
             else
             {
-                await connectionManager.ReRegisterConnectionAsync(this.Context.ConnectionId, userId);
+                await connectionManager.ReRegisterConnectionAsync(this.Context.ConnectionId, this.GetUserId());
             }
         }
         public override async Task OnDisconnectedAsync(Exception exception)
-        {
-            var userId = securityService?.GetUserId().ToString();
-            await connectionManager.UnRegisterConnectionAsync(this.Context.ConnectionId, userId);
-
+        { 
+            await connectionManager.UnRegisterConnectionAsync(this.Context.ConnectionId, this.GetUserId()); 
         }
         public Task ClientEvent(SignalReceiveEvent webStreamMessage)
+        { 
+            return eventHandler.OnEventReceived(this.GetUserId(), new WebStreamMessage(webStreamMessage.EventName, webStreamMessage.Data));
+        } 
+        private UserIdData GetUserId()
         {
             var userId = securityService?.GetUserId().ToString();
-            return eventHandler.OnEventReceived(userId, new WebStreamMessage(webStreamMessage.EventName, webStreamMessage.Data));
+            var tenantId = securityService?.GetTenantId().ToString();
+            return new UserIdData(userId, tenantId);
         }
     }
 }

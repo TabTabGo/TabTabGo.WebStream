@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using TabTabGo.WebStream.Model;
 
 namespace TabTabGo.WebStream.Notification.Services
 {
@@ -16,12 +17,12 @@ namespace TabTabGo.WebStream.Notification.Services
         /// send message to user on The Event 'SendNotification'
         /// </summary> 
         /// <returns></returns>
-        Task SendNotification(IEnumerable<string> userIds, object data, CancellationToken cancellationToken = default);
+        Task SendNotification(IEnumerable<UserIdData> userIds, object data, CancellationToken cancellationToken = default);
         /// <summary>
         /// send message to user on The Event 'SendNotification'
         /// </summary> 
         /// <returns></returns>
-        Task SendNotification(string userId, object data, CancellationToken cancellationToken = default);
+        Task SendNotification(UserIdData userId, object data, CancellationToken cancellationToken = default);
 
     }
 }

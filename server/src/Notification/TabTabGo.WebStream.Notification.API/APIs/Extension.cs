@@ -6,6 +6,7 @@ using System.Security.Claims;
 using TabTabGo.Core.Data;
 using TabTabGo.Core.Models;
 using TabTabGo.Core.Services;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Notification.Entities;
 using TabTabGo.WebStream.Notification.Module;
 using TabTabGo.WebStream.Notification.Repository;
@@ -27,10 +28,12 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                 Guid notificationMessageId) =>
             {
                 var userId = securityService?.GetUserId().ToString();
+
+                var tenantId = securityService?.GetTenantId().ToString();
                 if (string.IsNullOrEmpty(userId)) return Results.Forbid();
                 unitOfWork.BeginTransaction();
 
-                var userNotification = repo.GetByUserIdAndNotificationId(userId, notificationMessageId);
+                var userNotification = repo.GetByUserIdAndNotificationId(UserIdData.From(userId,tenantId), notificationMessageId);
                 if (userNotification == null) { return Results.NotFound(); }
                 service.ReadNotification(userNotification, repo);
                 unitOfWork.Commit();
@@ -56,8 +59,9 @@ namespace TabTabGo.WebStream.Notification.API.APIs
              {
 
                  var userId = securityService?.GetUserId().ToString();
+                 var telenetId = securityService?.GetTenantId().ToString();
                  if (string.IsNullOrEmpty(userId)) return Results.Forbid();
-                 var result = service.GetUserNotifications(userId
+                 var result = service.GetUserNotifications(UserIdData.From(userId,telenetId)
                 //how to get Current user ??? do we need to use tabtabgo.ISecureityService or add new Service 
                 , filter, page, repo);
                  return Results.Ok(result);
@@ -80,8 +84,9 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             {
 
                 var userId = securityService?.GetUserId().ToString();
+                var tenant = securityService?.GetTenant().ToString();
                 if (string.IsNullOrEmpty(userId)) return Results.Forbid();
-                var userNotification = repo.GetByUserIdAndNotificationId(userId, notificationMessageId);
+                var userNotification = repo.GetByUserIdAndNotificationId(UserIdData.From(userId,tenant), notificationMessageId);
                 if (userNotification == null) { return Results.NotFound(); }
                 return Results.Ok(userNotification);
             }
