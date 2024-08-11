@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Notification.Entities;
 using TabTabGo.WebStream.Notification.Module;
 
@@ -9,6 +10,6 @@ namespace TabTabGo.WebStream.Notification.Services
     {
         Task ReadAllNotifications(TUserKey userKey, CancellationToken cancellationToken = default);
         Task ReadNotification(NotificationUser notificationUser, CancellationToken cancellationToken = default);
-        Task<TabTabGo.Core.Models.PageList<NotificationUser>> GetUserNotifications(string userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, CancellationToken cancellationToken = default);
+        Task<TabTabGo.Core.Models.PageList<NotificationUser>> GetUserNotifications(UserIdData userId, UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters, CancellationToken cancellationToken = default);
     }
 }
