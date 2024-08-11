@@ -14,7 +14,7 @@ namespace TabTabGo.WebStream.MessageStorage.EFCore.Mappers
             builder.Property(s => s.CreatedBy).IsRequired(false);
             builder.Property(s => s.UpdatedBy).IsRequired(false);
             builder.HasIndex(m => new { m.UserId, m.SentDate });
-            builder.HasIndex(m => new { m.UserId});
+            builder.HasIndex(s => new { s.UserId, s.TenantId });
         }
     }
 }

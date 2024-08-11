@@ -11,23 +11,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4AF33E86-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.TestApp", "test\TabTabGo.WebStream.TestApp\TabTabGo.WebStream.TestApp.csproj", "{EBF69406-49DF-44A1-90B0-D07CB96A811A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "test\Notification", "{CCEC652F-D27A-4766-BB76-1978921451AA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{CCEC652F-D27A-4766-BB76-1978921451AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.Notification.API", "src\Notification\TabTabGo.WebStream.Notification.API\TabTabGo.WebStream.Notification.API.csproj", "{C418808D-634A-40F6-AAF2-7D48C3B6E772}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notification.API", "src\Notification\TabTabGo.WebStream.Notification.API\TabTabGo.WebStream.Notification.API.csproj", "{C418808D-634A-40F6-AAF2-7D48C3B6E772}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.Notification", "src\Notification\TabTabGo.WebStream.Notification\TabTabGo.WebStream.Notification.csproj", "{E8BA5A28-8F7D-4904-9DD6-947CEA9B2A68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notification", "src\Notification\TabTabGo.WebStream.Notification\TabTabGo.WebStream.Notification.csproj", "{E8BA5A28-8F7D-4904-9DD6-947CEA9B2A68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.Notification.EFCore", "src\Notification\TabTabGo.WebStream.Notification.EFCore\TabTabGo.WebStream.Notification.EFCore.csproj", "{ECA5770E-5F1D-4CED-953B-CC31B9E5EDC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.Notification.EFCore", "src\Notification\TabTabGo.WebStream.Notification.EFCore\TabTabGo.WebStream.Notification.EFCore.csproj", "{ECA5770E-5F1D-4CED-953B-CC31B9E5EDC5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E9705C2A-76CE-4E8B-B4FA-70254D7D2106}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.TestClient", "test\TabTabGo.WebStream.ClientTest\TabTabGo.WebStream.TestClient.csproj", "{D5044B45-F347-4A85-AAD0-A60E8D7CC91F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.TestClient", "test\TabTabGo.WebStream.ClientTest\TabTabGo.WebStream.TestClient.csproj", "{D5044B45-F347-4A85-AAD0-A60E8D7CC91F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessageStorage", "MessageStorage", "{EE1623FE-EBFA-4E7F-9768-9F1A21096AD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.MessageStorage", "src\MessageStorage\TabTabGo.WebStream.MessageStorage\TabTabGo.WebStream.MessageStorage.csproj", "{0D00680B-ECE2-4308-9823-5C5CCB597E5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.MessageStorage", "src\MessageStorage\TabTabGo.WebStream.MessageStorage\TabTabGo.WebStream.MessageStorage.csproj", "{0D00680B-ECE2-4308-9823-5C5CCB597E5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabTabGo.WebStream.MessageStorage.EFCore", "src\MessageStorage\TabTabGo.WebStream.MessageStorage.EFCore\TabTabGo.WebStream.MessageStorage.EFCore.csproj", "{86CB3C3B-AD83-4275-B8DC-D02EF7A626FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabTabGo.WebStream.MessageStorage.EFCore", "src\MessageStorage\TabTabGo.WebStream.MessageStorage.EFCore\TabTabGo.WebStream.MessageStorage.EFCore.csproj", "{86CB3C3B-AD83-4275-B8DC-D02EF7A626FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,17 +76,17 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{D76A76C7-49B7-4D22-B257-AF87B7D60C14} = {E9705C2A-76CE-4E8B-B4FA-70254D7D2106}
+		{B451E71B-3311-4211-B39D-443132E5C6DB} = {E9705C2A-76CE-4E8B-B4FA-70254D7D2106}
 		{EBF69406-49DF-44A1-90B0-D07CB96A811A} = {4AF33E86-9916-4F1E-9776-A6A0D3381DD0}
+		{CCEC652F-D27A-4766-BB76-1978921451AA} = {E9705C2A-76CE-4E8B-B4FA-70254D7D2106}
 		{C418808D-634A-40F6-AAF2-7D48C3B6E772} = {CCEC652F-D27A-4766-BB76-1978921451AA}
 		{E8BA5A28-8F7D-4904-9DD6-947CEA9B2A68} = {CCEC652F-D27A-4766-BB76-1978921451AA}
 		{ECA5770E-5F1D-4CED-953B-CC31B9E5EDC5} = {CCEC652F-D27A-4766-BB76-1978921451AA}
-		{D76A76C7-49B7-4D22-B257-AF87B7D60C14} = {E9705C2A-76CE-4E8B-B4FA-70254D7D2106}
-		{B451E71B-3311-4211-B39D-443132E5C6DB} = {E9705C2A-76CE-4E8B-B4FA-70254D7D2106}
 		{D5044B45-F347-4A85-AAD0-A60E8D7CC91F} = {4AF33E86-9916-4F1E-9776-A6A0D3381DD0}
+		{EE1623FE-EBFA-4E7F-9768-9F1A21096AD7} = {E9705C2A-76CE-4E8B-B4FA-70254D7D2106}
 		{0D00680B-ECE2-4308-9823-5C5CCB597E5C} = {EE1623FE-EBFA-4E7F-9768-9F1A21096AD7}
 		{86CB3C3B-AD83-4275-B8DC-D02EF7A626FE} = {EE1623FE-EBFA-4E7F-9768-9F1A21096AD7}
-		{CCEC652F-D27A-4766-BB76-1978921451AA} = {E9705C2A-76CE-4E8B-B4FA-70254D7D2106}
-		{EE1623FE-EBFA-4E7F-9768-9F1A21096AD7} = {E9705C2A-76CE-4E8B-B4FA-70254D7D2106}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3DA62474-E7F3-4385-B08D-88FE745580C9}

@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using TabTabGo.Core.Models;
 using TabTabGo.WebStream.MessageStorage.Entites;
-using TabTabGo.WebStream.MessageStorage.Repository; 
+using TabTabGo.WebStream.MessageStorage.Repository;
+using TabTabGo.WebStream.Model;
 
 namespace TabTabGo.WebStream.MessageStorage.EFCore.Repositories
 {
@@ -20,21 +21,21 @@ namespace TabTabGo.WebStream.MessageStorage.EFCore.Repositories
             IQueryable<UserWebStreamStorageMessage> query = context.Set<UserWebStreamStorageMessage>().ApplyCriteria(criteria);
             return new PageingListBuilder<UserWebStreamStorageMessage>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         } 
-        public List<UserWebStreamStorageMessage> GetByUserId(string userId)
+        public List<UserWebStreamStorageMessage> GetByUserId(UserIdData userId)
         {
-            return context.Set<UserWebStreamStorageMessage>().Where(s => s.UserId.Equals(userId)).ToList();
+            return context.Set<UserWebStreamStorageMessage>().Where(s => s.UserId.Equals(userId.UserId) && s.TenantId.Equals(userId.TenantId)).ToList();
         } 
-        public UserWebStreamStorageMessage GetByUserIdAndNotificationId(string userId, Guid messageId)
+        public UserWebStreamStorageMessage GetByUserIdAndNotificationId(UserIdData userId, Guid messageId)
         {
-            return context.Set<UserWebStreamStorageMessage>().Where(s => s.MessageId.Equals(messageId) && s.UserId.Equals(userId)).FirstOrDefault();
+            return context.Set<UserWebStreamStorageMessage>().Where(s => s.MessageId.Equals(messageId) && s.UserId.Equals(userId.UserId) && s.TenantId.Equals(userId.TenantId)).FirstOrDefault();
         } 
-        public Task<UserWebStreamStorageMessage> GetByUserIdAndNotificationIdAsync(string userId, Guid messageId, CancellationToken cancellationToken = default)
+        public Task<UserWebStreamStorageMessage> GetByUserIdAndNotificationIdAsync(UserIdData userId, Guid messageId, CancellationToken cancellationToken = default)
         {
-            return context.Set<UserWebStreamStorageMessage>().Where(s => s.MessageId.Equals(messageId) && s.UserId.Equals(userId)).FirstOrDefaultAsync(cancellationToken);
+            return context.Set<UserWebStreamStorageMessage>().Where(s => s.MessageId.Equals(messageId) && s.UserId.Equals(userId.UserId) && s.TenantId.Equals(userId.TenantId)).FirstOrDefaultAsync(cancellationToken);
         } 
-        public Task<List<UserWebStreamStorageMessage>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+        public Task<List<UserWebStreamStorageMessage>> GetByUserIdAsync(UserIdData userId, CancellationToken cancellationToken = default)
         {
-            return context.Set<UserWebStreamStorageMessage>().Where(s => s.UserId.Equals(userId)).ToListAsync(cancellationToken);
+            return context.Set<UserWebStreamStorageMessage>().Where(s => s.UserId.Equals(userId.UserId) && s.TenantId.Equals(userId.TenantId)).ToListAsync(cancellationToken);
         }
     }
 }

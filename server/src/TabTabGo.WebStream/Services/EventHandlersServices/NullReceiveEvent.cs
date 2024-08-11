@@ -9,7 +9,7 @@ namespace TabTabGo.WebStream.Services.EventHandlersServices
     /// </summary>
     public class NullReceiveEvent : IReceiveEvent
     {
-        public Task OnEventReceived(string userId, WebStreamMessage message)
+        public Task OnEventReceived(UserIdData userId, WebStreamMessage message)
         {
             return Task.CompletedTask;
         }

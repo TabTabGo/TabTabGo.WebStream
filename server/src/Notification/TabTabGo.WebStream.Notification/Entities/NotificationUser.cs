@@ -12,6 +12,7 @@ namespace TabTabGo.WebStream.Notification.Entities
     {
         public Guid Id { get; set; }
         public string UserId { get; set; }
+        public string TenantId { get; set; }
         [JsonConverter(typeof(JsonStringEnumConverter))]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public NotificationUserStatus Status { get; set; } = NotificationUserStatus.Unread;

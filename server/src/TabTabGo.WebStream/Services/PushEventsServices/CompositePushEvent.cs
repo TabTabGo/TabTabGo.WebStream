@@ -30,7 +30,7 @@ namespace TabTabGo.WebStream.Services.PushEventsServices
 
         }
         
-        public async Task PushToUserAsync(IEnumerable<string> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
+        public async Task PushToUserAsync(IEnumerable<UserIdData> userIds, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             foreach (var s in _pushEvents)
             {
@@ -38,7 +38,7 @@ namespace TabTabGo.WebStream.Services.PushEventsServices
             }
         }
 
-        public async Task PushToUserAsync(string userId, WebStreamMessage message, CancellationToken cancellationToken = default)
+        public async Task PushToUserAsync(UserIdData userId, WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             foreach (var s in _pushEvents)
             {
