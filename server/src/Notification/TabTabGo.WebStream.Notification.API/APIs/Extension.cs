@@ -23,7 +23,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             endpointRouteBuilder.MapPost("notifications/read/all", async (
                     [FromServices] INotificationUserRepository repo,
                     [FromServices] IUnitOfWork unitOfWork,
-                    [FromServices] INotificationServices<string> service,
+                    [FromServices] INotificationServices<UserIdData> service,
                     [FromServices] ISecurityService<TUserKey, TTenantKey> securityService,
                     CancellationToken cancellationToken) =>
                 {
@@ -31,7 +31,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                     if (string.IsNullOrEmpty(userId)) return Results.Forbid();
                     unitOfWork.BeginTransaction();
 
-                    await service.ReadAllNotifications(userId, cancellationToken);
+                    await service.ReadAllNotifications(UserIdData.From(userId, securityService?.GetTenantId().ToString()), cancellationToken);
                     unitOfWork.Commit();
                     return Results.Ok();
                 })
@@ -46,7 +46,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             endpointRouteBuilder.MapPost("notifications/{notificationMessageId}/read", async (
                     [FromServices] INotificationUserRepository repo,
                     [FromServices] IUnitOfWork unitOfWork,
-                    [FromServices] INotificationServices<string> service,
+                    [FromServices] INotificationServices<UserIdData> service,
                     [FromServices] ISecurityService<TUserKey, TTenantKey> securityService,
                     HttpRequest request,
                     Guid notificationMessageId,
@@ -78,7 +78,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                 .WithOpenApi();
 
             endpointRouteBuilder.MapGet("notifications", async (
-                    [FromServices] INotificationServices<string> service,
+                    [FromServices] INotificationServices<UserIdData> service,
                     [FromServices] TabTabGo.Core.Services.ISecurityService<TUserKey, TTenantKey> securityService,
                     [AsParameters] UserNotificationFilter filter, // need to fix binding
                     [AsParameters] TabTabGo.Core.ViewModels.PagingOptionRequest page, // need to fix binding
@@ -108,7 +108,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                     (
                         HttpRequest request,
                         [FromServices] INotificationUserRepository repo,
-                        [FromServices] INotificationServices<string> service,
+                        [FromServices] INotificationServices<UserIdData> service,
                         [FromServices] TabTabGo.Core.Services.ISecurityService<TUserKey, TTenantKey> securityService,
                         Guid notificationMessageId) =>
                     {
