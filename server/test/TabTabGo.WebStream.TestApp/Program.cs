@@ -10,6 +10,8 @@ using TabTabGo.WebStream.Services.EventHandlersServices;
 using TabTabGo.WebStream.SignalR.Extensions.Builders;
 using TabTabGo.WebStream.SignalR.Hub;
 using TabTabGo.WebStream.TestApp;
+using TabTabGo.WebStream.AMQP.Extensions.Builders;
+using TabTabGo.WebStream.Services.Contract;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
@@ -46,6 +48,21 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DbContext, NotificationDbContext>(s => s.UseMySql("Server=127.0.0.1;Database=WebStream;Uid=root;Pwd=root;Allow User Variables=true", ServerVersion.AutoDetect("Server=127.0.0.1;Database=WebStream;Uid=root;Pwd=root;Allow User Variables=true")));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSignalR(s => s.EnableDetailedErrors = true);
+
+
+
+
+builder.Services.Add_TTG_AMPQ_RedirectedEventsConsumer(new TabTabGo.WebStream.AMQP.Options.AMQPOptions
+{
+    Host = "localhost",
+    Password = "guest",
+    UserName = "guest",
+    QueueName = "Notification",
+    Port = 5672
+}); //recive redirected messages
+
+
+
 builder.Services.AddWebStream(builder =>
 {
     builder.RegisteEventHandler<NullReceiveEvent>();
@@ -70,7 +87,7 @@ builder.Services.AddWebStream(builder =>
         .LogAllRecevedMessages();
     });
     builder.UseEFCore();
-    builder.SetupIPushEvent(s => s.AddSignalR<Guid,Guid>().LogAllOutMessages());
+    builder.SetupIPushEvent(s => s.AddSignalR<Guid, Guid>().LogAllOutMessages());
     builder.SetupIConnectionManager(s => s.AddConnectionToStorage().AddSignalR<Guid, Guid>());
 });
 
@@ -79,12 +96,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 app.MapGroup("tabtabgo").MapNotificationsEndPoints<Guid, Guid>();
-app.MapHub<WebStreamHub<Guid, Guid>>("/WebStreamHub");
-var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<DbContext>();
-dbContext.Database.EnsureCreated();
-dbContext.Dispose();
-scope.Dispose();
+app.MapHub<WebStreamHub<Guid, Guid>>("/WebStreamHub"); 
 //test broadcast api
 app.MapPost("broadcast", async (string message, IHubContext<WebStreamHub<Guid, Guid>> hubContext) =>
 {
