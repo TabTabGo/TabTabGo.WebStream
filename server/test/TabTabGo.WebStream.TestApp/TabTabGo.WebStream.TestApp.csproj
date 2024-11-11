@@ -18,6 +18,8 @@
     <ProjectReference Include="..\..\src\Notification\TabTabGo.WebStream.Notification.EFCore\TabTabGo.WebStream.Notification.EFCore.csproj" />
 	  
     <ProjectReference Include="..\..\src\Notification\TabTabGo.WebStream.Notification.EFCore\TabTabGo.WebStream.Notification.EFCore.csproj" />
+	  
+    <ProjectReference Include="..\..\src\TabTabGo.WebStream.AMQP\TabTabGo.WebStream.AMQP.csproj" />
 	  	  
     
     <ProjectReference Include="..\..\src\TabTabGo.WebStream.SignalR\TabTabGo.WebStream.SignalR.csproj" />

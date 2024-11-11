@@ -4,13 +4,8 @@ namespace TabTabGo.WebStream.Model
 {
     public class WebStreamMessage : ICloneable
     {
-        private readonly Guid _id = Guid.NewGuid();
-        public Guid Id => _id;
 
-        /// <summary>
-        /// each message you created will have a unique Id
-        /// you cannot change this Id
-        /// </summary> 
+        public Guid Id { set; get; }= Guid.NewGuid(); 
         public WebStreamMessage(string eventName, object data)
         {
             this.EventName = eventName;

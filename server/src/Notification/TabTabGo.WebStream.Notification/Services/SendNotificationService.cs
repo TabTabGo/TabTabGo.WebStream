@@ -24,7 +24,7 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
         INotificationUserRepository users)
         : ISendNotification
     {
-        public async Task SendNotification(IEnumerable<string> userIds, object data,
+        public async Task SendNotification(IEnumerable<UserIdData> userIds, object data,
             CancellationToken cancellationToken = default)
         {
             var currentDateTime = DateTime.UtcNow;
@@ -43,8 +43,9 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
                      {
                          NotifiedDateTime = currentDateTime,
                          NotificationMessageId = notification.Id,
-                         UserId = userId
-                     }))
+                         UserId = userId.UserId,
+                         TenantId= userId.TenantId,
+            }))
             {
                 await users.InsertAsync(user, cancellationToken);
             }
@@ -52,8 +53,9 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             await unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task SendNotification(string userId, object data, CancellationToken cancellationToken = default)
+        public async Task SendNotification(UserIdData userId, object data, CancellationToken cancellationToken = default)
         {
+            if (userId == null) return;
             var currentDateTime = DateTime.UtcNow;
             var notification = new NotificationMessage()
             {
@@ -70,7 +72,8 @@ namespace TabTabGo.WebStream.NotificationStorage.Services
             {
                 NotifiedDateTime = currentDateTime,
                 NotificationMessageId = notification.Id,
-                UserId = userId
+                UserId = userId.UserId,
+                TenantId = userId.TenantId,
             };
             await users.InsertAsync(user, cancellationToken);
             await unitOfWork.SaveChangesAsync(cancellationToken);

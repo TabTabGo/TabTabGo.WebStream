@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using TabTabGo.Core.Models;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Notification.Entities;
 using TabTabGo.WebStream.Notification.Module;
 using TabTabGo.WebStream.Notification.Repository;
@@ -23,15 +24,15 @@ namespace TabTabGo.WebStream.Notification.EFCore.Repositories
             return new PagingListBuilder<NotificationMessage>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         }
 
-        public List<NotificationMessage> GetByUserId(string userId)
+        public List<NotificationMessage> GetByUserId(UserIdData userId)
         {
-            return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId)).Select(s => s.NotificationMessage).ToList();
+            return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId.UserId) && s.TenantId == userId.TenantId).Select(s => s.NotificationMessage).ToList();
 
         }
 
-        public Task<List<NotificationMessage>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+        public Task<List<NotificationMessage>> GetByUserIdAsync(UserIdData userId, CancellationToken cancellationToken = default)
         {
-            return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId)).Select(s => s.NotificationMessage).ToListAsync(cancellationToken);
+            return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId.UserId) && s.TenantId == userId.TenantId).Select(s => s.NotificationMessage).ToListAsync(cancellationToken);
         }
     }
 } 

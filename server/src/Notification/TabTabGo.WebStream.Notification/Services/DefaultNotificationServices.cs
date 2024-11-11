@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TabTabGo.Core.Models;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Notification.Entities;
 using TabTabGo.WebStream.Notification.Entities.Enums;
 using TabTabGo.WebStream.Notification.Module;
@@ -13,7 +14,7 @@ using TabTabGo.WebStream.Notification.Repository;
 namespace TabTabGo.WebStream.Notification.Services
 {
     public class DefaultNotificationServices(INotificationUserRepository notificationUserRepository)
-        : INotificationServices<string>
+        : INotificationServices<UserIdData>
     {
         List<Expression<Func<NotificationUser, bool>>> GetNotificationUserCriteria(UserNotificationFilter filters)
         {
@@ -64,12 +65,12 @@ namespace TabTabGo.WebStream.Notification.Services
             return criteria;
         }
      
-        public  Task<PageList<NotificationUser>> GetUserNotifications(string userId,
+        public  Task<PageList<NotificationUser>> GetUserNotifications(UserIdData userId,
             UserNotificationFilter filters, TabTabGo.Core.ViewModels.PagingOptionRequest pagingParameters,
             CancellationToken cancellationToken = default)
         {
             var criteria = GetNotificationUserCriteria(filters);
-            criteria.Add(s => s.UserId.Equals(userId));
+            criteria.Add(s => s.UserId.Equals(userId.UserId) &&s.TenantId.Equals(userId.TenantId));
 
             return notificationUserRepository.GetPageListAsync(criteria,
                 pagingParameters.OrderBy,
@@ -77,7 +78,7 @@ namespace TabTabGo.WebStream.Notification.Services
                 pagingParameters.PageSize, pagingParameters.Page, cancellationToken);
         }
      
-        public Task ReadAllNotifications(string userId,
+        public Task ReadAllNotifications(UserIdData userId,
             CancellationToken cancellationToken = default)
         {
            return notificationUserRepository.UpdateAllUnreadNotificationsAsync(userId, NotificationUserStatus.Read,

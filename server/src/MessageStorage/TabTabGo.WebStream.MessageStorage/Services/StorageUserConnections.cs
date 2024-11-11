@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using TabTabGo.Core.Data; 
+﻿using TabTabGo.Core.Data;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.MessageStorage.Services
@@ -18,27 +15,32 @@ namespace TabTabGo.WebStream.MessageStorage.Services
             _userConnectionRepository = userConnectionRepository;
         }
 
-        public List<string> GetUserConnectionIds(string userId)
+        public List<string> GetUserConnectionIds(UserIdData userId)
         {
             return _userConnectionRepository.GetByUserId(userId).Select(userConnection => userConnection.ConnectionId).ToList();
         }
 
-        public async Task<List<string>> GetUserConnectionIdsAsync(string userId, CancellationToken cancellationToken = default)
+        public async Task<List<string>> GetUserConnectionIdsAsync(UserIdData userId, CancellationToken cancellationToken = default)
         {
             return (await _userConnectionRepository.GetByUserIdAsync(userId, cancellationToken)).Select(userConnection => userConnection.ConnectionId).ToList();
         }
 
-        public string GetUserIdByConnectionId(string connectionId)
+        public UserIdData GetUserIdByConnectionId(string connectionId)
         {
-            return _userConnectionRepository.GetByConnectionId(connectionId).UserId;
+            var result = _userConnectionRepository.GetByConnectionId(connectionId);
+            if (result == null) return null;
+            return UserIdData.From(result.UserId, result.TenantId);
         }
 
-        public async Task<string> GetUserIdByConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default)
+        public async Task<UserIdData> GetUserIdByConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default)
         {
-            return (await _userConnectionRepository.GetByConnectionIdAsync(connectionId, cancellationToken)).UserId;
+            var result = (await _userConnectionRepository.GetByConnectionIdAsync(connectionId, cancellationToken));
+            if (result == null) return null;
+            return UserIdData.From(result.UserId, result.TenantId);
+
         }
 
-        public List<string> GetUsersConnections(IEnumerable<string> userIds)
+        public List<string> GetUsersConnections(IEnumerable<UserIdData> userIds)
         {
             return userIds
                 .SelectMany(userId => _userConnectionRepository.GetByUserId(userId))
@@ -46,24 +48,24 @@ namespace TabTabGo.WebStream.MessageStorage.Services
                 .ToList();
         }
 
-        public async Task<List<string>> GetUsersConnectionsAsync(IEnumerable<string> userIds, CancellationToken cancellationToken = default)
+        public async Task<List<string>> GetUsersConnectionsAsync(IEnumerable<UserIdData> userIds, CancellationToken cancellationToken = default)
         {
             var connectionIds = await Task.WhenAll(userIds.Select(userId => _userConnectionRepository.GetByUserIdAsync(userId, cancellationToken)));
             return connectionIds.SelectMany(ids => ids).Select(c => c.ConnectionId).ToList();
         }
 
-        public List<string> GetUsersIdsByConnectionIds(IEnumerable<string> connectionIds)
+        public List<UserIdData> GetUsersIdsByConnectionIds(IEnumerable<string> connectionIds)
         {
             return connectionIds
                .Select(connectionId => _userConnectionRepository.GetByConnectionId(connectionId))
-               .Select(userConnection => userConnection.UserId)
+               .Select(userConnection => UserIdData.From(userConnection.UserId, userConnection.TenantId))
                .ToList();
         }
 
-        public async Task<List<string>> GetUsersIdsByConnectionIdsAsync(IEnumerable<string> connectionIds, CancellationToken cancellationToken = default)
+        public async Task<List<UserIdData>> GetUsersIdsByConnectionIdsAsync(IEnumerable<string> connectionIds, CancellationToken cancellationToken = default)
         {
             var userConnections = await Task.WhenAll(connectionIds.Select(connectionId => _userConnectionRepository.GetByConnectionIdAsync(connectionId, cancellationToken)));
-            return userConnections.Select(uc => uc.UserId).ToList();
+            return userConnections.Select(uc => UserIdData.From(uc.UserId, uc.TenantId)).ToList();
         }
     }
 }

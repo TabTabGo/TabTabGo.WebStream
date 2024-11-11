@@ -34,18 +34,18 @@ namespace TabTabGo.WebStream.MessageStorage.Services
             var userId = await userConnections.GetUserIdByConnectionIdAsync(connectionId, cancellationToken);
             await this.Save(userId, message, cancellationToken); 
         }
-        public Task PushToUserAsync(IEnumerable<string> userIds, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
+        public Task PushToUserAsync(IEnumerable<UserIdData> userIds, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             return Save(userIds, message, cancellationToken);
         }
 
-        public Task PushToUserAsync(string userId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
+        public Task PushToUserAsync(UserIdData userId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
         {
             return Save(userId, message, cancellationToken);
         }
 
 
-        public async Task Save(IEnumerable<string> userIds, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
+        public async Task Save(IEnumerable<UserIdData> userIds, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
         {
 
             var dbMessage = await messages.GetByKeyAsync(message.Id, cancellationToken: cancellationToken);
@@ -68,15 +68,18 @@ namespace TabTabGo.WebStream.MessageStorage.Services
                 {
                     SentDate = DateTime.UtcNow,
                     MessageId = dbMessage.Id,
-                    UserId = userId
+                    UserId = userId.UserId,
+                    TenantId = userId.TenantId,
+                    
                 };
                 await users.InsertAsync(user, cancellationToken);
             }
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task Save(string userId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
+        public async Task Save(UserIdData userId, Model.WebStreamMessage message, CancellationToken cancellationToken = default)
         {
+            if (userId == null) return;
             var notification = await messages.GetByKeyAsync(message.Id, cancellationToken: cancellationToken);
             if (notification == null)
             {
@@ -93,7 +96,8 @@ namespace TabTabGo.WebStream.MessageStorage.Services
             {
                 SentDate = DateTime.UtcNow,
                 MessageId = notification.Id,
-                UserId = userId
+                UserId = userId.UserId,
+                TenantId=userId.TenantId
             };
             await users.InsertAsync(user, cancellationToken);
             await _unitOfWork.SaveChangesAsync();

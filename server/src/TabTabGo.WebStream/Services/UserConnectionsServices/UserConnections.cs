@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Services.Contract;
 
 namespace TabTabGo.WebStream.Services.UserConnectionsServices
@@ -17,42 +18,42 @@ namespace TabTabGo.WebStream.Services.UserConnectionsServices
             _userConnections = userConnections.ToList();
         }
 
-        public List<string> GetUserConnectionIds(string userId)
+        public List<string> GetUserConnectionIds(UserIdData userId)
         {
             return _userConnections.FirstOrDefault().GetUserConnectionIds(userId);
         }
 
-        public Task<List<string>> GetUserConnectionIdsAsync(string userId, CancellationToken cancellationToken = default)
+        public Task<List<string>> GetUserConnectionIdsAsync(UserIdData userId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public string GetUserIdByConnectionId(string connectionId)
+        public UserIdData GetUserIdByConnectionId(string connectionId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> GetUserIdByConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default)
+        public Task<UserIdData> GetUserIdByConnectionIdAsync(string connectionId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetUsersConnections(IEnumerable<string> userIds)
+        public List<string> GetUsersConnections(IEnumerable<UserIdData> userIds)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<string>> GetUsersConnectionsAsync(IEnumerable<string> userIds, CancellationToken cancellationToken = default)
+        public Task<List<string>> GetUsersConnectionsAsync(IEnumerable<UserIdData> userIds, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> GetUsersIdsByConnectionIds(IEnumerable<string> connectionIds)
+        public List<UserIdData> GetUsersIdsByConnectionIds(IEnumerable<string> connectionIds)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<string>> GetUsersIdsByConnectionIdsAsync(IEnumerable<string> connectionIds, CancellationToken cancellationToken = default)
+        public Task<List<UserIdData>> GetUsersIdsByConnectionIdsAsync(IEnumerable<string> connectionIds, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

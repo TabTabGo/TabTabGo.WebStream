@@ -3,7 +3,7 @@
 
 var builder = new Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder();
 var token = Console.ReadLine();
-builder.WithUrl("https://localhost:7008/WebStreamHub",s=>s.AccessTokenProvider=() =>Task.FromResult(token));
+builder.WithUrl("https://localhost:7008/api/v1/web-stream-hub", s=>s.AccessTokenProvider=() =>Task.FromResult(token));
 builder.WithAutomaticReconnect();
 var connection = builder.Build();
 

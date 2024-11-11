@@ -31,7 +31,7 @@ namespace TabTabGo.WebStream.SignalR.Hub
                 {"Real-IP", realIP},
                 {"Forward-For", forwardeds},
             };
-            var userId = securityService?.GetUserId().ToString();
+            var userId = GetUserIdData();
             var userConnections = await connections.GetUserConnectionIdsAsync(userId);
             if (!userConnections.Contains(this.Context.ConnectionId))
             {
@@ -44,14 +44,18 @@ namespace TabTabGo.WebStream.SignalR.Hub
         }
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            var userId = securityService?.GetUserId().ToString();
+            var userId = GetUserIdData();
             await connectionManager.UnRegisterConnectionAsync(this.Context.ConnectionId, userId);
 
         }
         public Task ClientEvent(SignalReceiveEvent webStreamMessage)
         {
-            var userId = securityService?.GetUserId().ToString();
+            var userId = GetUserIdData();
             return eventHandler.OnEventReceived(userId, new WebStreamMessage(webStreamMessage.EventName, webStreamMessage.Data));
+        }
+        private UserIdData GetUserIdData()
+        {
+            return UserIdData.From(securityService?.GetUserId().ToString(), securityService.GetTenantId().ToString());
         }
     }
 }

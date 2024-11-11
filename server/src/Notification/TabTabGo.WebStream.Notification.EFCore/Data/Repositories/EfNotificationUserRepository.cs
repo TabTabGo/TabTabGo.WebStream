@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using TabTabGo.Core.Models;
 using TabTabGo.Core.Services;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Notification.Entities;
 using TabTabGo.WebStream.Notification.Entities.Enums;
 using TabTabGo.WebStream.Notification.Module;
@@ -24,9 +25,9 @@ namespace TabTabGo.WebStream.Notification.EFCore.Repositories
             return new PagingListBuilder<NotificationUser>(query, pageNumber, pageSize, orderBy, isDesc).BuildWithFullCount();
         }
 
-        public void UpdateAllUnreadNotifications(string userId, NotificationUserStatus read, DateTime utcNow)
+        public void UpdateAllUnreadNotifications(UserIdData userId, NotificationUserStatus read, DateTime utcNow)
         {
-            _dbSet.Where(x => x.UserId == userId && x.Status == NotificationUserStatus.Unread)
+            _dbSet.Where(x => x.UserId == userId.UserId && x.TenantId==userId.TenantId && x.Status == NotificationUserStatus.Unread)
                 .ExecuteUpdate(calls =>
                      calls
                          .SetProperty(n => n.Status, read)
@@ -35,9 +36,9 @@ namespace TabTabGo.WebStream.Notification.EFCore.Repositories
                 );
         }
 
-        public Task UpdateAllUnreadNotificationsAsync(string userId, NotificationUserStatus read, DateTime utcNow)
+        public Task UpdateAllUnreadNotificationsAsync(UserIdData userId, NotificationUserStatus read, DateTime utcNow)
         {
-           return  _dbSet.Where(x => x.UserId == userId && x.Status == NotificationUserStatus.Unread)
+           return  _dbSet.Where(x => x.UserId == userId.UserId && x.TenantId == userId.TenantId && x.Status == NotificationUserStatus.Unread)
                 .ExecuteUpdateAsync(calls =>
                     calls
                         .SetProperty(n => n.Status, read)
@@ -46,32 +47,32 @@ namespace TabTabGo.WebStream.Notification.EFCore.Repositories
                 );
         }
 
-        public List<NotificationUser> GetByUserId(string userId)
+        public List<NotificationUser> GetByUserId(UserIdData userId)
         {
-            return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId)).Include(s=>s.NotificationMessage).ToList();
+            return context.Set<NotificationUser>().Where(s => s.UserId.Equals(userId.UserId) && s.TenantId == userId.TenantId).Include(s=>s.NotificationMessage).ToList();
         } 
-        public NotificationUser GetByUserIdAndNotificationId(string userId, Guid notificationId)
+        public NotificationUser GetByUserIdAndNotificationId(UserIdData userId, Guid notificationId)
         {
-            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.NotificationMessageId.Equals(notificationId) && s.UserId.Equals(userId)).FirstOrDefault();
+            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.NotificationMessageId.Equals(notificationId) && s.UserId.Equals(userId.UserId) && s.TenantId == userId.TenantId).FirstOrDefault();
         } 
-        public Task<NotificationUser> GetByUserIdAndNotificationIdAsync(string userId, Guid notificationId, CancellationToken cancellationToken = default)
+        public Task<NotificationUser> GetByUserIdAndNotificationIdAsync(UserIdData userId, Guid notificationId, CancellationToken cancellationToken = default)
         {
-            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.NotificationMessageId.Equals(notificationId) && s.UserId.Equals(userId)).FirstOrDefaultAsync(cancellationToken);
+            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.NotificationMessageId.Equals(notificationId) && s.UserId.Equals(userId.UserId) && s.TenantId == userId.TenantId).FirstOrDefaultAsync(cancellationToken);
         } 
-        public Task<List<NotificationUser>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
+        public Task<List<NotificationUser>> GetByUserIdAsync(UserIdData userId, CancellationToken cancellationToken = default)
         {
-            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.UserId.Equals(userId)).ToListAsync(cancellationToken);
+            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.UserId.Equals(userId.UserId) && s.TenantId == userId.TenantId).ToListAsync(cancellationToken);
         }
 
-        public Task<NotificationUser> GetByUserIdAndUserNotificationId(string userId, Guid userNotificationId,CancellationToken cancellationToken)
+        public Task<NotificationUser> GetByUserIdAndUserNotificationId(UserIdData userId, Guid userNotificationId,CancellationToken cancellationToken)
         {
-            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.Id.Equals(userNotificationId) && s.UserId.Equals(userId)).FirstOrDefaultAsync(cancellationToken);
+            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.Id.Equals(userNotificationId) && s.UserId.Equals(userId.UserId) && s.TenantId == userId.TenantId).FirstOrDefaultAsync(cancellationToken);
 
         }
 
-        public NotificationUser GetByUserIdAndUserNotificationId(string userId, Guid userNotificationId)
+        public NotificationUser GetByUserIdAndUserNotificationId(UserIdData userId, Guid userNotificationId)
         {
-            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.Id.Equals(userNotificationId) && s.UserId.Equals(userId)).FirstOrDefault();
+            return context.Set<NotificationUser>().Include(s => s.NotificationMessage).Where(s => s.Id.Equals(userNotificationId) && s.UserId.Equals(userId.UserId) && s.TenantId == userId.TenantId).FirstOrDefault();
         }
     }
 }

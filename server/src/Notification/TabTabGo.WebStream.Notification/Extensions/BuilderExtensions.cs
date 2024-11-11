@@ -2,6 +2,7 @@
 using System;
 using TabTabGo.Core.Data;
 using TabTabGo.WebStream.Extensions;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Notification.Builders;
 using TabTabGo.WebStream.Notification.Repository;
 using TabTabGo.WebStream.Notification.Services;
@@ -28,7 +29,7 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddScoped(item.GetTypeToRegest(), s => item.Get(s));
                 }
-                services.AddScoped<INotificationServices<string>, DefaultNotificationServices>();
+                services.AddScoped<INotificationServices<UserIdData>, DefaultNotificationServices>();
                 services.AddScoped<ISendNotification, SendNotificationService>();
 
             }
@@ -38,7 +39,7 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddTransient(item.GetTypeToRegest(), s => item.Get(s));
                 }
-                services.AddTransient<INotificationServices<string>, DefaultNotificationServices>();
+                services.AddTransient<INotificationServices<UserIdData>, DefaultNotificationServices>();
                 services.AddTransient<ISendNotification, SendNotificationService>();
 
             }
@@ -48,7 +49,7 @@ namespace TabTabGo.WebStream.Notification.Extensions
                 {
                     services.AddSingleton(item.GetTypeToRegest(), s => item.Get(s));
                 }
-                services.AddSingleton<INotificationServices<string>, DefaultNotificationServices>();
+                services.AddSingleton<INotificationServices<UserIdData>, DefaultNotificationServices>();
                 services.AddSingleton<ISendNotification, SendNotificationService>();
             }
             return services;

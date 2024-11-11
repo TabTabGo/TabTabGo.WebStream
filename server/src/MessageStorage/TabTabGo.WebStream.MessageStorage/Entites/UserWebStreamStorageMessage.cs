@@ -9,6 +9,7 @@ namespace TabTabGo.WebStream.MessageStorage.Entites
     {
         public Guid Id { get; set; }
         public string UserId { get; set; } 
+        public string TenantId { get; set; }
         public DateTime SentDate { get; set; } = DateTime.UtcNow; 
         public Guid MessageId { get; set; }
         public WebStreamStorageMessage Message { get; set; } 

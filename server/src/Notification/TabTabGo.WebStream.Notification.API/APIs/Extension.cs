@@ -2,12 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using System.Security.Claims;
 using TabTabGo.Core.Data;
 using TabTabGo.Core.Models;
 using TabTabGo.Core.Services;
+using TabTabGo.WebStream.Model;
 using TabTabGo.WebStream.Notification.DTOs;
-using TabTabGo.WebStream.Notification.Entities;
 using TabTabGo.WebStream.Notification.Module;
 using TabTabGo.WebStream.Notification.Repository;
 using TabTabGo.WebStream.Notification.Services;
@@ -24,7 +23,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             endpointRouteBuilder.MapPost("notifications/read/all", async (
                     [FromServices] INotificationUserRepository repo,
                     [FromServices] IUnitOfWork unitOfWork,
-                    [FromServices] INotificationServices<string> service,
+                    [FromServices] INotificationServices<UserIdData> service,
                     [FromServices] ISecurityService<TUserKey, TTenantKey> securityService,
                     CancellationToken cancellationToken) =>
                 {
@@ -32,7 +31,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                     if (string.IsNullOrEmpty(userId)) return Results.Forbid();
                     unitOfWork.BeginTransaction();
 
-                    await service.ReadAllNotifications(userId, cancellationToken);
+                    await service.ReadAllNotifications(UserIdData.From(userId, securityService?.GetTenantId().ToString()), cancellationToken);
                     unitOfWork.Commit();
                     return Results.Ok();
                 })
@@ -47,18 +46,20 @@ namespace TabTabGo.WebStream.Notification.API.APIs
             endpointRouteBuilder.MapPost("notifications/{notificationMessageId}/read", async (
                     [FromServices] INotificationUserRepository repo,
                     [FromServices] IUnitOfWork unitOfWork,
-                    [FromServices] INotificationServices<string> service,
+                    [FromServices] INotificationServices<UserIdData> service,
                     [FromServices] ISecurityService<TUserKey, TTenantKey> securityService,
                     HttpRequest request,
                     Guid notificationMessageId,
                     CancellationToken cancellationToken) =>
                 {
                     var userId = securityService?.GetUserId().ToString();
+                    var tenantId = securityService?.GetTenantId().ToString();
+
                     if (string.IsNullOrEmpty(userId)) return Results.Forbid();
                     unitOfWork.BeginTransaction();
 
                     var userNotification =
-                        await repo.GetByUserIdAndNotificationIdAsync(userId, notificationMessageId, cancellationToken);
+                        await repo.GetByUserIdAndNotificationIdAsync(UserIdData.From(userId, tenantId), notificationMessageId, cancellationToken);
                     if (userNotification == null)
                     {
                         return Results.NotFound();
@@ -77,7 +78,7 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                 .WithOpenApi();
 
             endpointRouteBuilder.MapGet("notifications", async (
-                    [FromServices] INotificationServices<string> service,
+                    [FromServices] INotificationServices<UserIdData> service,
                     [FromServices] TabTabGo.Core.Services.ISecurityService<TUserKey, TTenantKey> securityService,
                     [AsParameters] UserNotificationFilter filter, // need to fix binding
                     [AsParameters] TabTabGo.Core.ViewModels.PagingOptionRequest page, // need to fix binding
@@ -85,8 +86,9 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                 ) =>
                 {
                     var userId = securityService?.GetUserId().ToString();
+                    var tenantId = securityService?.GetTenantId().ToString();
                     if (string.IsNullOrEmpty(userId)) return Results.Forbid();
-                    var result = await service.GetUserNotifications(userId
+                    var result = await service.GetUserNotifications(UserIdData.From(userId, tenantId)
                         //how to get Current user ??? do we need to use tabtabgo.ISecureityService or add new Service 
                         , filter, page);
 
@@ -106,13 +108,15 @@ namespace TabTabGo.WebStream.Notification.API.APIs
                     (
                         HttpRequest request,
                         [FromServices] INotificationUserRepository repo,
-                        [FromServices] INotificationServices<string> service,
+                        [FromServices] INotificationServices<UserIdData> service,
                         [FromServices] TabTabGo.Core.Services.ISecurityService<TUserKey, TTenantKey> securityService,
                         Guid notificationMessageId) =>
                     {
+
                         var userId = securityService?.GetUserId().ToString();
+                        var tenantId = securityService?.GetTenantId().ToString(); 
                         if (string.IsNullOrEmpty(userId)) return Results.Forbid();
-                        var userNotification = repo.GetByUserIdAndNotificationId(userId, notificationMessageId);
+                        var userNotification = repo.GetByUserIdAndNotificationId(UserIdData.From(userId,tenantId), notificationMessageId);
                         if (userNotification == null)
                         {
                             return Results.NotFound();
